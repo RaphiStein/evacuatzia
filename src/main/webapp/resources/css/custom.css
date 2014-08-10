@@ -1,0 +1,13 @@
+.border-bottom {
+	border-bottom: 1px grey solid;
+}
+.theLabel {
+	font-weight: bold;
+	
+}
+.buffer {
+	height: 10px;
+}
+.float-right {
+	float: right;
+}
