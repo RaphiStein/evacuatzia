@@ -1,0 +1,37 @@
+<!DOCTYPE hibernate-configuration PUBLIC
+"-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+    <session-factory>
+
+        <!-- hibernate dialect -->
+        <property name="hibernate.dialect">org.hibernate.dialect.MySQLInnoDBDialect</property>
+
+
+        <property name="hibernate.connection.driver_class">com.mysql.jdbc.Driver</property>
+        <property name="hibernate.connection.url">jdbc:mysql://localhost/evac</property>
+        <property name="hibernate.connection.username">tomcat_regular</property>
+        <property name="hibernate.connection.password">R3gul4r</property>
+        <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property>
+
+        <!-- Automatic schema creation (begin) === -->
+        <property name="hibernate.hbm2ddl.auto">create</property>
+
+        <!--  Commit on demand -->
+        <property name="hibernate.connection.autocommit">false</property>
+
+        <!-- Simple memory-only cache -->
+        <property name="hibernate.cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
+
+        <!-- Enable Hibernate's automatic session context management -->
+        <property name="current_session_context_class">thread</property>
+
+        <!-- ############################################ -->
+        <!-- # mapping files with external dependencies # -->
+        <!-- ############################################ -->
+
+        <mapping resource="evacuatzia_proj/sqlhelpers/beans/UserInfo.hbm.xml" />
+
+    </session-factory>
+</hibernate-configuration>

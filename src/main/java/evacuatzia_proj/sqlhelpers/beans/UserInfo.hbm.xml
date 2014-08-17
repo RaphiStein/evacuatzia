@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC
+"-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+	<class name="il.ac.technion.evacuatzia.sqlhealpers.beans.UserInfo"
+		table="user_info">
+
+		<id name="id" column="ID">
+			<generator class="native" />
+		</id>
+		<property name="userName">
+			<column name="user_name" length="20" not-null="true" />
+		</property>
+
+		<property name="name">
+			<column name="name" length="40" not-null="true" />
+		</property>
+
+	</class>
+</hibernate-mapping>
