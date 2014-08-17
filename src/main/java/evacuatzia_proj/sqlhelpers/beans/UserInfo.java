@@ -1,9 +1,22 @@
 package evacuatzia_proj.sqlhelpers.beans;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
+import org.hibernate.annotations.GenericGenerator;
+
+@Entity //This will be a table in the DB
+@Table( name = "user_info" )
 public class UserInfo {
 	Long id;
 	String userName;
 	String name;
+	
+	@Id
+	@GeneratedValue(generator="assigned")
+//	@GenericGenerator(name="increment", strategy = "increment")
 	public Long getId() {
 		return id;
 	}
