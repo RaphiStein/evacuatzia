@@ -11,9 +11,9 @@
 		<id name="id" column="ID">
 			<generator class="assigned" />
 		</id>
-		<property name="userName" type="string" column="user_name" />
+		<property name="userName" type="string" column="user_name" length="20"/>
 
-		<property name="name" type="string" column="name" />
+		<property name="name" type="string" column="name" length="40"/>
 
 	</class>
 </hibernate-mapping>

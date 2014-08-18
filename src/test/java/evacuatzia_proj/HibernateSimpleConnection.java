@@ -23,7 +23,7 @@ public class HibernateSimpleConnection {
 	}
 
 	private static void queryUserInfo(Session session) {
-		Query query = session.createQuery("from user_info");
+		Query query = session.createQuery("from UserInfo");
 		List<UserInfo> list = query.list();
 		java.util.Iterator<UserInfo> iter = list.iterator();
 		while (iter.hasNext()) {
