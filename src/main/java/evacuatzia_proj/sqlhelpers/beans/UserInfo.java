@@ -2,6 +2,7 @@ package evacuatzia_proj.sqlhelpers.beans;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -15,8 +16,8 @@ public class UserInfo {
 	String name;
 	
 	@Id
-	@GeneratedValue(generator="assigned")
-//	@GenericGenerator(name="increment", strategy = "increment")
+	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GenericGenerator(name="increment", strategy = "increment")
 	public Long getId() {
 		return id;
 	}

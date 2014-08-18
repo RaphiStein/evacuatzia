@@ -43,7 +43,6 @@ public class HibernateSimpleConnection {
 
 		user.setName("Barak Obhama");
 		user.setUserName("BarakO");
-		user.setId(99999L);
 
 		session.save(user);
 	}
