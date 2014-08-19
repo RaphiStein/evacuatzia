@@ -11,7 +11,7 @@
 		<id name="id" column="ID">
 			<generator class="increment" />
 		</id>
-		<property name="userName" type="string" column="user_name" not-null="true" length="20"/>
+		<property name="userName" type="string" column="user_name" not-null="true" length="20" unique="true"/>
 
 		<property name="name" type="string" column="name" not-null="true" length="40"/>
 
