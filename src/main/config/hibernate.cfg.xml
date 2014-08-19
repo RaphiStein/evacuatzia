@@ -33,7 +33,9 @@
 
         <!-- Names the annotated entity class -->
         <mapping class="evacuatzia_proj.sqlhelpers.beans.UserInfo"/>
+        <mapping class="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent"/>
         <mapping resource="evacuatzia_proj/sqlhelpers/beans/UserInfo.hbm.xml"/>
+        <mapping resource="evacuatzia_proj/sqlhelpers/beans/EvacuationEvent.hbm.xml"/>
 
     </session-factory>
 </hibernate-configuration>

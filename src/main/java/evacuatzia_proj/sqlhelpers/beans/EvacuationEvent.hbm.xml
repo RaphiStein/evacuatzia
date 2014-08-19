@@ -6,7 +6,7 @@
 <hibernate-mapping>
 
 	<class name="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent"
-		table="evac">
+		table="evac_event">
 
 		<id name="id" column="ID">
 			<generator class="increment" />
@@ -15,7 +15,7 @@
 		<property name="geoId" type="long" />
 		<property name="geoLongitude" type="double" />
 		<property name="geoLatitude" type="double" />
-		<property name="time" type="timezone" />
+		<property name="time"/>
 		<property name="capacity" type="int" />
 		<!-- cascade="save-update" means we only need to save the update for the 
 			user and it will be added here as well (kind of...) example: http://www.mkyong.com/hibernate/hibernate-cascade-example-save-update-delete-and-delete-orphan/ -->

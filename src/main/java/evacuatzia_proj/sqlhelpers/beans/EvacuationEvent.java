@@ -9,11 +9,13 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity //This will be a table in the DB
-@Table( name = "evac" )
+@Table( name = "evac_event" )
 public class EvacuationEvent {
 	Long id;
 	String title;
@@ -72,6 +74,7 @@ public class EvacuationEvent {
 	public void setGeoLatitude(Double geoLatitude) {
 		this.geoLatitude = geoLatitude;
 	}
+	@Temporal(TemporalType.TIMESTAMP) //Setting up a specific DB date type
 	public Date getTime() {
 		return time;
 	}
