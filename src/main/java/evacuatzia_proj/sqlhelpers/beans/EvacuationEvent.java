@@ -14,22 +14,23 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
 
-@Entity //This will be a table in the DB
-@Table( name = "evac_event" )
+@Entity
+// This will be a table in the DB
+@Table(name = "evac_event")
 public class EvacuationEvent {
 	Long id;
 	String title;
 	Long geoId; // ID in geometric database
 	Double geoLongitude; // longitude
-	Double geoLatitude;	// latitude
+	Double geoLatitude; // latitude
 	Date time;
 	Integer capacity;
-//	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
-	
+	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
+
 	public EvacuationEvent() {
 		super();
 	}
-	
+
 	public EvacuationEvent(String title, Long geoId, Double geoLongitude, Double geoLatitude, Date time,
 			Integer capacity) {
 		super();
@@ -43,61 +44,107 @@ public class EvacuationEvent {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
-	@GenericGenerator(name="increment", strategy = "increment")
+	@GenericGenerator(name = "increment", strategy = "increment")
 	public Long getId() {
 		return id;
 	}
+
 	public void setId(Long id) {
 		this.id = id;
 	}
+
 	public String getTitle() {
 		return title;
 	}
+
 	public void setTitle(String title) {
 		this.title = title;
 	}
+
 	public Long getGeoId() {
 		return geoId;
 	}
+
 	public void setGeoId(Long geoId) {
 		this.geoId = geoId;
 	}
+
 	public Double getGeoLongitude() {
 		return geoLongitude;
 	}
+
 	public void setGeoLongitude(Double geoLongitude) {
 		this.geoLongitude = geoLongitude;
 	}
+
 	public Double getGeoLatitude() {
 		return geoLatitude;
 	}
+
 	public void setGeoLatitude(Double geoLatitude) {
 		this.geoLatitude = geoLatitude;
 	}
-	@Temporal(TemporalType.TIMESTAMP) //Setting up a specific DB date type
+
+	@Temporal(TemporalType.TIMESTAMP)
+	// Setting up a specific DB date type
 	public Date getTime() {
 		return time;
 	}
+
 	public void setTime(Date time) {
 		this.time = time;
 	}
+
 	public Integer getCapacity() {
 		return capacity;
 	}
+
 	public void setCapacity(Integer capacity) {
 		this.capacity = capacity;
 	}
+
+	public Set<UserInfo> getRegisteredUsers() {
+		return registeredUsers;
+	}
+
+	public void setRegisteredUsers(Set<UserInfo> registeredUsers) {
+		this.registeredUsers = registeredUsers;
+	}
+
+	public int availablePlaces() {
+		return capacity - registeredUsers.size();
+	}
 	
-//	public void registerUser(UserInfo user) {
-//		registeredUsers.add(user);
-//	}
-//	
-//	public void removeUser(UserInfo user) {
-//		registeredUsers.remove(user);
-//	}
-	
+	public void registerUser(UserInfo user) {
+		// TODO: change the assert to check and throw statement
+		assert(registeredUsers.size() < capacity);
+		registeredUsers.add(user);
+	}
+
+	public void removeUser(UserInfo user) {
+		registeredUsers.remove(user);
+	}
+
 	@Override
 	public int hashCode() {
 		return id.hashCode();
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		EvacuationEvent other = (EvacuationEvent) obj;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		return true;
+	}
+
 }

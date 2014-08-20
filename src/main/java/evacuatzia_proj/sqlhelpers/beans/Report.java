@@ -9,63 +9,54 @@ import javax.persistence.Table;
 import org.hibernate.annotations.GenericGenerator;
 
 @Entity
-// This will be a table in the DB
-@Table(name = "user_info")
-public class UserInfo {
+//This will be a table in the DB
+@Table(name = "report")
+public class Report {
 	Long id;
-	String userName;
-	String name;	
-	EvacuationEvent evacEvent;
+	UserInfo userReported;
+	String title;
 	
-	public UserInfo() {
+	public Report(UserInfo userReported, String title) {
 		super();
+		this.userReported = userReported;
+		this.title = title;
 	}
 
-	public UserInfo(String userName, String name) {
+	public Report() {
 		super();
-		this.userName = userName;
-		this.name = name;
-		evacEvent = null;
 	}
-
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	@GenericGenerator(name = "increment", strategy = "increment")
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
-	public String getUserName() {
-		return userName;
-	}
-
-	public void setUserName(String userName) {
-		this.userName = userName;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public EvacuationEvent getEvacEvent() {
-		return evacEvent;
-	}
-
-	public void setEvacEvent(EvacuationEvent evacEvent) {
-		this.evacEvent = evacEvent;
+	public String getTitle() {
+		return title;
 	}
 	
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	public UserInfo getUserReported() {
+		return userReported;
+	}
+
+	public void setUserReported(UserInfo userReported) {
+		this.userReported = userReported;
+	}
+
 	@Override
 	public int hashCode() {
-		return id.hashCode();
+		final int prime = 31;
+		int result = 1;
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		return result;
 	}
 
 	@Override
@@ -76,7 +67,7 @@ public class UserInfo {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		UserInfo other = (UserInfo) obj;
+		Report other = (Report) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;
@@ -84,4 +75,5 @@ public class UserInfo {
 			return false;
 		return true;
 	}
+	
 }

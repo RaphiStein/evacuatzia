@@ -19,11 +19,9 @@
 		<property name="capacity" type="int" />
 		<!-- cascade="save-update" means we only need to save the update for the 
 			user and it will be added here as well (kind of...) example: http://www.mkyong.com/hibernate/hibernate-cascade-example-save-update-delete-and-delete-orphan/ -->
-		<!-- 
 		<set name="registeredUsers" cascade="save-update">
-			<key column="user_id" />
-			<one-to-many class="evacuatzia_proj.sqlhelpers.beans.UserInfo" />
+			<key column="registered_to_event" />
+			<one-to-many class="evacuatzia_proj.sqlhelpers.beans.UserInfo"/>
 		</set>
-		 -->
 	</class>
 </hibernate-mapping>
