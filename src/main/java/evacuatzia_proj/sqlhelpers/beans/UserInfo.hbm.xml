@@ -8,12 +8,19 @@
 	<class name="evacuatzia_proj.sqlhelpers.beans.UserInfo"
 		table="user_info">
 
-		<id name="id" column="ID">
+		<id name="id" column="User_ID">
 			<generator class="increment" />
 		</id>
 		<property name="userName" type="string" column="user_name" not-null="true" length="20" unique="true"/>
 		<property name="name" type="string" column="name" not-null="true" length="40"/>
-		<many-to-one name="evacEvent" class="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent" column="registered_to_event" cascade="save-update" not-null="false" />
+		<!-- 
+		<join table="evac_registration">
+		  <key column="User_ID"/>
+		  <many-to-one name="evacEvent" column="Event_ID" class="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent"/>
+		</join>
+		 -->
+		<!-- <many-to-one name="evacEvent" class="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent"
+		  column="registered_to_event" cascade="save-update" not-null="false" /> -->
 
 	</class>
 </hibernate-mapping>

@@ -15,7 +15,7 @@ public class UserInfo {
 	Long id;
 	String userName;
 	String name;	
-	EvacuationEvent evacEvent;
+//	EvacuationEvent evacEvent;
 	
 	public UserInfo() {
 		super();
@@ -25,7 +25,7 @@ public class UserInfo {
 		super();
 		this.userName = userName;
 		this.name = name;
-		evacEvent = null;
+//		evacEvent = null;
 	}
 
 	@Id
@@ -55,14 +55,14 @@ public class UserInfo {
 		this.name = name;
 	}
 
-	public EvacuationEvent getEvacEvent() {
-		return evacEvent;
-	}
+//	public EvacuationEvent getEvacEvent() {
+//		return evacEvent;
+//	}
+//
+//	public void setEvacEvent(EvacuationEvent evacEvent) {
+//		this.evacEvent = evacEvent;
+//	}
 
-	public void setEvacEvent(EvacuationEvent evacEvent) {
-		this.evacEvent = evacEvent;
-	}
-	
 	@Override
 	public int hashCode() {
 		return id.hashCode();

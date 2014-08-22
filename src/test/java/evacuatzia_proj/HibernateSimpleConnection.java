@@ -1,13 +1,13 @@
 package evacuatzia_proj;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
-import java.io.ObjectInputStream.GetField;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Random;
 import java.util.Set;
 
 import org.hibernate.Query;
@@ -33,10 +33,15 @@ public class HibernateSimpleConnection {
 		session = startSessionAndTransaction();
 	}
 	
+	@After
+	public void teardown() {
+		session.getTransaction().commit();
+		dropAllTables();
+	}
 	
 	private void dropAllTables() {
 		Session s = startSessionAndTransaction();
-		String[] toClear = new String[]{"UserInfo", "EvacuationEvent"};
+		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo"};
 		for (String type: toClear) {
 			hqlTruncate(type, s);
 		}
@@ -55,13 +60,6 @@ public class HibernateSimpleConnection {
 	    Query query = s.createQuery(hql);
 	    return query.executeUpdate();
 	}
-	
-	
-	@After
-	public void teardown() {
-		session.getTransaction().commit();
-	}
-
 	
 	@Test
 	public void simpleReportCreation() {
@@ -94,7 +92,7 @@ public class HibernateSimpleConnection {
 
 
 	private Report createNewReportByUser(UserInfo user) {
-		return new Report(user, "some report title");
+		return new Report(user, "some report title" + uniqueNum++);
 	}
 
 
@@ -112,7 +110,7 @@ public class HibernateSimpleConnection {
 	private void compareUsers(UserInfo origUser, UserInfo returnedUser) {
 		assertEquals(origUser.getUserName(), returnedUser.getUserName());
 		assertEquals(origUser.getName(), returnedUser.getName());
-		assertEquals(origUser.getEvacEvent(), returnedUser.getEvacEvent());
+//		assertEquals(origUser.getEvacEvent(), returnedUser.getEvacEvent());
 	}
 
 	private UserInfo createNewUser() {
@@ -129,9 +127,10 @@ public class HibernateSimpleConnection {
 		
 		UserInfo returnedUser = queryFirstUserInfo();
 		EvacuationEvent evacEvent = createEvacEvent();
-		returnedUser.setEvacEvent(evacEvent);
+//		returnedUser.setEvacEvent(evacEvent);
 		evacEvent.registerUser(returnedUser);
-		session.save(returnedUser);
+//		session.save(returnedUser);
+		session.save(evacEvent);
 		session.getTransaction().commit();
 		session = startSessionAndTransaction();
 		EvacuationEvent returnedEvacEvent = queryEvacuationEvent();
@@ -153,6 +152,11 @@ public class HibernateSimpleConnection {
 		List<UserInfo> allUsers = queryAllUsersInfo();
 		for (UserInfo u: allUsers) {
 			evacEvent.registerUser(u);
+		}
+		for (int i = 0; i<3; ++i) {
+			// create some more users
+			UserInfo origUser = createNewUser();
+			session.save(origUser);
 		}
 		session.save(evacEvent);
 		session.getTransaction().commit();

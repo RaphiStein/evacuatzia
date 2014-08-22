@@ -8,7 +8,7 @@
 	<class name="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent"
 		table="evac_event">
 
-		<id name="id" column="ID">
+		<id name="id" column="Event_ID">
 			<generator class="increment" />
 		</id>
 		<property name="title" type="string" length="500" />
@@ -19,9 +19,13 @@
 		<property name="capacity" type="int" />
 		<!-- cascade="save-update" means we only need to save the update for the 
 			user and it will be added here as well (kind of...) example: http://www.mkyong.com/hibernate/hibernate-cascade-example-save-update-delete-and-delete-orphan/ -->
-		<set name="registeredUsers" cascade="save-update">
+<!-- 		<set name="registeredUsers" cascade="save-update">
 			<key column="registered_to_event" />
 			<one-to-many class="evacuatzia_proj.sqlhelpers.beans.UserInfo"/>
-		</set>
+		</set> -->
+ 		<set name="registeredUsers" table="evac_registration" cascade="all">
+            <key column="Event_ID" not-null="true"/>
+            <many-to-many column="User_ID" class="evacuatzia_proj.sqlhelpers.beans.UserInfo" unique="true"/>
+        </set>
 	</class>
 </hibernate-mapping>
