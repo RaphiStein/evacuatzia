@@ -11,7 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 // This will be a table in the DB
 @Table(name = "user_info")
-public class UserInfo {
+public class UserInfo implements java.io.Serializable {
 	Long id;
 	String userName;
 	String name;	

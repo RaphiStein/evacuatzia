@@ -1,0 +1,21 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 24, 2014 8:25:09 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="evacuatzia_proj.sqlhelpers.beans.LoginAccounts" table="login_accounts" catalog="evac">
+        <id name="userName" type="string">
+            <column name="userName" length="20" />
+            <generator class="assigned" />
+        </id>
+        <property name="userPass" type="string">
+            <column name="userPass" length="32" not-null="true" />
+        </property>
+        <set name="userRoles" table="user_roles" inverse="true" lazy="true" fetch="select">
+            <key>
+                <column name="userName" length="20" not-null="true" />
+            </key>
+            <one-to-many class="evacuatzia_proj.sqlhelpers.beans.UserRoles" />
+        </set>
+    </class>
+</hibernate-mapping>

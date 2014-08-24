@@ -35,9 +35,14 @@
         <mapping class="evacuatzia_proj.sqlhelpers.beans.UserInfo"/>
         <mapping class="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent"/>
         <mapping class="evacuatzia_proj.sqlhelpers.beans.Report"/>
+        <mapping class="evacuatzia_proj.sqlhelpers.beans.LoginAccounts"/>
+        <mapping class="evacuatzia_proj.sqlhelpers.beans.UserRoles"/>
+        <mapping class="evacuatzia_proj.sqlhelpers.beans.UserRolesId"/>
         <mapping resource="evacuatzia_proj/sqlhelpers/beans/UserInfo.hbm.xml"/>
         <mapping resource="evacuatzia_proj/sqlhelpers/beans/EvacuationEvent.hbm.xml"/>
         <mapping resource="evacuatzia_proj/sqlhelpers/beans/Report.hbm.xml"/>
+        <mapping resource="evacuatzia_proj/sqlhelpers/beans/LoginAccounts.hbm.xml"/>
+        <mapping resource="evacuatzia_proj/sqlhelpers/beans/UserRoles.hbm.xml"/>
 
     </session-factory>
 </hibernate-configuration>

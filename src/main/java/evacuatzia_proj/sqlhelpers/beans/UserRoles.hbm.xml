@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<!-- Generated Aug 24, 2014 8:25:09 PM by Hibernate Tools 4.0.0 -->
+<hibernate-mapping>
+    <class name="evacuatzia_proj.sqlhelpers.beans.UserRoles" table="user_roles" catalog="evac">
+        <composite-id name="id" class="evacuatzia_proj.sqlhelpers.beans.UserRolesId">
+            <key-property name="userName" type="string">
+                <column name="userName" length="20" />
+            </key-property>
+            <key-property name="roleName" type="string">
+                <column name="roleName" length="15" />
+            </key-property>
+        </composite-id>
+        <many-to-one name="loginAccounts" class="evacuatzia_proj.sqlhelpers.beans.LoginAccounts" update="false" insert="false" fetch="select">
+            <column name="userName" length="20" not-null="true" />
+        </many-to-one>
+    </class>
+</hibernate-mapping>

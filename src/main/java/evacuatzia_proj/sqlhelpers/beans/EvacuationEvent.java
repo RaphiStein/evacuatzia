@@ -17,7 +17,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 // This will be a table in the DB
 @Table(name = "evac_event")
-public class EvacuationEvent {
+public class EvacuationEvent implements java.io.Serializable {
 	Long id;
 	String title;
 	Long geoId; // ID in geometric database
