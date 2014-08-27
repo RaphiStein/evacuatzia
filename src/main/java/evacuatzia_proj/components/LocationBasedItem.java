@@ -1,9 +1,9 @@
 package evacuatzia_proj.components;
 
 public class LocationBasedItem {
-	private int eventID;
-	private String title;
-	private Geometry location;
+	private final int eventID;
+	private final String title;
+	private final Geometry location;
 	
 	
 	public LocationBasedItem(int eventID, String title, Geometry location) {
@@ -16,21 +16,21 @@ public class LocationBasedItem {
 	public int getEventID() {
 		return eventID;
 	}
-	public void setEventID(int eventID) {
-		this.eventID = eventID;
-	}
+//	public void setEventID(int eventID) {
+//		this.eventID = eventID;
+//	}
 	public String getTitle() {
 		return title;
 	}
-	public void setTitle(String title) {
-		this.title = title;
-	}
+//	public void setTitle(String title) {
+//		this.title = title;
+//	}
 	public Geometry getLocation() {
 		return location;
 	}
-	public void setLocation(Geometry location) {
-		this.location = location;
-	}
+//	public void setLocation(Geometry location) {
+//		this.location = location;
+//	}
 	
 	
 }

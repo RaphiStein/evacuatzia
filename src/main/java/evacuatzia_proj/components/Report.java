@@ -1,21 +1,27 @@
 package evacuatzia_proj.components;
 
+import java.util.Date;
+
 public class Report extends LocationBasedItem {
 
-	private User user;
+	private final User user;
+	private final Date reportTime;
 
-	public Report(int eventID, String title, Geometry location, User user) {
-		super(eventID, title, location);
+	public Report(int reportID, String title, Geometry location, Date reportTime, User user) {
+		super(reportID, title, location);
 		this.user = user;
+		this.reportTime = reportTime;
 	}
 
 	public User getUser() {
 		return user;
 	}
 
-	public void setUser(User user) {
-		this.user = user;
+//	public void setUser(User user) {
+//		this.user = user;
+//	}
+	
+	public Date getReportTime() {
+		return reportTime;
 	}
-	
-	
 }
