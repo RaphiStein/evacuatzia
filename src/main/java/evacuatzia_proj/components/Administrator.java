@@ -1,5 +1,6 @@
 package evacuatzia_proj.components;
 
+import java.util.Date;
 import java.util.List;
 
 /** Class for the Administrator of the website. Implemented in the Singleton to allow for only one administrator.
@@ -7,30 +8,35 @@ import java.util.List;
  * @author Raphi Stein
  *
  */
-public class Administrator {
+public enum Administrator {
+	INSTANCE;
+	
 	/** Singleton object for Administrator */
-	private static Administrator admin;
+//	private static Administrator admin;
 	
 
-	private Administrator(){}
+//	private Administrator(){}
 
-	public static Administrator getAdmin(){
-		if (admin == null){
-			admin = new Administrator();
-		}
-		return admin;
-	}	
+//	public static Administrator getAdmin(){
+//		if (admin == null){
+//			admin = new Administrator();
+//		}
+//		return admin;
+//	}	
 	
-	public void createEvent(Event event){
-		
+	public Event createEvent(String title, Geometry location, Date estimatedTime, String meansOfEvacuation, int capacity ){
+		// TODO: implement this
+		return null;
 	}
-	public void deleteEvent(int id){
+	public void deleteEvent(Event event){
 		//TODO Remove all users from this event
 	}
-	public void addUserToEvent(int eventID, int userID){
-		
+	public Event addUserToEvent(Event event, User user){
+		//TODO implement
+		return null;
 	}
 	public List<Event> getAllEvents(){
+		// TODO implement
 		return null;
 	}
 	

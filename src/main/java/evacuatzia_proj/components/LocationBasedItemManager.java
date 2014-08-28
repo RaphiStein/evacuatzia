@@ -1,5 +1,6 @@
 package evacuatzia_proj.components;
 
+import java.util.Date;
 import java.util.List;
 
 public abstract class LocationBasedItemManager {

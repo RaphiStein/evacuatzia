@@ -9,5 +9,13 @@ public class ReportManager extends LocationBasedItemManager {
 		return null;
 	}
 	
+	public static Report createNewReport(User user, String title, Geometry location, Date reportTime) {
+		// TODO: implement
+		return null;
+	}
 	
+	public static boolean removeReport(User user, Report report) {
+		// TODO: implement
+		return false;		
+	}
 }

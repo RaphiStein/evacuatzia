@@ -5,12 +5,22 @@ import java.util.List;
 
 public class UserManager {
 
-	public static void register(User user){
+	public static User register(String username, String password, String name) {
+		// TODO: implement
+		return null;
+	}
+	
+	public static void unregisterUser(User user) { 
 		
 	}
 	public static boolean login(String username, String password){
 		return false;
 	}
+	
+	public static void logout(User user) {
+		
+	}
+	
 	public static List<User> getAllUsers(){
 		return null;
 	}
@@ -20,27 +30,9 @@ public class UserManager {
 		return null;
 	}
 	
-	public static Report createNewReport(User user, String title, Geometry location, Date reportTime) {
+	public static List<User> getUsersByName(String name) {
 		// TODO: implement
 		return null;
 	}
-	
-	public static Event registerToEvent(User user, Event event) {
-		// TODO: implement
-		return null;
-	}
-	
-	public static void unregisterFromEvent(User user) {
-		// TODO: implement
-	}
-	
-	public static Event getEventByUser(User user) {
-		// TODO: implement
-		return null;
-	}
-	
-	public static List<Report> getReportsByUser(User user) {
-		// TODO: implement
-		return null;
-	}
+
 }

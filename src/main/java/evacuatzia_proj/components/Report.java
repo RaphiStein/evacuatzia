@@ -1,6 +1,7 @@
 package evacuatzia_proj.components;
 
 import java.util.Date;
+import java.util.List;
 
 public class Report extends LocationBasedItem {
 
@@ -24,4 +25,10 @@ public class Report extends LocationBasedItem {
 	public Date getReportTime() {
 		return reportTime;
 	}
+	
+	public static List<Report> getReportsByUser(User user) {
+		// TODO: implement
+		return null;
+	}
+	
 }
