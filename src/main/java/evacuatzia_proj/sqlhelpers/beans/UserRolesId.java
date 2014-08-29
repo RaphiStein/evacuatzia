@@ -63,4 +63,11 @@ public class UserRolesId implements java.io.Serializable {
 		return result;
 	}
 
+
+	// For debuging
+	@Override
+	public String toString() {
+		return "username: " + userName + ", role:" + roleName;
+	}
+	
 }

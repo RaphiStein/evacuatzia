@@ -3,7 +3,7 @@
 "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
 <!-- Generated Aug 24, 2014 8:25:09 PM by Hibernate Tools 4.0.0 -->
 <hibernate-mapping>
-    <class name="evacuatzia_proj.sqlhelpers.beans.UserRoles" table="user_roles" catalog="evac">
+    <class name="evacuatzia_proj.sqlhelpers.beans.UserRoles" table="user_roles">
         <composite-id name="id" class="evacuatzia_proj.sqlhelpers.beans.UserRolesId">
             <key-property name="userName" type="string">
                 <column name="userName" length="20" />

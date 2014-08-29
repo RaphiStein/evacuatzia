@@ -3,6 +3,7 @@ package evacuatzia_proj;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -18,8 +19,11 @@ import org.junit.Test;
 
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
+import evacuatzia_proj.sqlhelpers.beans.LoginAccounts;
 import evacuatzia_proj.sqlhelpers.beans.Report;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
+import evacuatzia_proj.sqlhelpers.beans.UserRoles;
+import evacuatzia_proj.sqlhelpers.beans.UserRolesId;
 
 public class HibernateSimpleConnection {
 	Session session;
@@ -41,7 +45,7 @@ public class HibernateSimpleConnection {
 	
 	private void dropAllTables() {
 		Session s = startSessionAndTransaction();
-		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo"};
+		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo", "UserRoles", "LoginAccounts"};
 		for (String type: toClear) {
 			hqlTruncate(type, s);
 		}
@@ -69,28 +73,19 @@ public class HibernateSimpleConnection {
 		session.getTransaction().commit();
 		session = startSessionAndTransaction();
 		
-		user = queryFirstUserInfo();
+		user = (UserInfo) queryFirstObjectsInDB("UserInfo");
 		Report report = createNewReportByUser(user);
 		session.save(report);
 
 		session.getTransaction().commit();
 		session = startSessionAndTransaction();
 
-		Report returnedReport = queryFirstReport();
+		Report returnedReport = (Report) queryFirstObjectsInDB("Report");
 		
 		assertEquals(report, returnedReport);
 		assertEquals(user, returnedReport.getUserReported());
 	}
 	
-	private Report queryFirstReport() {
-		Query query = session.createQuery("from Report");
-		List<Report> list = query.list();
-		java.util.Iterator<Report> iter = list.iterator();
-		assertTrue(iter.hasNext());
-		return iter.next();
-	}
-
-
 	private Report createNewReportByUser(UserInfo user) {
 		return new Report(user, "some report title" + uniqueNum++);
 	}
@@ -102,7 +97,7 @@ public class HibernateSimpleConnection {
 		session.save(origUser);
 		session.getTransaction().commit();
 		session = startSessionAndTransaction();
-		UserInfo returnedUser = queryFirstUserInfo();
+		UserInfo returnedUser = (UserInfo) queryFirstObjectsInDB("UserInfo");
 		assertFalse(origUser == returnedUser); // if original and returned are not actually the same user the test worth nothing.
 		compareUsers(origUser, returnedUser);
 	}
@@ -125,7 +120,7 @@ public class HibernateSimpleConnection {
 		UserInfo origUser = createNewUser();
 		session.save(origUser);
 		
-		UserInfo returnedUser = queryFirstUserInfo();
+		UserInfo returnedUser = (UserInfo) queryFirstObjectsInDB("UserInfo");
 		EvacuationEvent evacEvent = createEvacEvent();
 //		returnedUser.setEvacEvent(evacEvent);
 		evacEvent.registerUser(returnedUser);
@@ -133,7 +128,7 @@ public class HibernateSimpleConnection {
 		session.save(evacEvent);
 		session.getTransaction().commit();
 		session = startSessionAndTransaction();
-		EvacuationEvent returnedEvacEvent = queryEvacuationEvent();
+		EvacuationEvent returnedEvacEvent = (EvacuationEvent) queryFirstObjectsInDB("EvacuationEvent");
 		assertFalse(evacEvent == returnedEvacEvent); // if actually the same event, the test worth nothing.
 		Set<UserInfo> registeredUsers = returnedEvacEvent.getRegisteredUsers();
 		assertEquals(1, registeredUsers.size());
@@ -149,9 +144,9 @@ public class HibernateSimpleConnection {
 			session.save(origUser);
 		}
 		EvacuationEvent evacEvent = createEvacEvent();
-		List<UserInfo> allUsers = queryAllUsersInfo();
-		for (UserInfo u: allUsers) {
-			evacEvent.registerUser(u);
+		List<Object> allUsers = queryAllObjectsInDB("UserInfo");
+		for (Object u: allUsers) {
+			evacEvent.registerUser((UserInfo) u);
 		}
 		for (int i = 0; i<3; ++i) {
 			// create some more users
@@ -161,12 +156,12 @@ public class HibernateSimpleConnection {
 		session.save(evacEvent);
 		session.getTransaction().commit();
 		session = startSessionAndTransaction();
-		EvacuationEvent returnedEvacEvent = queryEvacuationEvent();
+		EvacuationEvent returnedEvacEvent = (EvacuationEvent) queryFirstObjectsInDB("EvacuationEvent");;
 		assertFalse(evacEvent == returnedEvacEvent); // if actually the same event, the test worth nothing.
 		Set<UserInfo> registeredUsers = returnedEvacEvent.getRegisteredUsers();
 		assertEquals(allUsers.size(), registeredUsers.size());
-		for (UserInfo u: allUsers) {
-			assertTrue(registeredUsers.contains(u));
+		for (Object u: allUsers) {
+			assertTrue(registeredUsers.contains((UserInfo) u));
 		}
 	}
 	
@@ -174,7 +169,7 @@ public class HibernateSimpleConnection {
 	public void addEventAndQueryForItSucceeds() throws ParseException {
 		EvacuationEvent origEvent = createEvacEvent();
 		session.save(origEvent);
-		EvacuationEvent returnedEvent = queryEvacuationEvent();
+		EvacuationEvent returnedEvent = (EvacuationEvent) queryFirstObjectsInDB("EvacuationEvent");;
 		compareEvents(origEvent, returnedEvent);
 	}
 
@@ -198,33 +193,69 @@ public class HibernateSimpleConnection {
 		return origEvent;
 	}
 
-	private EvacuationEvent queryEvacuationEvent() {
-		Query query = session.createQuery("from EvacuationEvent");
-		List<EvacuationEvent> list = query.list();
-		java.util.Iterator<EvacuationEvent> iter = list.iterator();
-		assertTrue(iter.hasNext());
-		return iter.next();
-//			System.out.println("Event ID: \"" + event.getId() + "\", title:" + event.getTitle() + "\", geoId:"
-//					+ event.getGeoId() + "\", geoLongitude:" + event.getGeoLongitude() + "\", geoLatitude:"
-//					+ event.getGeoLatitude() + "\", time:" + sdf.format(event.getTime()) + "\", capacity:"
-//					+ event.getCapacity() + "\"");
+	@Test
+	public void registerNewAccount() {
+		LoginAccounts login = new LoginAccounts("Serious", "Sam1234");
+		session.save(login);
+		session.getTransaction().commit();
+		session = startSessionAndTransaction();
+		LoginAccounts retLogin = (LoginAccounts) queryFirstObjectsInDB("LoginAccounts");
+		compareLoginAccounts(login, retLogin);
 	}
 
-	private UserInfo queryFirstUserInfo() {
-		java.util.Iterator<UserInfo> iter = queryAllUsersInfo().iterator();
-		assertTrue(iter.hasNext());
-		return iter.next();
-//      System.out.println("user ID: \"" + person.getId() + "\", userName: \"" + person.getUserName()
-//			+ "\", name: \"" + person.getName() + "\"");
+	private void compareLoginAccounts(LoginAccounts origAccount, LoginAccounts returnedAccount) {
+		assertEquals(origAccount.getUserName(), returnedAccount.getUserName());
+		assertEquals(origAccount.getUserPass(), returnedAccount.getUserPass());
 	}
 	
-	private List<UserInfo> queryAllUsersInfo() {
-		Query query = session.createQuery("from UserInfo");
-		return query.list();
+	@Test
+	public void addRoleToOneAccountAndNotTheOther() {
+		String un1 = "firstUser";
+		String un2 = "secondUser";
+		LoginAccounts first = new LoginAccounts(un1, "Sam1234");
+		LoginAccounts second = new LoginAccounts(un2, "Sam1234");
+		
+		String role1 = "mySuperRole";
+		UserRoles role = new UserRoles(new UserRolesId(first.getUserName(), role1), first);
+		
+		session.save(first);
+		session.save(role);
+		session.save(second);
+		session.getTransaction().commit();
+		session = startSessionAndTransaction();
+		List<Object> loginAccounts = queryAllObjectsInDB("LoginAccounts");
+		assertEquals(2, loginAccounts.size());
+		for (Object accountObj: loginAccounts) {
+			LoginAccounts account = (LoginAccounts) accountObj;
+			String accountName = account.getUserName();
+			if (accountName.equals(un1)) {
+				assertEquals(1, account.getUserRoles().size());
+				assertTrue(account.getUserRoles().contains(role));
+			} else if (accountName.equals(un2)) {
+				assertEquals(0, account.getUserRoles().size());
+			} else {
+				fail("Found account with an unrecognized name: "+ accountName);
+			}
+		}
+	}
+	
+	// for debugging
+	private void printRoles(Set userRolesId) {
+		for(Object tmp: userRolesId) {
+			UserRoles role = (UserRoles) tmp;
+			System.out.println(role);
+		}
 	}
 
-//	@Test
-//	public void registerNewAccount() {
-//		
-//	}
+	private Object queryFirstObjectsInDB(String className) {
+		java.util.Iterator<Object> iter = queryAllObjectsInDB(className).iterator();
+		assertTrue(iter.hasNext());
+		return iter.next();
+	}
+	
+	
+	private List<Object> queryAllObjectsInDB(String className) {
+		Query query = session.createQuery("from " + className);
+		return query.list();
+	}
 }
