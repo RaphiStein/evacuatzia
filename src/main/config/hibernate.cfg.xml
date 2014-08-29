@@ -14,7 +14,7 @@
         -->
         <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 
-        <property name="connection.driver_class">com.postgresql.jdbc.driver</property>
+        <property name="connection.driver_class">org.postgresql.Driver</property>
         <property name="connection.url">jdbc:postgresql://localhost/evac</property>
         
         <property name="connection.username">tomcat_regular</property>
