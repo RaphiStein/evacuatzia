@@ -36,7 +36,7 @@ public class HibernateSimpleConnection {
 	@After
 	public void teardown() {
 		session.getTransaction().commit();
-		dropAllTables();
+//		dropAllTables();
 	}
 	
 	private void dropAllTables() {
@@ -223,5 +223,8 @@ public class HibernateSimpleConnection {
 		return query.list();
 	}
 
-
+//	@Test
+//	public void registerNewAccount() {
+//		
+//	}
 }

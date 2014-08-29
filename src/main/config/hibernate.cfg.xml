@@ -6,10 +6,17 @@
     <session-factory>
 
         <!-- hibernate dialect -->
+        <!-- 
         <property name="hibernate.dialect">org.hibernate.dialect.MySQL5InnoDBDialect</property>
 
         <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
         <property name="connection.url">jdbc:mysql://localhost/evac</property>
+        -->
+        <property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
+
+        <property name="connection.driver_class">com.postgresql.jdbc.driver</property>
+        <property name="connection.url">jdbc:postgresql://localhost/evac</property>
+        
         <property name="connection.username">tomcat_regular</property>
         <property name="connection.password">R3gul4r</property>
         <!--  Commit on demand -->
