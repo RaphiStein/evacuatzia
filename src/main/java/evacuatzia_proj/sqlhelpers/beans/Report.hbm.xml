@@ -12,6 +12,9 @@
 			<generator class="increment" />
 		</id>
 		<property name="title" type="string" length="500" />
+        <property name="location"/>
+        <property name="radius" type="double"/>
+        <property name="time"/>
 		<!-- no need to cascade. we insert this only once and then not change the reporting user -->
 		<many-to-one name="userReported" class="evacuatzia_proj.sqlhelpers.beans.UserInfo" column="user_reported" lazy="false" not-null="true" />
 		

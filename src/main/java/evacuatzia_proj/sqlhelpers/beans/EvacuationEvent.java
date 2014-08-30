@@ -9,21 +9,20 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
 
 @Entity
 // This will be a table in the DB
 @Table(name = "evac_event")
-public class EvacuationEvent implements java.io.Serializable {
+public class EvacuationEvent extends LocationBasedItem implements java.io.Serializable { 
 	Long id;
-	String title;
-	Long geoId; // ID in geometric database
-	Double geoLongitude; // longitude
-	Double geoLatitude; // latitude
-	Date time;
+
 	Integer capacity;
 	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
 
@@ -31,14 +30,9 @@ public class EvacuationEvent implements java.io.Serializable {
 		super();
 	}
 
-	public EvacuationEvent(String title, Long geoId, Double geoLongitude, Double geoLatitude, Date time,
+	public EvacuationEvent(String title, Double geoLongitude, Double geoLatitude, Double radius, Date time,
 			Integer capacity) {
-		super();
-		this.title = title;
-		this.geoId = geoId;
-		this.geoLongitude = geoLongitude;
-		this.geoLatitude = geoLatitude;
-		this.time = time;
+		super(title, geoLongitude, geoLatitude, radius, time);
 		this.capacity = capacity;
 	}
 
@@ -51,48 +45,6 @@ public class EvacuationEvent implements java.io.Serializable {
 
 	public void setId(Long id) {
 		this.id = id;
-	}
-
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
-	}
-
-	public Long getGeoId() {
-		return geoId;
-	}
-
-	public void setGeoId(Long geoId) {
-		this.geoId = geoId;
-	}
-
-	public Double getGeoLongitude() {
-		return geoLongitude;
-	}
-
-	public void setGeoLongitude(Double geoLongitude) {
-		this.geoLongitude = geoLongitude;
-	}
-
-	public Double getGeoLatitude() {
-		return geoLatitude;
-	}
-
-	public void setGeoLatitude(Double geoLatitude) {
-		this.geoLatitude = geoLatitude;
-	}
-
-	@Temporal(TemporalType.TIMESTAMP)
-	// Setting up a specific DB date type
-	public Date getTime() {
-		return time;
-	}
-
-	public void setTime(Date time) {
-		this.time = time;
 	}
 
 	public Integer getCapacity() {

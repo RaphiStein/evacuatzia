@@ -12,9 +12,8 @@
 			<generator class="increment" />
 		</id>
 		<property name="title" type="string" length="500" />
-		<property name="geoId" type="long" />
-		<property name="geoLongitude" type="double" />
-		<property name="geoLatitude" type="double" />
+		<property name="location"/>
+		<property name="radius" type="double"/>
 		<property name="time"/>
 		<property name="capacity" type="int" />
 		<!-- cascade="save-update" means we only need to save the update for the 

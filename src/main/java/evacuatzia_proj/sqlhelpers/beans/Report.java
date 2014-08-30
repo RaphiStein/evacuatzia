@@ -1,5 +1,7 @@
 package evacuatzia_proj.sqlhelpers.beans;
 
+import java.util.Date;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -11,15 +13,15 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 //This will be a table in the DB
 @Table(name = "report")
-public class Report implements java.io.Serializable {
+public class Report extends LocationBasedItem implements java.io.Serializable {
 	Long id;
 	UserInfo userReported;
-	String title;
+//	String title;
 	
-	public Report(UserInfo userReported, String title) {
-		super();
+	public Report(UserInfo userReported, String title, Double geoLongitude, Double geoLatitude, Double radius, Date time) {
+		super(title, geoLongitude, geoLatitude, radius, time);
 		this.userReported = userReported;
-		this.title = title;
+//		this.title = title;
 	}
 
 	public Report() {
@@ -35,14 +37,7 @@ public class Report implements java.io.Serializable {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public String getTitle() {
-		return title;
-	}
-	
-	public void setTitle(String title) {
-		this.title = title;
-	}
-	
+
 	public UserInfo getUserReported() {
 		return userReported;
 	}

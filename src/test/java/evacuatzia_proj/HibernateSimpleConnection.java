@@ -17,6 +17,11 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.vividsolutions.jts.geom.Coordinate;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
+
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 import evacuatzia_proj.sqlhelpers.beans.LoginAccounts;
@@ -74,7 +79,7 @@ public class HibernateSimpleConnection {
 	}
 	
 	@Test
-	public void simpleReportCreation() {
+	public void simpleReportCreation() throws ParseException {
 		UserInfo user = createNewUser();
 		session.save(user);
 		
@@ -92,10 +97,18 @@ public class HibernateSimpleConnection {
 		
 		assertEquals(report, returnedReport);
 		assertEquals(user, returnedReport.getUserReported());
+		assertEquals(report.getTitle(), returnedReport.getTitle());
+		assertEquals(report.getLocation(), returnedReport.getLocation());
+		assertEquals(report.getRadius(), returnedReport.getRadius());
+		assertEquals(report.getTime(), returnedReport.getTime());
 	}
 	
-	private Report createNewReportByUser(UserInfo user) {
-		return new Report(user, "some report title" + uniqueNum++);
+	private Report createNewReportByUser(UserInfo user) throws ParseException {
+		Date time = sdf.parse("13.12.2011");
+		Double geoLong = 12.3456789;
+		Double geoLat = 12.3456789;
+		Double radius = 20.324;
+		return new Report(user, "some report title" + uniqueNum++, geoLong, geoLat, radius, time);
 	}
 
 
@@ -183,21 +196,23 @@ public class HibernateSimpleConnection {
 
 	private void compareEvents(EvacuationEvent origEvent, EvacuationEvent returnedEvent) {
 		assertEquals(origEvent.getTitle(), returnedEvent.getTitle());
-		assertEquals(origEvent.getGeoId(), returnedEvent.getGeoId());
-		assertEquals(origEvent.getGeoLongitude(), returnedEvent.getGeoLongitude());
-		assertEquals(origEvent.getGeoLatitude(), returnedEvent.getGeoLatitude());
 		assertEquals(origEvent.getTime(), returnedEvent.getTime());
 		assertEquals(origEvent.getCapacity(), returnedEvent.getCapacity());
+		assertEquals(origEvent.getLocation(), returnedEvent.getLocation());
+		assertEquals(origEvent.getRadius(), returnedEvent.getRadius());
 	}
 
 	private EvacuationEvent createEvacEvent() throws ParseException {
 		String title = "a title";
-		Long geoID = 999L;
 		Double geoLong = 12.3456789;
 		Double geoLat = 12.3456789;
+		Double radius = 20.324;
+//		Double geoLong = 30.0;
+//		Double geoLat = 130.0;
+//		Double radius = 10.0;
 		Date time = sdf.parse("13.12.2011");
 		Integer capacity = 20;
-		EvacuationEvent origEvent = new EvacuationEvent(title, geoID, geoLong, geoLat, time, capacity);
+		EvacuationEvent origEvent = new EvacuationEvent(title, geoLong, geoLat, radius, time, capacity);
 		return origEvent;
 	}
 
@@ -269,4 +284,16 @@ public class HibernateSimpleConnection {
 		}
 		return null;
 	}
+	
+//	@Test
+//	public void tmpTest() {
+//		Coordinate coor1 = new Coordinate(20.0, 10.0);
+//		Coordinate coor2 = new Coordinate(20.0, 11.0);
+//		GeometryFactory gf = new GeometryFactory();
+//		Geometry p1 = gf.createPoint(coor1);
+//		Geometry p2 = gf.createPoint(coor1);
+//		Geometry p3 = gf.createPoint(coor2);
+//		assertEquals(p1, p2);
+//		assertFalse(p1.equals(p3));
+//	}
 }
