@@ -44,12 +44,12 @@ public class HibernateSimpleConnection {
 	}
 	
 	private void dropAllTables() {
-		Session s = startSessionAndTransaction();
+		session = startSessionAndTransaction();
 		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo", "UserRoles", "LoginAccounts"};
 		for (String type: toClear) {
-			hqlTruncate(type, s);
+			hqlTruncate(type);
 		}
-		s.getTransaction().commit();
+		session.getTransaction().commit();
 	}
 
 
@@ -59,10 +59,18 @@ public class HibernateSimpleConnection {
 		return s;
 	}
 
-	private int hqlTruncate(String myType, Session s){
-	    String hql = String.format("delete from %s",myType);
-	    Query query = s.createQuery(hql);
-	    return query.executeUpdate();
+	private void hqlTruncate(String myType){
+//	    String hql = String.format("delete from %s",myType);
+//	    Query query = s.createQuery(hql);
+//	    query.executeUpdate();
+		List<Object> objs = queryAllObjectsInDB(myType);
+		if (objs == null) {
+			// Data table didn't exist
+			return;
+		}
+		for (Object obj: objs) {
+			session.delete(obj);
+		}
 	}
 	
 	@Test
@@ -255,7 +263,10 @@ public class HibernateSimpleConnection {
 	
 	
 	private List<Object> queryAllObjectsInDB(String className) {
-		Query query = session.createQuery("from " + className);
-		return query.list();
+		Query query = session.createQuery("FROM " + className);
+		if (query != null) {
+			return query.list();
+		}
+		return null;
 	}
 }
