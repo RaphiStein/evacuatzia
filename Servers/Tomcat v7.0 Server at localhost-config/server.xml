@@ -124,22 +124,8 @@
              Documentation at: /docs/config/valve.html
              Note: The pattern used is equivalent to using pattern="common" -->
         <Valve className="org.apache.catalina.valves.AccessLogValve" directory="logs" pattern="%h %l %u %t &quot;%r&quot; %s %b" prefix="localhost_access_log." suffix=".txt"/>
-          
-      <Context docBase="evacuatzia_proj" path="/evacuatzia" reloadable="true" source="org.eclipse.jst.j2ee.server:evacuatzia_proj">
-         <Realm className="org.apache.catalina.realm.JDBCRealm"
-          driverName="org.postgresql.Driver"
-          connectionURL="jdbc:postgresql://localhost/evac?user=tomcat_login&amp;password=#L0g1n#"
-          userTable="login_accounts" userNameCol="username" userCredCol="userpass"
-          userRoleTable="user_roles" roleNameCol="rolename"/>
-          
-         <!-- 
-          <Realm className="org.apache.catalina.realm.JDBCRealm"
-            driverName="com.mysql.Driver"
-            connectionURL="jdbc:mysql://localhost/authority?user=tomcat_login&amp;password=#L0g1n#"
-            userTable="login_accounts" userNameCol="userName" userCredCol="userPass"
-            userRoleTable="user_roles" roleNameCol="roleName"/> 
-      -->
-      </Context> </Host>
+
+      <Context docBase="evacuatzia" path="/evacuatzia" reloadable="true" source="org.eclipse.jst.j2ee.server:evacuatzia"/></Host>
     </Engine>
   </Service>
 </Server>
