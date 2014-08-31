@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.junit.Before;
 import org.junit.Test;
 
 import evacuatzia_proj.components.User;
@@ -17,6 +18,7 @@ public class ApiUserTest {
 	
 	private void dropAllTables() {
 		Session s = SessionFactoryUtil.getSessionFactory().getCurrentSession();
+		s.beginTransaction();
 		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo", "UserRoles", "LoginAccounts"};
 		for (String type: toClear) {
 			hqlTruncate(type, s);
@@ -35,6 +37,11 @@ public class ApiUserTest {
 			return query.list();
 		}
 		return null;
+	}
+	
+	@Before
+	public void setup() {
+		dropAllTables();
 	}
 	
 	@Test
