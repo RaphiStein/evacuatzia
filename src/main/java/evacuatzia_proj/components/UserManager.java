@@ -2,9 +2,11 @@ package evacuatzia_proj.components;
 
 import java.util.List;
 
+import org.hibernate.Criteria;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import evacuatzia_proj.exceptions.NameException;
@@ -15,7 +17,7 @@ import evacuatzia_proj.sqlhelpers.beans.LoginAccounts;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
 import evacuatzia_proj.sqlhelpers.beans.UserRoles;
 import evacuatzia_proj.sqlhelpers.beans.UserRolesId;
-import evacuatzia_proj.utils.StringEncoder;
+import evacuatzia_proj.utils.StringHashingUtils;
 
 public class UserManager {
 	private static final SessionFactory sf = SessionFactoryUtil.getSessionFactory();
@@ -25,7 +27,7 @@ public class UserManager {
 		validateUsernameSupplied(username);
 		validatePasswordSupplied(password);
 		validateNameSupplied(name);
-		String hashedPassword = StringEncoder.toMD5(password);
+		String hashedPassword = StringHashingUtils.toMD5(password);
 		LoginAccounts loginAccount = new LoginAccounts(username, hashedPassword);
 		UserRoles role = new UserRoles(new UserRolesId(username, sUserRole), loginAccount);
 		UserInfo userInfo = new UserInfo(username, name);
@@ -67,8 +69,29 @@ public class UserManager {
 		return true;
 	}
 
-	public static void changePassword(String username, String password) {
-		// TODO implement
+	public static void changePassword(String username, String prevPassword, String newPassword) {
+		validateUsernameSupplied(username);
+		validatePasswordSupplied(prevPassword);
+		validatePasswordSupplied(newPassword);
+		Session s = sf.openSession();
+		s.beginTransaction();
+		try {
+			// get user account, check prevpassword and if ok, update it.
+			Criteria cr = s.createCriteria(LoginAccounts.class);
+			cr.add(Restrictions.eq("username", username));
+			LoginAccounts account = (LoginAccounts) cr.uniqueResult();
+			if (StringHashingUtils.stringMatchMD5(prevPassword, account.getUserPass())) {
+				account.setUserPass(StringHashingUtils.toMD5(newPassword));
+			} else {
+				throw new PasswordException("Existing password incorrect");
+			}
+			s.getTransaction().commit();
+		} catch (HibernateException e ) {
+			// TODO: refine this
+			System.out.println("GILAD: error in changePassword - got message: " + e.getMessage());
+		} finally {
+			s.close();
+		}
 	}
 
 	public static boolean isUsernameAvailable(String username) {
