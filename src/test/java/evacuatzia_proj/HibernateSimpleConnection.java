@@ -69,10 +69,6 @@ public class HibernateSimpleConnection {
 //	    Query query = s.createQuery(hql);
 //	    query.executeUpdate();
 		List<Object> objs = queryAllObjectsInDB(myType);
-		if (objs == null) {
-			// Data table didn't exist
-			return;
-		}
 		for (Object obj: objs) {
 			session.delete(obj);
 		}
