@@ -1,19 +1,19 @@
 package evacuatzia_proj.components;
 
 public class LocationBasedItem {
-	private final int eventID;
+	private final Long eventID;
 	private final String title;
 	private final Geometry location;
 	
 	
-	public LocationBasedItem(int eventID, String title, Geometry location) {
+	public LocationBasedItem(Long eventID, String title, Geometry location) {
 		super();
 		this.eventID = eventID;
 		this.title = title;
 		this.location = location;
 	}
 	
-	public int getEventID() {
+	public Long getEventID() {
 		return eventID;
 	}
 //	public void setEventID(int eventID) {

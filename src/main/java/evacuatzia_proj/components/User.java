@@ -1,6 +1,7 @@
 package evacuatzia_proj.components;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
 	private final String username, name;
@@ -31,5 +32,9 @@ public class User {
 	
 	public boolean deleteReport(Report report) {
 		return ReportManager.removeReport(this, report);
+	}
+	
+	public List<Report> getReports() {
+		return ReportManager.getReportsByUser(this);
 	}
 }
