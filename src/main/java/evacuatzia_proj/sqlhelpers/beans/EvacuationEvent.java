@@ -11,11 +11,6 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
-import org.hibernate.annotations.Type;
-
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
 
 @Entity
 // This will be a table in the DB
@@ -24,6 +19,7 @@ public class EvacuationEvent extends LocationBasedItem implements java.io.Serial
 	Long id;
 
 	Integer capacity;
+	String means;
 	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
 
 	public EvacuationEvent() {
@@ -31,9 +27,10 @@ public class EvacuationEvent extends LocationBasedItem implements java.io.Serial
 	}
 
 	public EvacuationEvent(String title, Double geoLongitude, Double geoLatitude, Double radius, Date time,
-			Integer capacity) {
+			String meansOfEvac, Integer capacity) {
 		super(title, geoLongitude, geoLatitude, radius, time);
 		this.capacity = capacity;
+		this.means = meansOfEvac;
 	}
 
 	@Id
@@ -45,6 +42,14 @@ public class EvacuationEvent extends LocationBasedItem implements java.io.Serial
 
 	public void setId(Long id) {
 		this.id = id;
+	}
+	
+	public String getMeans() {
+		return means;
+	}
+
+	public void setMeans(String means) {
+		this.means = means;
 	}
 
 	public Integer getCapacity() {
