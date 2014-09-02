@@ -19,7 +19,7 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="">Johnny</a></li>
+            <li><a href=""><%= request.getSession().getAttribute("name") == null ? "Not Logged In" : "Logged in" %></a></li>
             <li><a href="#">My Account</a></li>
 
             <li class="dropdown">
