@@ -1,5 +1,6 @@
 package evacuatzia_proj;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -10,6 +11,8 @@ import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 
+import evacuatzia_proj.common.TestUtils;
+import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.PasswordException;
 import evacuatzia_proj.exceptions.UsernameException;
@@ -17,32 +20,9 @@ import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 
 public class ApiUserTest {
 	
-	private void dropAllTables() {
-		Session s = SessionFactoryUtil.getSessionFactory().getCurrentSession();
-		s.beginTransaction();
-		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo", "UserRoles", "LoginAccounts"};
-		for (String type: toClear) {
-			hqlTruncate(type, s);
-		}
-		s.getTransaction().commit();
-	}
-	private void hqlTruncate(String myType, Session s){
-		List<Object> objs = queryAllObjectsInDB(myType, s);
-		for (Object obj: objs) {
-			s.delete(obj);
-		}
-	}
-	private List<Object> queryAllObjectsInDB(String className, Session s) {
-		Query query = s.createQuery("FROM " + className);
-		if (query != null) {
-			return query.list();
-		}
-		return null;
-	}
-	
 	@Before
 	public void setup() {
-		dropAllTables();
+		TestUtils.dropAllTables();
 	}
 	
 	@Test
@@ -96,5 +76,17 @@ public class ApiUserTest {
 		assertTrue(UserManager.isUsernameAvailable(username));
 		UserManager.register(username, pass1, name);
 		assertFalse(UserManager.isUsernameAvailable(username));
+	}
+	
+	@Test
+	public void canGetAllRegisteredAccounts() {
+		User user1 = UserManager.register("1", "mypass1", "myName1");
+		User user2 = UserManager.register("2", "mypass2", "myName2");
+		User user3 = UserManager.register("3", "mypass3", "myName3");
+		List<User> usersList = UserManager.getAllUsers();
+		assertEquals(3, usersList.size());
+		assertTrue(usersList.contains(user1));
+		assertTrue(usersList.contains(user2));
+		assertTrue(usersList.contains(user3));
 	}
 }

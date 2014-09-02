@@ -105,7 +105,7 @@ public class UserManager {
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			// TODO: make sure reports and events are removed
+			// TODO: make sure reports and event registration are removed
 			LoginAccounts account = getLoginAccountByUsername(username, s);
 			UserInfo userInfo = getUserInfoByUsername(username, s);
 			deleteIfNotNull(account, s);
@@ -160,14 +160,6 @@ public class UserManager {
 		return createUserListFromUserInfoList(userInfos);
 	}
 
-	private static List<User> createUserListFromUserInfoList(List<UserInfo> userInfos) {
-		List<User> retUsers = new ArrayList<>();
-		for (UserInfo info: userInfos) {
-			retUsers.add(new User(info.getUserName(), info.getName(), info.getId()));
-		}
-		return retUsers;
-	}
-
 	public static User getUserByUsername(String username) {
 		validateUsernameSupplied(username);
 		UserInfo info;
@@ -187,7 +179,7 @@ public class UserManager {
 		if (null == info) {
 			return null;
 		}
-		return new User(info.getUserName(), info.getName(), info.getId());
+		return createApiUserFromDbUser(info);
 	}
 
 	@SuppressWarnings("unchecked")
@@ -210,6 +202,19 @@ public class UserManager {
 		return createUserListFromUserInfoList(userInfoList);
 	}
 
+	// package protected
+	static User createApiUserFromDbUser(UserInfo user) {
+		return new User(user.getUserName(), user.getName(), user.getId());
+	}
+	
+	private static List<User> createUserListFromUserInfoList(List<UserInfo> userInfos) {
+		List<User> retUsers = new ArrayList<>();
+		for (UserInfo info: userInfos) {
+			retUsers.add(new User(info.getUserName(), info.getName(), info.getId()));
+		}
+		return retUsers;
+	}
+	
 	private static void validateNameSupplied(String name) {
 		if (!stringSupplied(name))
 			throw new NameException("Must supply a pasword");

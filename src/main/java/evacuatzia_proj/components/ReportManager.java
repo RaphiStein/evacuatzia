@@ -14,25 +14,30 @@ import com.vividsolutions.jts.geom.Coordinate;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
+import evacuatzia_proj.sqlhelpers.beans.UserInfo;
+import evacuatzia_proj.sqlhelpers.common.Utils;
 
 public class ReportManager extends LocationBasedItemManager {
 	private static final SessionFactory sf = SessionFactoryUtil.getSessionFactory();
-	
+
 	public static Report editReport(Report report, String title, Geometry location, Date reportTime) {
-		// TODO: validate all "must have" fields
+		// TODO: check/validate all "must have" fields
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		Long reportId = report.getEventID();
 		try {
 			Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
-			cr.add(Restrictions.eq("id" ,reportId));
-			evacuatzia_proj.sqlhelpers.beans.Report dbReport = (evacuatzia_proj.sqlhelpers.beans.Report) cr.uniqueResult();
+			cr.add(Restrictions.eq("id", reportId));
+			evacuatzia_proj.sqlhelpers.beans.Report dbReport = (evacuatzia_proj.sqlhelpers.beans.Report) cr
+					.uniqueResult();
 			if (null == dbReport) {
 				// report apparently was deleted...
-				// TODO: throw something
+				// TODO: throw something - report wasn't found in database -
+				// might have been removed.
 			}
 			dbReport.setTitle(title);
-			// TODO: set coordinates or change to setting Geometry directly (i preffer the latter)
+			// TODO: set coordinates or change to setting Geometry directly (i
+			// preffer the latter)
 			dbReport.setTime(reportTime);
 			s.update(dbReport);
 			t.commit();
@@ -46,35 +51,61 @@ public class ReportManager extends LocationBasedItemManager {
 	}
 
 	public static Report createNewReport(User user, String title, Geometry location, Date reportTime) {
+		evacuatzia_proj.sqlhelpers.beans.Report dbReport;
+		UserInfo dbUser;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			
+			dbUser = getUserInfoByApiUser(user, s);
+			if (null == dbUser) {
+				// TODO: throw something
+			}
+			dbReport = new evacuatzia_proj.sqlhelpers.beans.Report(dbUser,
+					title, location.getLongitude(), location.getLatitude(), location.getRadius(), reportTime);
+			s.save(dbReport);
+			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
+			throw e;
 		} finally {
 			s.close();
 		}
-		
-		// TODO: implement
-		return null;
+		return createApiReportFromDbReportAndDbUser(dbReport, dbUser);
 	}
-	
-	public static boolean removeReport(User user, Report report) {
+
+	private static Report createApiReportFromDbReportAndDbUser(evacuatzia_proj.sqlhelpers.beans.Report dbReport, UserInfo dbUser) {
+		Geometry geom = Utils.createOurGeometryFromJtsAndRadius(dbReport.getLocation(), dbReport.getRadius());
+		return new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(), UserManager.createApiUserFromDbUser(dbUser));
+	}
+
+	private static UserInfo getUserInfoByApiUser(User user, Session s) {
+		Criteria cr = s.createCriteria(UserInfo.class);
+		cr.add(Restrictions.eq("id", user.getId()));
+		return (UserInfo) cr.uniqueResult();
+	}
+
+	public static void removeReport(Report report) {
+		if (null == report) {
+			throw new EvacuatziaException("report must not be null");
+		}
+		Long id = report.getEventID();
+		evacuatzia_proj.sqlhelpers.beans.Report dbReport;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			
+			Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
+			cr.add(Restrictions.eq("id", id));
+			dbReport = (evacuatzia_proj.sqlhelpers.beans.Report) cr.uniqueResult();
+			s.delete(dbReport);
+			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
+			throw e;
 		} finally {
 			s.close();
 		}
-		
-		// TODO: implement
-		return false;		
 	}
-	
+
 	@SuppressWarnings("unchecked")
 	public static List<Report> getReportsByUser(User user) {
 		if (null == user) {
@@ -86,7 +117,7 @@ public class ReportManager extends LocationBasedItemManager {
 		Transaction t = s.beginTransaction();
 		try {
 			Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
-			cr.add(Restrictions.eq("userReported" ,id));
+			cr.add(Restrictions.eq("userReported", id));
 			dbReportList = cr.list();
 			t.commit();
 		} catch (RuntimeException e) {
@@ -96,7 +127,7 @@ public class ReportManager extends LocationBasedItemManager {
 			s.close();
 		}
 		List<Report> retReportList = new ArrayList<>();
-		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport: dbReportList) {
+		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : dbReportList) {
 			Coordinate coor = dbReport.getLocation().getCoordinate();
 			Geometry geom = new Geometry(coor.x, coor.y, dbReport.getRadius());
 			retReportList.add(new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(), user));

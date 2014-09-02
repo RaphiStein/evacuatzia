@@ -10,6 +10,9 @@ import org.hibernate.annotations.Type;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.GeometryFactory;
+import com.vividsolutions.jts.geom.Point;
+
+import evacuatzia_proj.sqlhelpers.common.Utils;
 
 public class LocationBasedItem {
 	private String title;
@@ -26,9 +29,7 @@ public class LocationBasedItem {
 		super();
 		this.title = title;
 		this.time = time;
-		Coordinate coor = new Coordinate(geoLongitude, geoLatitude);
-		GeometryFactory gf = new GeometryFactory();
-		location = gf.createPoint(coor);
+		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
 		this.radius = radius;
 	}
 
