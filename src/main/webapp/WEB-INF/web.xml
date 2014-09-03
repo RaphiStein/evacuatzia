@@ -128,7 +128,6 @@
 		<servlet-name>AllUsers</servlet-name>
 		<url-pattern>/user/all</url-pattern>
 	</servlet-mapping>
-	
 </web-app>
 
 
