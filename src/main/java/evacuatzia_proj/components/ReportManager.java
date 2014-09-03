@@ -21,6 +21,9 @@ public class ReportManager extends LocationBasedItemManager {
 	private static final SessionFactory sf = SessionFactoryUtil.getSessionFactory();
 
 	public static Report editReport(Report report, String title, Geometry location, Date reportTime) {
+		if (null == report) {
+			throw new EvacuatziaException("report must not be null");
+		}
 		// TODO: check/validate all "must have" fields
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();

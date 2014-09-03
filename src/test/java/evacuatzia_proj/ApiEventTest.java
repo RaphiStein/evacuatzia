@@ -15,6 +15,7 @@ import evacuatzia_proj.components.EventManager;
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
+import evacuatzia_proj.exceptions.EvacuatziaException;
 
 public class ApiEventTest {
 	private Geometry geom = new Geometry(10.0, 20.0, 5.0);
@@ -93,5 +94,32 @@ public class ApiEventTest {
 		EventManager.registerToEvent(user, event);
 		Event retEvent = EventManager.unregisterFromEvent(user, event);
 		assertEquals(0, retEvent.getRegistrationCount());
+	}
+	
+	@Test(expected=EvacuatziaException.class)
+	public void cantRegisterUserToDeletedEvent() {
+		User user;
+		Event event;
+		try {
+			user = UserManager.register("1", "p", "name");
+			event = Administrator.INSTANCE.createEvent("title", geom, new Date(), "swimming", 4);
+			Administrator.INSTANCE.deleteEvent(event);
+		} catch (RuntimeException e) {
+			fail("Failed but not where expected");
+			return; // just for static analysis
+		}
+		EventManager.registerToEvent(user, event);
+	}
+	
+	@Test
+	public void deleteEventRemovesItForRegisteredUsers() {
+		User user1 = UserManager.register("1", "p", "name");
+		User user2 = UserManager.register("2", "p", "name");
+		Event event = Administrator.INSTANCE.createEvent("title", geom, new Date(), "swimming", 4);
+		EventManager.registerToEvent(user1, event);
+		EventManager.registerToEvent(user2, event);
+		Administrator.INSTANCE.deleteEvent(event);
+		assertNull(EventManager.getEventByUser(user1));
+		assertNull(EventManager.getEventByUser(user2));
 	}
 }

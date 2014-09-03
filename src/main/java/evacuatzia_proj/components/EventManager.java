@@ -15,6 +15,8 @@ import org.hibernate.criterion.Restrictions;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
+import evacuatzia_proj.exceptions.EventFullException;
+import evacuatzia_proj.exceptions.MissingInDatabaseException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
@@ -75,14 +77,14 @@ public class EventManager extends LocationBasedItemManager {
 			// it
 			dbEvent = getDbEventByApiEvent(event, s);
 			if (null == dbEvent) {
-				// TODO: throw something for event not existing in db
+				throw new MissingInDatabaseException("Event was not found in Database. Was it Deleted?");
 			}
 			if (dbEvent.getCapacity() <= dbEvent.getRegisteredUsers().size()) {
-				// TODO: rollback and throw checked exception no available room
+				throw new EventFullException("Event maximum capacity reached.");
 			}
 			UserInfo userInfo = getDbUserByApiUser(user, s);
 			if (null == userInfo) {
-				// TODO: throw something for user not existing in db
+				throw new MissingInDatabaseException("User was not found in Database. Was account deleted?");
 			}
 			dbEvent.registerUser(userInfo);
 			s.update(dbEvent);
@@ -107,18 +109,16 @@ public class EventManager extends LocationBasedItemManager {
 		EvacuationEvent dbEvent;
 		try {
 			dbEvent = getDbEventByApiEvent(event, s);
-			if (null == dbEvent) {
-				// if this is null it must mean the event was removed already -
-				// nothing to return here
-				return null;
-			}
-			UserInfo dbUser = getDbUserByApiUser(user, s);
-			if (null != dbUser && dbEvent.getRegisteredUsers().contains(dbUser)) {
-				// just making sure the user still exists. and is registered to
-				// the event.
-				// if the user exists but not registered - no need to update.
-				dbEvent.getRegisteredUsers().remove(dbUser);
-				s.update(dbEvent);
+			// if this is null it must mean the event was removed already -
+			if (null != dbEvent) {
+				UserInfo dbUser = getDbUserByApiUser(user, s);
+				if (null != dbUser && dbEvent.getRegisteredUsers().contains(dbUser)) {
+					// just making sure the user still exists. and is registered to
+					// the event.
+					// if the user exists but not registered - no need to update.
+					dbEvent.getRegisteredUsers().remove(dbUser);
+					s.update(dbEvent);
+				}
 			}
 			t.commit();
 		} catch (RuntimeException e) {
@@ -143,8 +143,8 @@ public class EventManager extends LocationBasedItemManager {
 			q.setParameter("userId", user.getId());
 			EvacuationEvent dbEvent = (EvacuationEvent) q.uniqueResult();
 			if (null == dbEvent) {
-				// TODO: throw something
-				System.out.println("gilad debug - no event");
+				t.commit();
+				return null;
 			}
 			retEvent = createEventOutOfDbEvent(dbEvent);
 			t.commit();
@@ -214,8 +214,14 @@ public class EventManager extends LocationBasedItemManager {
 		}
 		return retEvent;
 	}
+	
+	static EvacuationEvent getDbEventByApiEvent(Event event, Session s) {
+		Criteria cr = s.createCriteria(EvacuationEvent.class);
+		cr.add(Restrictions.eq("id", event.getEventID()));
+		return (EvacuationEvent) cr.uniqueResult();
+	}
 
-	private static Event createEventOutOfDbEvent(EvacuationEvent dbEvent) {
+	static Event createEventOutOfDbEvent(EvacuationEvent dbEvent) {
 		Geometry geom = Utils.createOurGeometryFromJtsAndRadius(dbEvent.getLocation(), dbEvent.getRadius());
 		return new Event(dbEvent.getId(), dbEvent.getTitle(), geom, dbEvent.getTime(), dbEvent.getMeans(),
 				dbEvent.getCapacity(), dbEvent.getRegisteredUsers().size());
@@ -226,11 +232,5 @@ public class EventManager extends LocationBasedItemManager {
 		cr.add(Restrictions.eq("id", user.getId()));
 		UserInfo userInfo = (UserInfo) cr.uniqueResult();
 		return userInfo;
-	}
-
-	private static EvacuationEvent getDbEventByApiEvent(Event event, Session s) {
-		Criteria cr = s.createCriteria(EvacuationEvent.class);
-		cr.add(Restrictions.eq("id", event.getEventID()));
-		return (EvacuationEvent) cr.uniqueResult();
 	}
 }
