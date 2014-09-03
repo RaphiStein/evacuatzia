@@ -105,14 +105,16 @@ public class UserManager {
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			// TODO: make sure reports and event registration are removed
+			UserInfo dbUser = getUserInfoByUsername(username, s);
+			ReportManager.removeReportsByDbUser(dbUser, s);
+			EventManager.unregisterUserFromEvents(dbUser, s);
 			LoginAccounts account = getLoginAccountByUsername(username, s);
-			UserInfo userInfo = getUserInfoByUsername(username, s);
 			deleteIfNotNull(account, s);
-			deleteIfNotNull(userInfo, s);
+			deleteIfNotNull(dbUser, s);
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
+			throw e;
 		} finally {
 			s.close();
 		}
@@ -136,11 +138,6 @@ public class UserManager {
 		} finally {
 			s.close();
 		}
-	}
-
-	public static void logout(User user) {
-		// TODO: do we need it? (maybe logout from tomcat somehow)
-		// unless we change our implementation somehow - there is nothing to do here.
 	}
 
 	public static List<User> getAllUsers() {
@@ -169,6 +166,7 @@ public class UserManager {
 			info = getUserInfoByUsername(username, s);
 			t.commit();
 		} catch (RuntimeException e) {
+			System.out.println("GILAD: error - " + e.getMessage());
 			t.rollback();
 			throw e;
 		} finally {
@@ -207,6 +205,11 @@ public class UserManager {
 		return new User(user.getUserName(), user.getName(), user.getId());
 	}
 	
+	static UserInfo getUserInfoByUsername(String username, Session s) {
+		Criteria cr = s.createCriteria(UserInfo.class);
+		return (UserInfo) findByUsernameUsingCriteria(username, cr);
+	}
+	
 	private static List<User> createUserListFromUserInfoList(List<UserInfo> userInfos) {
 		List<User> retUsers = new ArrayList<>();
 		for (UserInfo info: userInfos) {
@@ -240,11 +243,6 @@ public class UserManager {
 	private static LoginAccounts getLoginAccountByUsername(String username, Session s) {
 		Criteria cr = s.createCriteria(LoginAccounts.class);
 		return (LoginAccounts) findByUsernameUsingCriteria(username, cr);
-	}
-	
-	private static UserInfo getUserInfoByUsername(String username, Session s) {
-		Criteria cr = s.createCriteria(UserInfo.class);
-		return (UserInfo) findByUsernameUsingCriteria(username, cr);
 	}
 
 	private static Object findByUsernameUsingCriteria(String username, Criteria cr) {

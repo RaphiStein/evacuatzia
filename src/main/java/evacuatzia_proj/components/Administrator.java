@@ -12,7 +12,6 @@ import org.hibernate.Transaction;
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
-import evacuatzia_proj.sqlhelpers.beans.UserInfo;
 
 /**
  * Class for the Administrator of the website. Implemented in the Singleton to

@@ -134,14 +134,11 @@ public class EventManager extends LocationBasedItemManager {
 		if (null == user) {
 			throw new EvacuatziaException("user must not be null");
 		}
-		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
 		Event retEvent;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			Query q = s.createQuery(hql);
-			q.setParameter("userId", user.getId());
-			EvacuationEvent dbEvent = (EvacuationEvent) q.uniqueResult();
+			EvacuationEvent dbEvent = getDbEventByDbUser(user.getId(), s);
 			if (null == dbEvent) {
 				t.commit();
 				return null;
@@ -155,6 +152,14 @@ public class EventManager extends LocationBasedItemManager {
 			s.close();
 		}
 		return retEvent;
+	}
+
+	private static EvacuationEvent getDbEventByDbUser(Long userId, Session s) {
+		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
+		Query q = s.createQuery(hql);
+		q.setParameter("userId", userId);
+		EvacuationEvent dbEvent = (EvacuationEvent) q.uniqueResult();
+		return dbEvent;
 	}
 
 	public static List<User> getRegisteredUsers(Event event) {
@@ -232,5 +237,21 @@ public class EventManager extends LocationBasedItemManager {
 		cr.add(Restrictions.eq("id", user.getId()));
 		UserInfo userInfo = (UserInfo) cr.uniqueResult();
 		return userInfo;
+	}
+
+	static void unregisterUserFromEvents(UserInfo dbUser, Session s) {
+//		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
+//		String hql = "delete from EventRegistrations u where u.id = :userId";
+//		Query q = s.createQuery(hql);
+//		q.setParameter("userId", dbUser.getId());
+//		q.executeUpdate();
+		
+		
+		EvacuationEvent dbEvent = getDbEventByDbUser(dbUser.getId(), s);
+		if (null == dbEvent) {
+			return;
+		}
+		dbEvent.removeUser(dbUser);
+		s.update(dbEvent);
 	}
 }

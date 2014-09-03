@@ -79,7 +79,8 @@ public class ApiEventTest {
 		Event event = Administrator.INSTANCE.createEvent("title", geom, new Date(), "raft", 3);
 		EventManager.registerToEvent(user1, event);
 		EventManager.registerToEvent(user2, event);
-		EventManager.registerToEvent(user3, event);
+		event = EventManager.registerToEvent(user3, event);
+		assertEquals(3, event.getRegistrationCount());
 		List<User> retUsersList = EventManager.getRegisteredUsers(event);
 		assertEquals(3, retUsersList.size());
 		assertTrue(retUsersList.contains(user1));

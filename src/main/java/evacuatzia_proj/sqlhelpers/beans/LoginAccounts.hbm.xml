@@ -11,7 +11,7 @@
         <property name="userPass" type="string">
             <column name="userPass" length="32" not-null="true" />
         </property>
-        <set name="userRoles" table="user_roles" inverse="true" lazy="true" fetch="select">
+        <set name="userRoles" table="user_roles" inverse="true" lazy="true" fetch="select" cascade="all">
             <key>
                 <column name="userName" length="20" not-null="true" />
             </key>

@@ -13,6 +13,7 @@ import org.hibernate.criterion.Restrictions;
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
+import evacuatzia_proj.exceptions.MissingInDatabaseException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
 import evacuatzia_proj.sqlhelpers.common.Utils;
@@ -35,8 +36,7 @@ public class ReportManager extends LocationBasedItemManager {
 					.uniqueResult();
 			if (null == dbReport) {
 				// report apparently was deleted...
-				// TODO: throw something - report wasn't found in database -
-				// might have been removed.
+				throw new MissingInDatabaseException("Report is missing from database. Was it removed?");
 			}
 			dbReport.setTitle(title);
 			// TODO: set coordinates or change to setting Geometry directly (i
@@ -76,17 +76,6 @@ public class ReportManager extends LocationBasedItemManager {
 		return createApiReportFromDbReportAndDbUser(dbReport, dbUser);
 	}
 
-	private static Report createApiReportFromDbReportAndDbUser(evacuatzia_proj.sqlhelpers.beans.Report dbReport, UserInfo dbUser) {
-		Geometry geom = Utils.createOurGeometryFromJtsAndRadius(dbReport.getLocation(), dbReport.getRadius());
-		return new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(), UserManager.createApiUserFromDbUser(dbUser));
-	}
-
-	private static UserInfo getUserInfoByApiUser(User user, Session s) {
-		Criteria cr = s.createCriteria(UserInfo.class);
-		cr.add(Restrictions.eq("id", user.getId()));
-		return (UserInfo) cr.uniqueResult();
-	}
-
 	public static void removeReport(Report report) {
 		if (null == report) {
 			throw new EvacuatziaException("report must not be null");
@@ -114,14 +103,12 @@ public class ReportManager extends LocationBasedItemManager {
 		if (null == user) {
 			throw new EvacuatziaException("user must not be null");
 		}
-		Long id = user.getId();
 		List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
-			cr.add(Restrictions.eq("userReported", id));
-			dbReportList = cr.list();
+			UserInfo dbUser = UserManager.getUserInfoByUsername(user.getUsername(), s);
+			dbReportList = getDbReportsByDbUser(dbUser, s);
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
@@ -136,5 +123,32 @@ public class ReportManager extends LocationBasedItemManager {
 			retReportList.add(new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(), user));
 		}
 		return retReportList;
+	}
+
+	// Package protected
+	static void removeReportsByDbUser(UserInfo user, Session s) {
+		List<evacuatzia_proj.sqlhelpers.beans.Report> userReportList = ReportManager.getDbReportsByDbUser(user, s);
+		for(evacuatzia_proj.sqlhelpers.beans.Report dbReport: userReportList) {
+			s.delete(dbReport);
+		}
+	}
+	
+	private static List<evacuatzia_proj.sqlhelpers.beans.Report> getDbReportsByDbUser(UserInfo user, Session s) {
+		List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList;
+		Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
+		cr.add(Restrictions.eq("userReported", user));
+		dbReportList = cr.list();
+		return dbReportList;
+	}
+	
+	private static Report createApiReportFromDbReportAndDbUser(evacuatzia_proj.sqlhelpers.beans.Report dbReport, UserInfo dbUser) {
+		Geometry geom = Utils.createOurGeometryFromJtsAndRadius(dbReport.getLocation(), dbReport.getRadius());
+		return new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(), UserManager.createApiUserFromDbUser(dbUser));
+	}
+
+	private static UserInfo getUserInfoByApiUser(User user, Session s) {
+		Criteria cr = s.createCriteria(UserInfo.class);
+		cr.add(Restrictions.eq("id", user.getId()));
+		return (UserInfo) cr.uniqueResult();
 	}
 }
