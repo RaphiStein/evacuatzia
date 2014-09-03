@@ -15,6 +15,8 @@ import evacuatzia_proj.components.EventManager;
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
+import evacuatzia_proj.exceptions.EvacuatziaException;
+import evacuatzia_proj.exceptions.IllegalEventCapacity;
 
 public class ApiEventTest {
 	private Geometry geom = new Geometry(10.0, 20.0, 5.0);
@@ -53,7 +55,7 @@ public class ApiEventTest {
 	}
 	
 	@Test
-	public void canEditEvent() {
+	public void canEditEvent() throws IllegalEventCapacity {
 		String title1 = "title1";
 		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
 		Date date1 = new Date();
@@ -70,6 +72,24 @@ public class ApiEventTest {
 		assertEquals(expectedEvent, actualEvent);
 	}
 	
+	@Test(expected=IllegalEventCapacity.class)
+	public void cannotEditEventIfWantsLessUsersThanRegistered() throws IllegalEventCapacity {
+		String title1 = "title1";
+		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
+		Date date1 = new Date();
+		String means1 = "hot air baloon";
+		int cap1 = 5;
+		int cap2 = 2;
+		User user1 = UserManager.register("1", "p", "n");
+		User user2 = UserManager.register("2", "p", "n");
+		User user3 = UserManager.register("3", "p", "n");
+		Event e = Administrator.INSTANCE.createEvent(title1, geom1, date1, means1, cap1);
+		EventManager.registerToEvent(user1, e);
+		EventManager.registerToEvent(user2, e);
+		EventManager.registerToEvent(user3, e);
+		EventManager.editEvent(e, title1, geom1, date1, means1, cap2);
+	}
+	
 	@Test
 	public void canGetRegisteredUsersFromEvent() {
 		User user1 = UserManager.register("1", "p", "name");
@@ -78,7 +98,8 @@ public class ApiEventTest {
 		Event event = Administrator.INSTANCE.createEvent("title", geom, new Date(), "raft", 3);
 		EventManager.registerToEvent(user1, event);
 		EventManager.registerToEvent(user2, event);
-		EventManager.registerToEvent(user3, event);
+		event = EventManager.registerToEvent(user3, event);
+		assertEquals(3, event.getRegistrationCount());
 		List<User> retUsersList = EventManager.getRegisteredUsers(event);
 		assertEquals(3, retUsersList.size());
 		assertTrue(retUsersList.contains(user1));
@@ -93,5 +114,45 @@ public class ApiEventTest {
 		EventManager.registerToEvent(user, event);
 		Event retEvent = EventManager.unregisterFromEvent(user, event);
 		assertEquals(0, retEvent.getRegistrationCount());
+	}
+	
+	@Test(expected=EvacuatziaException.class)
+	public void cantRegisterUserToDeletedEvent() {
+		User user;
+		Event event;
+		try {
+			user = UserManager.register("1", "p", "name");
+			event = Administrator.INSTANCE.createEvent("title", geom, new Date(), "swimming", 4);
+			Administrator.INSTANCE.deleteEvent(event);
+		} catch (RuntimeException e) {
+			fail("Failed but not where expected");
+			return; // just for static analysis
+		}
+		EventManager.registerToEvent(user, event);
+	}
+	
+	@Test
+	public void deleteEventRemovesItForRegisteredUsers() {
+		User user1 = UserManager.register("1", "p", "name");
+		User user2 = UserManager.register("2", "p", "name");
+		Event event = Administrator.INSTANCE.createEvent("title", geom, new Date(), "swimming", 4);
+		EventManager.registerToEvent(user1, event);
+		EventManager.registerToEvent(user2, event);
+		Administrator.INSTANCE.deleteEvent(event);
+		assertNull(EventManager.getEventByUser(user1));
+		assertNull(EventManager.getEventByUser(user2));
+	}
+	
+	@Test
+	public void canGetEventByUser() {
+		User user1 = UserManager.register("1", "p", "name");
+		assertNull(EventManager.getEventByUser(user1));
+		Event event1 = Administrator.INSTANCE.createEvent("title1", geom, new Date(), "swimming", 4);
+		Event event2 = Administrator.INSTANCE.createEvent("title2", geom, new Date(), "party boat", 40);
+		EventManager.registerToEvent(user1, event1);
+		Event returnedEvent = EventManager.getEventByUser(user1);
+		// can't compare events since number of registered users will be different. comparing only titles instead.
+		assertEquals(event1.getTitle(), returnedEvent.getTitle());
+		assertFalse(event2.getTitle().equals(returnedEvent.getTitle()));
 	}
 }

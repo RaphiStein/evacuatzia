@@ -23,7 +23,7 @@
 			<key column="registered_to_event" />
 			<one-to-many class="evacuatzia_proj.sqlhelpers.beans.UserInfo"/>
 		</set> -->
- 		<set name="registeredUsers" table="evac_registration" cascade="all">
+ 		<set name="registeredUsers" table="evac_registration">
             <key column="Event_ID" not-null="true"/>
             <many-to-many column="User_ID" class="evacuatzia_proj.sqlhelpers.beans.UserInfo" unique="true"/>
         </set>
