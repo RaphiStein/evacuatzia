@@ -11,12 +11,15 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
+import org.springframework.validation.annotation.Validated;
 
 import com.vividsolutions.jts.geom.Coordinate;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.EventFullException;
+import evacuatzia_proj.exceptions.IllegalEventCapacity;
 import evacuatzia_proj.exceptions.MissingInDatabaseException;
+import evacuatzia_proj.exceptions.missingParam.NameException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
@@ -31,19 +34,23 @@ public class EventManager extends LocationBasedItemManager {
 	 * version or Event
 	 */
 	public static Event editEvent(Event event, String title, Geometry location, Date estimatedTime,
-			String meansOfEvacuation, int capacity) {
+			String meansOfEvacuation, int capacity) throws IllegalEventCapacity {
 		if (null == event) {
 			throw new EvacuatziaException("user must not be null");
 		}
-		// TODO: check/validate all the rest of the fields
-		// TODO: also check new capacity is not less then existing number of registered users (can throw in the message the number of currently registered users)
+		CommonUtils.validateTitleSupplied(title);
+		CommonUtils.validateGeometrySupplied(location);
+		CommonUtils.validateDateSupplied(estimatedTime);
+		CommonUtils.validateMeansOfEvac(meansOfEvacuation);
+		
 		Event retEvent;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
 			EvacuationEvent dbEvent = getDbEventByApiEvent(event, s);
-			if (null == dbEvent) {
-				// TODO: throw something
+			ensureEventFoundInDb(dbEvent);
+			if (dbEvent.getRegisteredUsers().size() > capacity) {
+				throw new IllegalEventCapacity("New capacity is lower than the number of registered users");
 			}
 			dbEvent.setTitle(title);
 			dbEvent.setLocation(Utils.getPointFromDecimalValues(location.getLongitude(), location.getLatitude()));
@@ -62,7 +69,7 @@ public class EventManager extends LocationBasedItemManager {
 		}
 		return retEvent;
 	}
-
+	
 	public static Event registerToEvent(User user, Event event) {
 		if (null == user) {
 			throw new EvacuatziaException("user must not be null");
@@ -73,12 +80,8 @@ public class EventManager extends LocationBasedItemManager {
 		Transaction t = s.beginTransaction();
 		EvacuationEvent dbEvent;
 		try {
-			// TODO: if user is registered to an event already, remove him from
-			// it
 			dbEvent = getDbEventByApiEvent(event, s);
-			if (null == dbEvent) {
-				throw new MissingInDatabaseException("Event was not found in Database. Was it Deleted?");
-			}
+			ensureEventFoundInDb(dbEvent);
 			if (dbEvent.getCapacity() <= dbEvent.getRegisteredUsers().size()) {
 				throw new EventFullException("Event maximum capacity reached.");
 			}
@@ -86,6 +89,7 @@ public class EventManager extends LocationBasedItemManager {
 			if (null == userInfo) {
 				throw new MissingInDatabaseException("User was not found in Database. Was account deleted?");
 			}
+			unregisterUserFromEvents(userInfo, s);
 			dbEvent.registerUser(userInfo);
 			s.update(dbEvent);
 			t.commit();
@@ -138,7 +142,7 @@ public class EventManager extends LocationBasedItemManager {
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			EvacuationEvent dbEvent = getDbEventByDbUser(user.getId(), s);
+			EvacuationEvent dbEvent = getDbEventByUserId(user.getId(), s);
 			if (null == dbEvent) {
 				t.commit();
 				return null;
@@ -154,14 +158,6 @@ public class EventManager extends LocationBasedItemManager {
 		return retEvent;
 	}
 
-	private static EvacuationEvent getDbEventByDbUser(Long userId, Session s) {
-		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
-		Query q = s.createQuery(hql);
-		q.setParameter("userId", userId);
-		EvacuationEvent dbEvent = (EvacuationEvent) q.uniqueResult();
-		return dbEvent;
-	}
-
 	public static List<User> getRegisteredUsers(Event event) {
 		if (null == event) {
 			throw new EvacuatziaException("event must not be null");
@@ -172,9 +168,7 @@ public class EventManager extends LocationBasedItemManager {
 		Transaction t = s.beginTransaction();
 		try {
 			EvacuationEvent dbEvent = getDbEventByApiEvent(event, s);
-			if (null == dbEvent) {
-				// TODO: throw something
-			}
+			ensureEventFoundInDb(dbEvent);
 			dbUsersSet = dbEvent.getRegisteredUsers();
 			for (UserInfo dbUser : dbUsersSet) {
 				retUserList.add(new User(dbUser.getUserName(), dbUser.getName(), dbUser.getId()));
@@ -205,10 +199,7 @@ public class EventManager extends LocationBasedItemManager {
 			cr.add(Restrictions.eq("means", meansOfEvacuation));
 			cr.add(Restrictions.eq("capacity", capacity));
 			EvacuationEvent dbEvent = (EvacuationEvent) cr.uniqueResult();
-			if (null == dbEvent) {
-				// TODO: throw something
-				System.out.println("gilad debug - no event");
-			}
+			ensureEventFoundInDb(dbEvent);
 			retEvent = createEventOutOfDbEvent(dbEvent);
 			t.commit();
 		} catch (RuntimeException e) {
@@ -232,6 +223,23 @@ public class EventManager extends LocationBasedItemManager {
 				dbEvent.getCapacity(), dbEvent.getRegisteredUsers().size());
 	}
 
+	static void unregisterUserFromEvents(UserInfo dbUser, Session s) {
+		EvacuationEvent dbEvent = getDbEventByUserId(dbUser.getId(), s);
+		if (null == dbEvent) {
+			return;
+		}
+		dbEvent.removeUser(dbUser);
+		s.update(dbEvent);
+	}
+
+	private static EvacuationEvent getDbEventByUserId(Long userId, Session s) {
+		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
+		Query q = s.createQuery(hql);
+		q.setParameter("userId", userId);
+		EvacuationEvent dbEvent = (EvacuationEvent) q.uniqueResult();
+		return dbEvent;
+	}
+	
 	private static UserInfo getDbUserByApiUser(User user, Session s) {
 		Criteria cr = s.createCriteria(UserInfo.class);
 		cr.add(Restrictions.eq("id", user.getId()));
@@ -239,19 +247,9 @@ public class EventManager extends LocationBasedItemManager {
 		return userInfo;
 	}
 
-	static void unregisterUserFromEvents(UserInfo dbUser, Session s) {
-//		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
-//		String hql = "delete from EventRegistrations u where u.id = :userId";
-//		Query q = s.createQuery(hql);
-//		q.setParameter("userId", dbUser.getId());
-//		q.executeUpdate();
-		
-		
-		EvacuationEvent dbEvent = getDbEventByDbUser(dbUser.getId(), s);
+	private static void ensureEventFoundInDb(EvacuationEvent dbEvent) {
 		if (null == dbEvent) {
-			return;
+			throw new MissingInDatabaseException("Event was not found in Database. Was it Deleted?");
 		}
-		dbEvent.removeUser(dbUser);
-		s.update(dbEvent);
 	}
 }

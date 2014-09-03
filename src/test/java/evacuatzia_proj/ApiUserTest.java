@@ -24,8 +24,8 @@ import evacuatzia_proj.components.ReportManager;
 import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.MissingInDatabaseException;
-import evacuatzia_proj.exceptions.PasswordException;
-import evacuatzia_proj.exceptions.UsernameException;
+import evacuatzia_proj.exceptions.missingParam.PasswordException;
+import evacuatzia_proj.exceptions.missingParam.UsernameException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 

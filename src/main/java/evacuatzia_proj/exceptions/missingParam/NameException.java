@@ -1,4 +1,6 @@
-package evacuatzia_proj.exceptions;
+package evacuatzia_proj.exceptions.missingParam;
+
+import evacuatzia_proj.exceptions.EvacuatziaException;
 
 public class NameException extends EvacuatziaException {
 

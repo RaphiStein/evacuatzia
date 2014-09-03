@@ -16,6 +16,7 @@ import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.EvacuatziaException;
+import evacuatzia_proj.exceptions.IllegalEventCapacity;
 
 public class ApiEventTest {
 	private Geometry geom = new Geometry(10.0, 20.0, 5.0);
@@ -54,7 +55,7 @@ public class ApiEventTest {
 	}
 	
 	@Test
-	public void canEditEvent() {
+	public void canEditEvent() throws IllegalEventCapacity {
 		String title1 = "title1";
 		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
 		Date date1 = new Date();
@@ -69,6 +70,24 @@ public class ApiEventTest {
 		Event actualEvent = EventManager.editEvent(e, title2, geom2, date2, means2, cap2);
 		Event expectedEvent = new Event(e.getEventID(), title2, geom2, date2, means2, cap2, 0);
 		assertEquals(expectedEvent, actualEvent);
+	}
+	
+	@Test(expected=IllegalEventCapacity.class)
+	public void cannotEditEventIfWantsLessUsersThanRegistered() throws IllegalEventCapacity {
+		String title1 = "title1";
+		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
+		Date date1 = new Date();
+		String means1 = "hot air baloon";
+		int cap1 = 5;
+		int cap2 = 2;
+		User user1 = UserManager.register("1", "p", "n");
+		User user2 = UserManager.register("2", "p", "n");
+		User user3 = UserManager.register("3", "p", "n");
+		Event e = Administrator.INSTANCE.createEvent(title1, geom1, date1, means1, cap1);
+		EventManager.registerToEvent(user1, e);
+		EventManager.registerToEvent(user2, e);
+		EventManager.registerToEvent(user3, e);
+		EventManager.editEvent(e, title1, geom1, date1, means1, cap2);
 	}
 	
 	@Test
@@ -122,5 +141,18 @@ public class ApiEventTest {
 		Administrator.INSTANCE.deleteEvent(event);
 		assertNull(EventManager.getEventByUser(user1));
 		assertNull(EventManager.getEventByUser(user2));
+	}
+	
+	@Test
+	public void canGetEventByUser() {
+		User user1 = UserManager.register("1", "p", "name");
+		assertNull(EventManager.getEventByUser(user1));
+		Event event1 = Administrator.INSTANCE.createEvent("title1", geom, new Date(), "swimming", 4);
+		Event event2 = Administrator.INSTANCE.createEvent("title2", geom, new Date(), "party boat", 40);
+		EventManager.registerToEvent(user1, event1);
+		Event returnedEvent = EventManager.getEventByUser(user1);
+		// can't compare events since number of registered users will be different. comparing only titles instead.
+		assertEquals(event1.getTitle(), returnedEvent.getTitle());
+		assertFalse(event2.getTitle().equals(returnedEvent.getTitle()));
 	}
 }

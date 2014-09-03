@@ -11,9 +11,9 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
-import evacuatzia_proj.exceptions.NameException;
-import evacuatzia_proj.exceptions.PasswordException;
-import evacuatzia_proj.exceptions.UsernameException;
+import evacuatzia_proj.exceptions.missingParam.NameException;
+import evacuatzia_proj.exceptions.missingParam.PasswordException;
+import evacuatzia_proj.exceptions.missingParam.UsernameException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.LoginAccounts;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
@@ -26,9 +26,9 @@ public class UserManager {
 	private static final String sUserRole = "user"; // TODO: take this out to some other class
 
 	public static User register(String username, String password, String name) {
-		validateUsernameSupplied(username);
-		validatePasswordSupplied(password);
-		validateNameSupplied(name);
+		CommonUtils.validateUsernameSupplied(username);
+		CommonUtils.validatePasswordSupplied(password);
+		CommonUtils.validateNameSupplied(name);
 		String hashedPassword = StringHashingUtils.toMD5(password);
 		LoginAccounts loginAccount = new LoginAccounts(username, hashedPassword);
 		UserRoles role = new UserRoles(new UserRolesId(username, sUserRole), loginAccount);
@@ -53,9 +53,9 @@ public class UserManager {
 	}
 	
 	public static void changePassword(String username, String prevPassword, String newPassword) {
-		validateUsernameSupplied(username);
-		validatePasswordSupplied(prevPassword);
-		validatePasswordSupplied(newPassword);
+		CommonUtils.validateUsernameSupplied(username);
+		CommonUtils.validatePasswordSupplied(prevPassword);
+		CommonUtils.validatePasswordSupplied(newPassword);
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
@@ -80,7 +80,7 @@ public class UserManager {
 	}
 
 	public static boolean isUsernameAvailable(String username) {
-		validateUsernameSupplied(username);
+		CommonUtils.validateUsernameSupplied(username);
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
@@ -121,8 +121,8 @@ public class UserManager {
 	}
 
 	public static boolean login(String username, String password) {
-		validateUsernameSupplied(username);
-		validatePasswordSupplied(password);
+		CommonUtils.validateUsernameSupplied(username);
+		CommonUtils.validatePasswordSupplied(password);
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
@@ -158,7 +158,7 @@ public class UserManager {
 	}
 
 	public static User getUserByUsername(String username) {
-		validateUsernameSupplied(username);
+		CommonUtils.validateUsernameSupplied(username);
 		UserInfo info;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
@@ -182,7 +182,7 @@ public class UserManager {
 
 	@SuppressWarnings("unchecked")
 	public static List<User> getUsersByName(String name) {
-		validateUsernameSupplied(name);
+		CommonUtils.validateUsernameSupplied(name);
 		List<UserInfo> userInfoList;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
@@ -216,28 +216,6 @@ public class UserManager {
 			retUsers.add(new User(info.getUserName(), info.getName(), info.getId()));
 		}
 		return retUsers;
-	}
-	
-	private static void validateNameSupplied(String name) {
-		if (!stringSupplied(name))
-			throw new NameException("Must supply a pasword");
-	}
-
-	private static void validatePasswordSupplied(String password) {
-		if (!stringSupplied(password))
-			throw new PasswordException("Must supply a pasword");
-	}
-
-	private static void validateUsernameSupplied(String username) {
-		if (!stringSupplied(username))
-			throw new UsernameException("Must supply a username");
-	}
-
-	private static boolean stringSupplied(String s) {
-		if (null == s || s.equals("")) {
-			return false;
-		}
-		return true;
 	}
 
 	private static LoginAccounts getLoginAccountByUsername(String username, Session s) {

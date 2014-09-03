@@ -2,6 +2,11 @@ package evacuatzia_proj.exceptions;
 
 public class EventFullException extends EvacuatziaException {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -7001664694998867977L;
+
 	public EventFullException() {
 		super();
 	}
