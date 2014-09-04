@@ -15,7 +15,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 // This will be a table in the DB
 @Table(name = "evac_event")
-public class EvacuationEvent extends LocationBasedItem implements java.io.Serializable { 
+public class EvacuationEvent extends LocationBasedItem { 
 	Long id;
 
 	Integer capacity;

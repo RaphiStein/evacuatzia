@@ -13,7 +13,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 //This will be a table in the DB
 @Table(name = "report")
-public class Report extends LocationBasedItem implements java.io.Serializable {
+public class Report extends LocationBasedItem {
 	Long id;
 	UserInfo userReported;
 //	String title;

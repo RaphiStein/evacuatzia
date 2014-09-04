@@ -11,11 +11,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 // This will be a table in the DB
 @Table(name = "user_info")
-public class UserInfo implements java.io.Serializable {
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = -1069540749404314178L;
+public class UserInfo {
 	Long id;
 	String userName;
 	String name;	
