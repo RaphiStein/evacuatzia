@@ -2,10 +2,16 @@ package evacuatzia_proj.servlets;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
+import evacuatzia_proj.components.User;
+import evacuatzia_proj.components.UserManager;
 
 
 
@@ -33,7 +39,20 @@ public class Login extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO process user input
-		
+		String username = request.getParameter("user");
+        String pwd = request.getParameter("password");
+        User user;
+        
+        if (UserManager.login(username, pwd)){ //login is sucessful
+        	//instantiate user object
+        	user = UserManager.getUserByUsername(username);
+        	request.getSession().setAttribute("user", user);
+        	request.getRequestDispatcher("resources/jsp/user/" + user.getUsername() + ".jsp").forward(request, response);
+        }
+        else{
+        	//return error
+        }
+        
 	}
 	
 
