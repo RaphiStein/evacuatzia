@@ -7,17 +7,13 @@ import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.Type;
 
-import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
 
 import evacuatzia_proj.sqlhelpers.common.Utils;
 
 public class LocationBasedItem {
 	private String title;
 	private Date time;
-	@Type(type="org.hibernate.spatial.GeometryType")
 	private Geometry location;
 	private Double radius;
 
@@ -51,6 +47,7 @@ public class LocationBasedItem {
 		this.time = time;
 	}
 
+	@Type(type="org.hibernate.spatial.GeometryType")
 	public Geometry getLocation() {
 		return location;
 	}

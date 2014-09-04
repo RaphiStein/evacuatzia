@@ -9,8 +9,6 @@ import static org.junit.Assert.fail;
 import java.util.Date;
 import java.util.List;
 
-import org.hibernate.Query;
-import org.hibernate.Session;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -26,8 +24,6 @@ import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.MissingInDatabaseException;
 import evacuatzia_proj.exceptions.missingParam.PasswordException;
 import evacuatzia_proj.exceptions.missingParam.UsernameException;
-import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
-import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 
 public class ApiUserTest {
 	

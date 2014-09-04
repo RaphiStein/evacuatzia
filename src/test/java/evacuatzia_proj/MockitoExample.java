@@ -8,6 +8,9 @@ import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.Mockito;
 
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
+
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.Report;
 import evacuatzia_proj.components.ReportManager;
@@ -28,5 +31,4 @@ public class MockitoExample {
 		Report example = user.createReport(title, loc, date);
 		assertTrue(example == report);
 	}
-
 }
