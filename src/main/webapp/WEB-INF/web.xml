@@ -110,7 +110,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Report</servlet-name>
-		<url-pattern>/report</url-pattern>
+		<url-pattern>/report/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Event</servlet-name>

@@ -23,7 +23,7 @@
 				<div class="form-group">
 					<label for="name" class="col-lg-2 control-label">Name</label>
 					<div class="col-lg-10">
-						<lable for="name_field" class="form-control ">${user.name}</lable>
+						<label for="name_field" class="form-control ">${user.name}</label>
 					</div>
 				</div>
 			</form>
@@ -52,8 +52,7 @@
 				<div class="row">
 					<div id="" class="list-group">
 					 <c:forEach var="report" items="${reports}"> 
-						<a href="#" id="user1" class="list-group-item"> <img class=""
-							style="float: left; padding-right: 20px;" src="/evacuatzia/resources/img/report.png" />
+						<a href="#" id="user1" class="list-group-item"> <img class="" style="float: left; padding-right: 20px;" src="/evacuatzia/resources/img/report.png" />
 							<h4 class="list-group-item-heading"><span>${report.title}</span></h4>
 							<p class="list-group-item-text">Details</p>
 						</a> 
