@@ -79,6 +79,27 @@
 		<description>Displays all users.</description>
 		<servlet-class>evacuatzia_proj.servlets.AllUsers</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>Map</display-name>
+		<servlet-name>Map</servlet-name>
+		<servlet-class>evacuatzia_proj.servlets.Map</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>SearchEvent</display-name>
+		<servlet-name>SearchEvent</servlet-name>
+		<servlet-class>evacuatzia_proj.servlets.SearchEvents</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		Search for reports by name</description>
+		<display-name>SearchReports</display-name>
+		<servlet-name>SearchReports</servlet-name>
+		<servlet-class>evacuatzia_proj.servlets.SearchReports</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>Bla</servlet-name>
@@ -127,6 +148,22 @@
 	<servlet-mapping>
 		<servlet-name>AllUsers</servlet-name>
 		<url-pattern>/user/all</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Map</servlet-name>
+		<url-pattern>/map</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Map</servlet-name>
+		<url-pattern>/search</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SearchEvent</servlet-name>
+		<url-pattern>/search/events</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>SearchReports</servlet-name>
+		<url-pattern>/search/reports</url-pattern>
 	</servlet-mapping>
 </web-app>
 
