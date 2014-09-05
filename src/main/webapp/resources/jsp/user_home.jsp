@@ -1,8 +1,12 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+
 <!doctype html>
 <html>
-	<%@ include file="resources/includes/head.jsp" %>
+
+	<%@ include file="../includes/head.jsp" %>
+	
 <body>
-	<%@ include file="resources/includes/header.jsp" %>
+	<%@ include file="../includes/header.jsp" %>
 
 	<div class="container" id="main">
 		<div class="col-lg-6">
@@ -13,14 +17,13 @@
 				<div class="form-group">
 					<label for="username" class="col-lg-2 control-label">Username</label>
 					<div class="col-lg-10">
-						<lable for="username_field" class="form-control ">Shmulik123</lable>
+						<label for="username_field" class="form-control ">${user.username}</label>
 					</div>
 				</div>
 				<div class="form-group">
 					<label for="name" class="col-lg-2 control-label">Name</label>
 					<div class="col-lg-10">
-						<lable for="name_field" class="form-control ">Shmulik
-						Ben-David</lable>
+						<lable for="name_field" class="form-control ">${user.name}</lable>
 					</div>
 				</div>
 			</form>
@@ -31,7 +34,7 @@
 				<div class="row">
 					<div id="" class="list-group">
 						<a href="#" id="user1" class="list-group-item"> <img class=""
-							style="float: left; padding-right: 20px;" src="../img/report.png" />
+							style="float: left; padding-right: 20px;" src="/evacuatzia/resources/img/report.png" />
 							<h4 class="list-group-item-heading">
 								Some event</span>
 							</h4>
@@ -48,25 +51,13 @@
 			<div id="list" class="col-lg-6 col-lg-offset-3">
 				<div class="row">
 					<div id="" class="list-group">
+					 <c:forEach var="report" items="${reports}"> 
 						<a href="#" id="user1" class="list-group-item"> <img class=""
-							style="float: left; padding-right: 20px;" src="../img/report.png" />
-							<h4 class="list-group-item-heading">
-								Some report</span>
-							</h4>
+							style="float: left; padding-right: 20px;" src="/evacuatzia/resources/img/report.png" />
+							<h4 class="list-group-item-heading"><span>${report.title}</span></h4>
 							<p class="list-group-item-text">Details</p>
-						</a> <a href="#" id="user1" class="list-group-item"> <img class=""
-							style="float: left; padding-right: 20px;" src="../img/report.png" />
-							<h4 class="list-group-item-heading">
-								Some report</span>
-							</h4>
-							<p class="list-group-item-text">Details</p>
-						</a> <a href="#" id="user1" class="list-group-item"> <img class=""
-							style="float: left; padding-right: 20px;" src="../img/report.png" />
-							<h4 class="list-group-item-heading">
-								Some report</span>
-							</h4>
-							<p class="list-group-item-text">Details</p>
-						</a>
+						</a> 
+						</c:forEach>
 					</div>
 				</div>
 			</div>

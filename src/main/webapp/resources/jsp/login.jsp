@@ -1,5 +1,6 @@
 <!doctype html>
 <html>
+
 	<%@ include file="../includes/head.jsp" %>
 	
 <body>

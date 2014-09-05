@@ -1,8 +1,10 @@
 <!doctype html>
 <html>
-	<%@ include file="resources/includes/head.jsp" %>
+
+	<%@ include file="../includes/head.jsp" %>
+	
 <body>
-	<%@ include file="resources/includes/header.jsp" %>
+	<%@ include file="../includes/header.jsp" %>
 
 
   <div class="row">

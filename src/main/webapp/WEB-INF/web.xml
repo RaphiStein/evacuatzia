@@ -4,7 +4,7 @@
 	<display-name>Archetype Created Web Application</display-name>
 
 	<welcome-file-list>
-		<welcome-file>index.jsp</welcome-file>
+		<welcome-file>resources/jsp/index.jsp</welcome-file>
 	</welcome-file-list>
 
 	<servlet>
@@ -90,7 +90,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>User</servlet-name>
-		<url-pattern>/user/*/</url-pattern>
+		<url-pattern>/user/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>CreateReport</servlet-name>

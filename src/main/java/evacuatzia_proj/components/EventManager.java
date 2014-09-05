@@ -11,15 +11,11 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
-import org.springframework.validation.annotation.Validated;
-
-import com.vividsolutions.jts.geom.Coordinate;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.EventFullException;
 import evacuatzia_proj.exceptions.IllegalEventCapacity;
 import evacuatzia_proj.exceptions.MissingInDatabaseException;
-import evacuatzia_proj.exceptions.missingParam.NameException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;

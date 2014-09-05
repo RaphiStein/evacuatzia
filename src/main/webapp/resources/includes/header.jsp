@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href=""><img src="resources/img/evacuatzia.png" alt="Rideosphere"></a>
+          <a class="navbar-brand" href=""><img src="/evacuatzia/resources/img/evacuatzia.png" alt="Evacuatzia"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
