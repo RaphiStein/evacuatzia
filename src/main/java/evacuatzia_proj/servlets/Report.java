@@ -26,7 +26,6 @@ public class Report extends HttpServlet {
 		System.out.println("Servlet \"Report\" doGet working");
 		//Find report id in the path by pattern matching
 		String pathInfo = request.getPathInfo();
-		System.out.println("pathinfo: "+ pathInfo);
 		Pattern urlPattern = Pattern.compile("^/(\\d+)$");
 		Matcher matcher = urlPattern.matcher(pathInfo);
 		if (matcher.matches()) {

@@ -56,7 +56,7 @@
 							<h4 class="list-group-item-heading"><span>${report.title}</span></h4>
 							<p class="list-group-item-text">Details</p>
 						</a> 
-						</c:forEach>
+                     </c:forEach>
 					</div>
 				</div>
 			</div>

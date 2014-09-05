@@ -1,9 +1,14 @@
 package evacuatzia_proj.components;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
-public class User {
+public class User implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -9197083065908908140L;
 	private final String username, name;
 	private final Long id;
 	

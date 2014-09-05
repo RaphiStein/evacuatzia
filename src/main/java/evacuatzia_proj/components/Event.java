@@ -5,6 +5,10 @@ import java.util.List;
 
 public class Event extends LocationBasedItem {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1566761603367666875L;
 	private final Date estimatedTime;
 	private final String meansOfEvacuation;
 	private final int capacity;

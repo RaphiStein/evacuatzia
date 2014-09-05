@@ -21,6 +21,7 @@
 		<div class="row" style="padding: 10px;">
 			<button type="submit" class="btn btn-default">Log in</button>
 		</div>
+		<span class="error">${error}</span>
 		</form>
 	</div>
 </body>

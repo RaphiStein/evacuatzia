@@ -29,9 +29,8 @@ public class Login extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Login doGet");
-		//request.setAttribute("name", "value");
-		request.getSession().setAttribute("name", 123);
-		request.getRequestDispatcher("resources/jsp/login.jsp").forward(request, response);
+//		request.getSession().setAttribute("name", 123);
+		request.getRequestDispatcher("/resources/jsp/login.jsp").forward(request, response);
 	}
 
 	/**
@@ -50,7 +49,8 @@ public class Login extends HttpServlet {
         	request.getRequestDispatcher("resources/jsp/user/" + user.getUsername() + ".jsp").forward(request, response);
         }
         else{
-        	//return error
+        	request.setAttribute("error", "Bad username or password. Please retry");
+            request.getRequestDispatcher("/resources/jsp/login.jsp").forward(request, response);
         }
         
 	}

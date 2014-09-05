@@ -114,7 +114,7 @@
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>Event</servlet-name>
-		<url-pattern>/event</url-pattern>
+		<url-pattern>/event/*</url-pattern>
 	</servlet-mapping>
 	<servlet-mapping>
 		<servlet-name>AllEvents</servlet-name>

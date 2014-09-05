@@ -1,11 +1,17 @@
 package evacuatzia_proj.components;
 
+import java.io.Serializable;
+
 /** Bean that stores and provides data about points
  * 
  * @author Raphi Stein
  *
  */
-public class Geometry {
+public class Geometry implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 5658227831728369278L;
 	private final Double longitude;
 	private final Double latitude;
 	private final Double radius;
@@ -27,6 +33,13 @@ public class Geometry {
 
 	public double getRadius() {
 		return radius;
+	}
+	
+	
+
+	@Override
+	public String toString() {
+		return "Geometry [longitude=" + longitude + ", latitude=" + latitude + ", radius=" + radius + "]";
 	}
 
 	@Override

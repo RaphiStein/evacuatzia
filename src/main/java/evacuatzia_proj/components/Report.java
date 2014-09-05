@@ -5,6 +5,10 @@ import java.util.List;
 
 public class Report extends LocationBasedItem {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 6086686538525757602L;
 	private final User user;
 	private final Date reportTime;
 

@@ -21,8 +21,8 @@
           <div class="theData col-lg-8"><p> ${report.user.username} </p></div>
         </div>
         <div class="row">
-          <div class="theLabel col-lg-4"><p> Geometry: </p></div>
-          <div class="theData col-lg-8"><p> ${report.location.longitude}, ${report.location.latitude} </p></div>
+          <div class="theLabel col-lg-4"><p> Location: </p></div>
+          <div class="theData col-lg-8"><p> ${report.location} </p></div>
         </div>
         <div class="row">
           <div class="theLabel col-lg-4"><p> Title </p></div>

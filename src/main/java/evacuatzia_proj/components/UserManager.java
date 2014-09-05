@@ -121,8 +121,12 @@ public class UserManager {
 	}
 
 	public static boolean login(String username, String password) {
-		CommonUtils.validateUsernameSupplied(username);
-		CommonUtils.validatePasswordSupplied(password);
+		try {
+			CommonUtils.validateUsernameSupplied(username);
+			CommonUtils.validatePasswordSupplied(password);
+		} catch (RuntimeException e) {
+			return false;
+		}
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {

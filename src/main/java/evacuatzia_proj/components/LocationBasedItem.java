@@ -1,6 +1,12 @@
 package evacuatzia_proj.components;
 
-public class LocationBasedItem {
+import java.io.Serializable;
+
+public class LocationBasedItem implements Serializable{
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = -6049693734298729987L;
 	private final Long eventID;
 	private final String title;
 	private final Geometry location;
