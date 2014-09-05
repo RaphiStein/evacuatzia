@@ -154,6 +154,18 @@ public class EventManager extends LocationBasedItemManager {
 		return retEvent;
 	}
 
+	public static List<Event> getAllEvents(){
+		return null;
+		// TODO implement
+	}
+	public static List<Event> getEventsByLocation(double lat, double lon, int radius){
+		return null;
+		// TODO implement
+	}
+	public static Event getNearestEvent(double lat, double lon){
+		// TODO 
+		return null;
+	}
 	public static List<User> getRegisteredUsers(Event event) {
 		if (null == event) {
 			throw new EvacuatziaException("event must not be null");

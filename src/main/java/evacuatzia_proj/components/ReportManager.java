@@ -124,6 +124,25 @@ public class ReportManager extends LocationBasedItemManager {
 		return createApiReportListFromDbReportList(user, dbReportList);
 	}
 
+	public static List<Report> getAllReports(){
+		// TODO
+		return null;
+		
+	}
+	public static List<Report> getReportsByLocation(double lat, double lon, int radius){
+		// TODO 
+		return null;
+	}
+	public static List<Report> getReportsByTitle(String title){
+		// TODO
+		return null;
+		
+	}
+	public static List<Report> getReportsByPartialTitle(String partialTitle){
+		// TODO
+		return null;
+		
+	}
 	private static List<Report> createApiReportListFromDbReportList(User user,
 			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
 		List<Report> retReportList = new ArrayList<>();
