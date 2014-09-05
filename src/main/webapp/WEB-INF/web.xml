@@ -3,10 +3,6 @@
 <web-app>
 	<display-name>Archetype Created Web Application</display-name>
 
-	<welcome-file-list>
-		<welcome-file>resources/jsp/index.jsp</welcome-file>
-	</welcome-file-list>
-
 	<servlet>
 		<servlet-name>Bla</servlet-name>
 		<servlet-class>evacuatzia_proj.servlets.Bla</servlet-class>
@@ -100,6 +96,13 @@
 		<servlet-name>SearchReports</servlet-name>
 		<servlet-class>evacuatzia_proj.servlets.SearchReports</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		If user is logged in, it's home page. If not, it's LogIn/Register page</description>
+		<display-name>Home</display-name>
+		<servlet-name>Home</servlet-name>
+		<servlet-class>evacuatzia_proj.servlets.Home</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>Bla</servlet-name>
@@ -164,6 +167,10 @@
 	<servlet-mapping>
 		<servlet-name>SearchReports</servlet-name>
 		<url-pattern>/search/reports</url-pattern>
+	</servlet-mapping>
+	<servlet-mapping>
+		<servlet-name>Home</servlet-name>
+		<url-pattern>/</url-pattern>
 	</servlet-mapping>
 </web-app>
 
