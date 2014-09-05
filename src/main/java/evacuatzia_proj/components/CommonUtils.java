@@ -12,7 +12,7 @@ import evacuatzia_proj.exceptions.missingParam.UsernameException;
 public class CommonUtils {
 	public static void validateNameSupplied(String name) {
 		if (!stringSupplied(name))
-			throw new NameException("Must supply a pasword");
+			throw new NameException("Must supply a name");
 	}
 
 	public static void validatePasswordSupplied(String password) {

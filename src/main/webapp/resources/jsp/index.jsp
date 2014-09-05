@@ -16,10 +16,9 @@
     </div>
     <div class="row">
 		<div class="col-lg-12 text-center">
-        <a href="login.jsp"><button type="button" class="btn btn-lg">Log in</button></a>
-        <button type="button" class="btn btn-lg">Register</button>
+        <a href="login"><button type="button" class="btn btn-lg">Log in</button></a>
+        <a href="register"><button type="button" class="btn btn-lg">Register</button></a>
 		</div>
     </div>
-  </div>
 </body>
 </html>

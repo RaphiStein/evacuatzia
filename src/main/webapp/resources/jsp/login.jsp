@@ -16,7 +16,7 @@
 			<input type="text" class="form-control" name="name" placeholder="Username">
 		</div>
 		<div class="row" style="padding: 10px;">
-			<input type="text" class="form-control" password="pass" placeholder="Password">
+			<input type="password" class="form-control" placeholder="Password">
 		</div>
 		<div class="row" style="padding: 10px;">
 			<button type="submit" class="btn btn-default">Log in</button>
