@@ -11,3 +11,6 @@
 .float-right {
 	float: right;
 }
+.top-buffer {
+	margin-top: 25px;
+}
