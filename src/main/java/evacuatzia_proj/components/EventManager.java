@@ -155,15 +155,30 @@ public class EventManager extends LocationBasedItemManager {
 	}
 
 	public static List<Event> getAllEvents(){
-		return null;
-		// TODO implement
+		List<Event> resEvents;
+		Session s = sf.openSession();
+		Transaction t = s.beginTransaction();
+		try {
+			Criteria cr = s.createCriteria(EvacuationEvent.class);
+			List<EvacuationEvent> dbEventList = cr.list();
+			resEvents = createEventOutOfDbEventList(dbEventList);
+			t.commit();
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw e;
+		} finally {
+			s.close();
+		}
+		return resEvents;
 	}
+
+	
 	public static List<Event> getEventsByLocation(double lat, double lon, int radius){
 		return null;
-		// TODO implement
+		// TODO see comment about getReportsByLocation. will do the same here tomorrow (sunday).
 	}
 	public static Event getNearestEvent(double lat, double lon){
-		// TODO 
+		// TODO will try to do it tomorrow (sunday).
 		return null;
 	}
 	public static List<User> getRegisteredUsers(Event event) {
@@ -240,6 +255,14 @@ public class EventManager extends LocationBasedItemManager {
 		s.update(dbEvent);
 	}
 
+	private static List<Event> createEventOutOfDbEventList(List<EvacuationEvent> dbEventList) {
+		List<Event> events = new ArrayList<>();
+		for(EvacuationEvent dbEvent: dbEventList) {
+			events.add(createEventOutOfDbEvent(dbEvent));
+		}
+		return events;
+	}
+	
 	private static EvacuationEvent getDbEventByUserId(Long userId, Session s) {
 		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
 		Query q = s.createQuery(hql);

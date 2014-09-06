@@ -25,7 +25,7 @@ public class ApiReportTest {
 		u.createReport("report1", new Geometry(25D, 25D, 1D), new Date());
 		OurPoint p1 = new OurPoint(0D, 0D);
 		OurPoint p2 = new OurPoint(20D, 20D);
-		List<Report> matchingReports = ReportManager.getAllReportsRectangle(p1,p2);
+		List<Report> matchingReports = ReportManager.getAllReportsInRectangle(p1,p2);
 		assertEquals(2, matchingReports.size());
 	}
 

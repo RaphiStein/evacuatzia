@@ -65,7 +65,7 @@ public class ReportManager extends LocationBasedItemManager {
 		try {
 			dbUser = getUserInfoByApiUser(user, s);
 			if (null == dbUser) {
-				// TODO: throw something
+				throw new MissingInDatabaseException("User is missing from database. Were he/she removed?");
 			}
 			dbReport = new evacuatzia_proj.sqlhelpers.beans.Report(dbUser,
 					title, location.getLongitude(), location.getLatitude(), location.getRadius(), reportTime);
@@ -120,31 +120,60 @@ public class ReportManager extends LocationBasedItemManager {
 		} finally {
 			s.close();
 		}
-		return createApiReportListFromDbReportList(user, dbReportList);
+		return createApiReportListFromDbReportListAndUser(user, dbReportList);
 	}
 
 	public static List<Report> getAllReports(){
-		// TODO
-		return null;
-		
+		List<Report> resReports;
+		Session s = sf.openSession();
+		Transaction t = s.beginTransaction();
+		try {
+			Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
+			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = cr.list();
+			resReports = createApiReportListFromDbReportList(dbReportList);
+			t.commit();
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw e;
+		} finally {
+			s.close();
+		}
+		return resReports;
 	}
+	
 	public static List<Report> getReportsByLocation(double lat, double lon, int radius){
-		// TODO 
+		// TODO:
+		// use getAllReportsInRectangle with two opposing points or getAllReportsInPoly with a list of points instead
+		// there is java script code to create a the points out of loat lon and radius
 		return null;
 	}
+	
 	public static List<Report> getReportsByTitle(String title){
-		// TODO
-		return null;
-		
+		// TODO - answer: do we realy want this? maybe we can do with the function for partial match?
+		CommonUtils.validateTitleSupplied(title);
+		List<Report> resReports;
+		Session s = sf.openSession();
+		Transaction t = s.beginTransaction();
+		try {
+			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = getDbReportsByTitle(title, s);
+			resReports = createApiReportListFromDbReportList(dbReportList);
+			t.commit();
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw e;
+		} finally {
+			s.close();
+		}
+		return resReports;
 	}
+	
 	public static List<Report> getReportsByPartialTitle(String partialTitle){
-		// TODO
+		// TODO (tomorrow)
 		return null;
 		
 	}
-	private static List<Report> createApiReportListFromDbReportList(User user,
+	private static List<Report> createApiReportListFromDbReportListAndUser(User user,
 			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
-		// TODO: make this function create users for reports by its own.
 		List<Report> retReportList = new ArrayList<>();
 		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : dbReportList) {
 			Coordinate coor = dbReport.getLocation().getCoordinate();
@@ -154,7 +183,7 @@ public class ReportManager extends LocationBasedItemManager {
 		return retReportList;
 	}
 	
-	public static List<Report> getAllReportsRectangle(OurPoint p1, OurPoint p2) {
+	public static List<Report> getAllReportsInRectangle(OurPoint p1, OurPoint p2) {
 		// create rectangle polygon
 		Polygon rect = CompUtils.createRectangleFromTwoPoints(p1, p2);
 		return reportsInPolygon(rect);
@@ -173,16 +202,17 @@ public class ReportManager extends LocationBasedItemManager {
 		return reportsInPolygon(poly);
 	}
 	
-	private static List<Report> reportsInPolygon(Polygon rect) {
+	private static List<Report> reportsInPolygon(Polygon poly) {
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		String hql = "select r from Report r where within(r.location, :filter) = true";
 		Query q = s.createQuery(hql);
-		q.setParameter("filter", rect);
+		q.setParameter("filter", poly);
 		List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = q.list(); 
+		List<Report> resReports = createApiReportListFromDbReportList(dbReportList);
 		t.commit();
 		s.close();
-		return createApiReportListFromDbReportList(null, dbReportList);
+		return resReports;
 	}
 
 	// Package protected
@@ -201,6 +231,24 @@ public class ReportManager extends LocationBasedItemManager {
 		return dbReportList;
 	}
 	
+	private static List<evacuatzia_proj.sqlhelpers.beans.Report> getDbReportsByTitle(String title, Session s) {
+		List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList;
+		Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
+		cr.add(Restrictions.eq("title", title));
+		dbReportList = cr.list();
+		return dbReportList;
+	}
+
+	private static List<Report> createApiReportListFromDbReportList(
+			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
+		List<Report> reports = new ArrayList<>();
+		for(evacuatzia_proj.sqlhelpers.beans.Report dbReport: dbReportList) {
+			UserInfo dbUser = dbReport.getUserReported();
+			reports.add(createApiReportFromDbReportAndDbUser(dbReport, dbUser));
+		}
+		return reports;
+	}
+
 	private static Report createApiReportFromDbReportAndDbUser(evacuatzia_proj.sqlhelpers.beans.Report dbReport, UserInfo dbUser) {
 		Geometry geom = Utils.createOurGeometryFromJtsAndRadius(dbReport.getLocation(), dbReport.getRadius());
 		return new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(), UserManager.createApiUserFromDbUser(dbUser));
