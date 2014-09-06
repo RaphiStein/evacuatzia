@@ -57,7 +57,7 @@ public class LoginAccounts implements java.io.Serializable {
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "loginAccounts")
-	public Set getUserRoles() {
+	public Set<UserRoles> getUserRoles() {
 		return this.userRoles;
 	}
 

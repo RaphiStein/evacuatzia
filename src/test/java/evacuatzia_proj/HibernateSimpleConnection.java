@@ -32,7 +32,7 @@ public class HibernateSimpleConnection {
 	
 	@Before
 	public void setup() {
-//		dropAllTables();
+		dropAllTables();
 		uniqueNum = 1;
 		session = startSessionAndTransaction();
 	}
@@ -45,9 +45,7 @@ public class HibernateSimpleConnection {
 	
 	private void dropAllTables() {
 		session = startSessionAndTransaction();
-//		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo", "UserRoles", "LoginAccounts"};
-		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo"};
-//		String[] toClear = new String[]{"UserInfo"};
+		String[] toClear = new String[]{"EvacuationEvent", "Report", "UserInfo", "UserRoles", "LoginAccounts"};
 		for (String type: toClear) {
 			hqlTruncate(type);
 		}
