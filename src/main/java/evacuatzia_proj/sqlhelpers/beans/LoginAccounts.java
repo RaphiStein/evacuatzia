@@ -5,6 +5,7 @@ package evacuatzia_proj.sqlhelpers.beans;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -56,7 +57,7 @@ public class LoginAccounts implements java.io.Serializable {
 		this.userPass = userPass;
 	}
 
-	@OneToMany(fetch = FetchType.LAZY, mappedBy = "loginAccounts")
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "loginAccounts", cascade = {CascadeType.ALL})
 	public Set<UserRoles> getUserRoles() {
 		return this.userRoles;
 	}

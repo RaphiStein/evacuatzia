@@ -14,7 +14,6 @@ import evacuatzia_proj.components.UserManager;
 
 public class ApiReportTest {
 
-	@Ignore
 	@Test
 	public void gettingAllReportsInARectangle() {
 		User u = UserManager.register("hello", "nopass", "bla");
