@@ -5,32 +5,51 @@ import java.util.HashSet;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+import evacuatzia_proj.sqlhelpers.common.Utils;
 
 @Entity
 // This will be a table in the DB
 @Table(name = "evac_event")
-public class EvacuationEvent extends LocationBasedItem { 
+public class EvacuationEvent { 
 	Long id;
-
 	Integer capacity;
 	String means;
 	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
-
+	private String title;
+	private Date time;
+	private Double radius;
+	private Geometry location;
+	
 	public EvacuationEvent() {
 		super();
 	}
 
 	public EvacuationEvent(String title, Double geoLongitude, Double geoLatitude, Double radius, Date time,
 			String meansOfEvac, Integer capacity) {
-		super(title, geoLongitude, geoLatitude, radius, time);
+		super();
 		this.capacity = capacity;
 		this.means = meansOfEvac;
+		this.title = title;
+		this.time = time;
+		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
+		this.radius = radius;
 	}
 
 	@Id
@@ -60,6 +79,10 @@ public class EvacuationEvent extends LocationBasedItem {
 		this.capacity = capacity;
 	}
 
+	@ManyToMany(fetch = FetchType.LAZY)
+	@JoinTable( name = "evac_registration",
+	joinColumns = @JoinColumn(name="Event_ID"),
+	inverseJoinColumns = @JoinColumn(name="User_ID"))
 	public Set<UserInfo> getRegisteredUsers() {
 		return registeredUsers;
 	}
@@ -80,6 +103,41 @@ public class EvacuationEvent extends LocationBasedItem {
 
 	public void removeUser(UserInfo user) {
 		registeredUsers.remove(user);
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	// Setting up a specific DB date type
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	@Type(type="org.hibernate.spatial.GeometryType")
+	public Geometry getLocation() {
+		return location;
+	}
+
+	public void setLocation(Geometry location) {
+		this.location = location;
+	}
+
+	public Double getRadius() {
+		return radius;
+	}
+
+	public void setRadius(Double radius) {
+		this.radius = radius;
 	}
 
 	@Override

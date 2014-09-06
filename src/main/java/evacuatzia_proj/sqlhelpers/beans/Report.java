@@ -6,22 +6,38 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.GenericGenerator;
+import org.hibernate.annotations.Type;
+
+import com.vividsolutions.jts.geom.Geometry;
+
+import evacuatzia_proj.sqlhelpers.common.Utils;
 
 @Entity
 //This will be a table in the DB
 @Table(name = "report")
-public class Report extends LocationBasedItem {
+public class Report {
 	Long id;
 	UserInfo userReported;
 //	String title;
+	private Double radius;
+	private Geometry location;
+	private Date time;
+	private String title;
 	
 	public Report(UserInfo userReported, String title, Double geoLongitude, Double geoLatitude, Double radius, Date time) {
-		super(title, geoLongitude, geoLatitude, radius, time);
+		super();
 		this.userReported = userReported;
-//		this.title = title;
+		this.title = title;
+		this.time = time;
+		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
+		this.radius = radius;
 	}
 
 	public Report() {
@@ -38,12 +54,49 @@ public class Report extends LocationBasedItem {
 		this.id = id;
 	}
 
+	@ManyToOne
+	@JoinColumn(name="user_reported")
 	public UserInfo getUserReported() {
 		return userReported;
 	}
 
 	public void setUserReported(UserInfo userReported) {
 		this.userReported = userReported;
+	}
+	
+	public String getTitle() {
+		return title;
+	}
+
+	public void setTitle(String title) {
+		this.title = title;
+	}
+	
+	@Temporal(TemporalType.TIMESTAMP)
+	// Setting up a specific DB date type
+	public Date getTime() {
+		return time;
+	}
+
+	public void setTime(Date time) {
+		this.time = time;
+	}
+
+	@Type(type="org.hibernate.spatial.GeometryType")
+	public Geometry getLocation() {
+		return location;
+	}
+
+	public void setLocation(Geometry location) {
+		this.location = location;
+	}
+
+	public Double getRadius() {
+		return radius;
+	}
+
+	public void setRadius(Double radius) {
+		this.radius = radius;
 	}
 
 	@Override
