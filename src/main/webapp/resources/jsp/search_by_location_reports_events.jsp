@@ -47,17 +47,17 @@
         <div id="list" class="col-lg-6">
           <div id="" class="list-group">
             <a href="#" id="user1" class="list-group-item">
-              <img class="" style="float: left; padding-right: 20px; "src="../img/clock.png"/>
+              <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/clock.png"/>
               <h4 class="list-group-item-heading">Evacuation of the building</span></h4>
               <p class="list-group-item-text">01/01/01 12:01 AM </p>
             </a>
             <a href="#" id="user1" class="list-group-item">
-              <img class="" style="float: left; padding-right: 20px; "src="../img/clock.png"/>
-              <h4 class="list-group-item-heading">Evacuation of the building</span></h4>
+              <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/report.png"/>
+              <h4 class="list-group-item-heading">Report about some danger</span></h4>
               <p class="list-group-item-text">01/01/01 12:01 AM </p>
             </a>
             <a href="#" id="user1" class="list-group-item">
-              <img class="" style="float: left; padding-right: 20px; "src="../img/clock.png"/>
+              <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/clock.png"/>
               <h4 class="list-group-item-heading">Evacuation of the building</span></h4>
               <p class="list-group-item-text">01/01/01 12:01 AM </p>
             </a>        

@@ -22,6 +22,7 @@ public class Map extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO 
 		System.out.println("Servlet \"Map\" doGet working");
+		System.out.println("PathInfo: " + request.getRequestURL());
 		request.getRequestDispatcher("/resources/jsp/search_by_location_reports_events.jsp").forward(request, response);
 	}
 
