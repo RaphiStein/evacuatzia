@@ -20,6 +20,10 @@ import javax.persistence.Table;
 @Table(name = "login_accounts")
 public class LoginAccounts implements java.io.Serializable {
 
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7715423562250531448L;
 	private String userName;
 	private String userPass;
 	private Set<UserRoles> userRoles = new HashSet<UserRoles>();

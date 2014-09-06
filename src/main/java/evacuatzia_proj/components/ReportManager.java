@@ -12,14 +12,13 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
 import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.LinearRing;
 import com.vividsolutions.jts.geom.Polygon;
 
+import evacuatzia_proj.components.helpers.CompUtils;
+import evacuatzia_proj.components.helpers.OurPoint;
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.MissingInDatabaseException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
-import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
 import evacuatzia_proj.sqlhelpers.common.Utils;
 
@@ -145,6 +144,7 @@ public class ReportManager extends LocationBasedItemManager {
 	}
 	private static List<Report> createApiReportListFromDbReportList(User user,
 			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
+		// TODO: make this function create users for reports by its own.
 		List<Report> retReportList = new ArrayList<>();
 		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : dbReportList) {
 			Coordinate coor = dbReport.getLocation().getCoordinate();
@@ -154,12 +154,26 @@ public class ReportManager extends LocationBasedItemManager {
 		return retReportList;
 	}
 	
-	public static List<Report> getAllReportsRectangle(Double x1, Double y1, Double x2, Double y2) {
+	public static List<Report> getAllReportsRectangle(OurPoint p1, OurPoint p2) {
 		// create rectangle polygon
-		Coordinate[] frame = createCoordinatesListForRectangle(x1,y1,x2,y2);
-		GeometryFactory fact = new GeometryFactory();
-		LinearRing linear = new GeometryFactory().createLinearRing(frame);
-		Polygon rect = new Polygon(linear, null, fact);
+		Polygon rect = CompUtils.createRectangleFromTwoPoints(p1, p2);
+		return reportsInPolygon(rect);
+	}
+	
+	
+	/**
+	 * @param points
+	 * 			list of points that form a polygon - first and last point shouldn't
+	 * 			be the same (we'll close the polygon ourselves)
+	 * @return
+	 * 			A list of all the reports of which the center falls within that polygon
+	 */
+	public static List<Report> getAllReportsInPoly(List<OurPoint> points) {
+		Polygon poly = CompUtils.createPolygonFromOurPointList(points);
+		return reportsInPolygon(poly);
+	}
+	
+	private static List<Report> reportsInPolygon(Polygon rect) {
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		String hql = "select r from Report r where within(r.location, :filter) = true";
@@ -169,14 +183,6 @@ public class ReportManager extends LocationBasedItemManager {
 		t.commit();
 		s.close();
 		return createApiReportListFromDbReportList(null, dbReportList);
-	}
-
-	private static Coordinate[] createCoordinatesListForRectangle(Double x1, Double y1, Double x2, Double y2) {
-		Coordinate c1 = new Coordinate(x1,y1);
-		Coordinate c2 = new Coordinate(x1,y2);
-		Coordinate c3 = new Coordinate(x2,y2);
-		Coordinate c4 = new Coordinate(x2,y1);
-		return new Coordinate[]{c1, c2, c3, c4, c1};
 	}
 
 	// Package protected
