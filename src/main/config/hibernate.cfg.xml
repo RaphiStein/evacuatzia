@@ -23,13 +23,9 @@
         <!--  Commit on demand -->
         <property name="connection.autocommit">false</property>
         <!-- <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property> -->
-        <property name="connection.provider_class">evacuatzia_proj.DBCPConnectionProvider</property>
 
-        <property name="connection.pool_size">40</property>
-        <property name="connection.dbcp.initialSize">10</property>
-        <property name="connection.dbcp.maxWait">3000</property>
-        <property name="hibernate.dbcp.maxIdle">20</property>
-        <property name="hibernate.dbcp.minIdle">0</property>
+        <!-- JDBC connection pool (use the built-in) -->
+        <property name="connection.pool_size">1</property>
 
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>
@@ -38,13 +34,14 @@
         <property name="use_sql_comments">true</property>
  -->
         <!-- Automatic schema creation (begin) === -->
-        <property name="hbm2ddl.auto">update</property>
+        <property name="hbm2ddl.auto">create</property>
 
         <!-- Simple memory-only cache -->
         <property name="cache.provider_class">org.hibernate.cache.HashtableCacheProvider</property>
 
         <!-- Enable Hibernate's automatic session context management -->
         <property name="current_session_context_class">thread</property>
+
         <!-- Names the annotated entity class -->
         <mapping class="evacuatzia_proj.sqlhelpers.beans.UserInfo"/>
         <mapping class="evacuatzia_proj.sqlhelpers.beans.EvacuationEvent"/>
