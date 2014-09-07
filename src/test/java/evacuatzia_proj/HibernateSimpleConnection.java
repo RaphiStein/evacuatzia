@@ -264,6 +264,7 @@ public class HibernateSimpleConnection {
 	}
 	
 	// for debugging
+	@SuppressWarnings("unused")
 	private void printRoles(Set userRolesId) {
 		for(Object tmp: userRolesId) {
 			UserRoles role = (UserRoles) tmp;

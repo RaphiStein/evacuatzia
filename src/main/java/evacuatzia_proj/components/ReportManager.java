@@ -102,7 +102,6 @@ public class ReportManager extends LocationBasedItemManager {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
 	public static List<Report> getReportsByUser(User user) {
 		if (null == user) {
 			throw new EvacuatziaException("user must not be null");
