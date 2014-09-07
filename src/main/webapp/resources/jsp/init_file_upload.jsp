@@ -10,7 +10,7 @@
     			Select a file to upload:
 			</div>
 			<div>
-				<form action="UploadServlet" method="post" enctype="multipart/form-data">
+				<form action="" method="POST" enctype="multipart/form-data">
 					<input type="file" name="file"/>
 					<input type="submit" value="Upload File" />
 				</form>
