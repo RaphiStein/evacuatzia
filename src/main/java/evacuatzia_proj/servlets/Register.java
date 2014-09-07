@@ -27,6 +27,7 @@ public class Register extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getRequestDispatcher("/resources/jsp/register_new_account.jsp").forward(request, response);
 	}
@@ -34,6 +35,7 @@ public class Register extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// check if username is available if not - write message and stay on page
 		// check password and username are not empty

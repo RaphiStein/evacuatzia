@@ -6,7 +6,6 @@ import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -14,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.Report;
-import evacuatzia_proj.components.UserManager;
 
 /**
  * Servlet implementation class User
@@ -26,6 +24,7 @@ public class User extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String pathInfo = request.getPathInfo();
 		System.out.println("Servlet \"User\" doGet working");
@@ -67,6 +66,7 @@ public class User extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 	}

@@ -24,6 +24,7 @@ public class AllReports extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet \"AllReports\" doGet working");
 		request.getRequestDispatcher("../resources/jsp/see_all_reports.jsp").forward(request, response);

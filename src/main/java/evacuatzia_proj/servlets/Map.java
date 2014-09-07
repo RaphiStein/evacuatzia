@@ -7,8 +7,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import evacuatzia_proj.components.ReportManager;
-
 /**
  * Servlet implementation class Map
  */
@@ -19,6 +17,7 @@ public class Map extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO 
 		System.out.println("Servlet \"Map\" doGet working");
@@ -29,6 +28,7 @@ public class Map extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO receive lat/lon from form
 		// TODO retrieve nearby events and reports from the database

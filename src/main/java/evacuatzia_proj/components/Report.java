@@ -1,7 +1,6 @@
 package evacuatzia_proj.components;
 
 import java.util.Date;
-import java.util.List;
 
 public class Report extends LocationBasedItem {
 

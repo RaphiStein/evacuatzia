@@ -17,6 +17,7 @@ public class AllUsers extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet \"AllUsers\" doGet working");
 		request.getRequestDispatcher("../resources/jsp/see_all_users.jsp").forward(request, response);

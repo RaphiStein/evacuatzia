@@ -181,7 +181,7 @@ public class HibernateSimpleConnection {
 		Set<UserInfo> registeredUsers = returnedEvacEvent.getRegisteredUsers();
 		assertEquals(allUsers.size(), registeredUsers.size());
 		for (Object u: allUsers) {
-			assertTrue(registeredUsers.contains((UserInfo) u));
+			assertTrue(registeredUsers.contains(u));
 		}
 	}
 	

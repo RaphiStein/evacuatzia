@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import evacuatzia_proj.components.Geometry;
-import evacuatzia_proj.components.UserManager;
 
 /**
  * Servlet implementation class Event
@@ -32,6 +31,7 @@ public class Event extends HttpServlet {
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO if user is logging in, 
 		//	if admin is logged in, enable deleting user
@@ -72,6 +72,7 @@ public class Event extends HttpServlet {
 	/**
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet \"Event\" doPost working");
 		request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);

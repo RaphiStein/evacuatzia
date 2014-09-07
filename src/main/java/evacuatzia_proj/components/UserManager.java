@@ -11,7 +11,6 @@ import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
-import evacuatzia_proj.exceptions.missingParam.NameException;
 import evacuatzia_proj.exceptions.missingParam.PasswordException;
 import evacuatzia_proj.exceptions.missingParam.UsernameException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
