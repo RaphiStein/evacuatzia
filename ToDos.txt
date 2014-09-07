@@ -2,3 +2,4 @@ Stuff to do before submitting:
 1) remove user pictures.
 2) remove facebook login button.
 3) in hibernate.cfg.xml, change "hbm2ddl.auto" to update (it is currently set to create).
+4) can change show_sql to false as well.
