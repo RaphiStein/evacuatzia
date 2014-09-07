@@ -9,7 +9,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="/evacuatzia"><img src="/evacuatzia/resources/img/evacuatzia.png" alt="Evacuatzia"></a>
+          <a class="navbar-brand" href="/evacuatzia"><img src="../img/evacuatzia.png" alt="Evacuatzia"></a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

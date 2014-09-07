@@ -48,5 +48,6 @@
 				<a href="/evacuatzia/user/action/create_report"><button type="submit" class="btn btn-info btn-lg">Create Report</button></a>
 			</div>
 		</div>
+    </div>
 </body>
 </html>

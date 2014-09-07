@@ -103,6 +103,12 @@
 		<servlet-name>Home</servlet-name>
 		<servlet-class>evacuatzia_proj.servlets.Home</servlet-class>
 	</servlet>
+	<servlet>
+	   <description>Page for uploading json file with initialization information</description>
+	   <display-name>Upload initialization file</display-name>
+	   <servlet-name>InitFileUpload</servlet-name>
+	   <servlet-class>evacuatzia_proj.servlets.InitFileUpload</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>Bla</servlet-name>
@@ -172,6 +178,10 @@
 		<servlet-name>Home</servlet-name>
 		<url-pattern>/</url-pattern>
 	</servlet-mapping>
+	<servlet-mapping>
+        <servlet-name>InitFileUpload</servlet-name>
+        <url-pattern>/upload_init</url-pattern>
+    </servlet-mapping>
 </web-app>
 
 
