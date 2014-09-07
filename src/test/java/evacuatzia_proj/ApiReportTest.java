@@ -5,9 +5,11 @@ import static org.junit.Assert.*;
 import java.util.Date;
 import java.util.List;
 
+import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
+import evacuatzia_proj.common.TestUtils;
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.Report;
 import evacuatzia_proj.components.ReportManager;
@@ -17,6 +19,11 @@ import evacuatzia_proj.components.helpers.OurPoint;
 
 public class ApiReportTest {
 
+	@Before
+	public void setup() {
+		TestUtils.dropAllTables();
+	}
+	
 	@Test
 	public void gettingAllReportsInARectangle() {
 		User u = UserManager.register("hello", "nopass", "bla");
