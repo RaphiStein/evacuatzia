@@ -11,12 +11,14 @@ public class Report extends LocationBasedItem {
 	private final User user;
 	private final Date reportTime;
 	private final String title;
+	private final String content;
 	
-	public Report(Long reportID, String title, Geometry location, Date reportTime, User user) {
+	public Report(Long reportID, String title, String content, Geometry location, Date reportTime, User user) {
 		super(reportID, location);
 		this.user = user;
 		this.reportTime = reportTime;
 		this.title = title;
+		this.content = content;
 	}
 
 	public User getUser() {
@@ -29,6 +31,10 @@ public class Report extends LocationBasedItem {
 	
 	public String getTitle() {
 		return title;
+	}
+
+	public String getContent() {
+		return content;
 	}
 	
 }

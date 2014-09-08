@@ -53,7 +53,7 @@ public class Report extends HttpServlet {
 	}
 	
 	private evacuatzia_proj.components.Report generateFakeReport(evacuatzia_proj.components.User user) {
-		return new evacuatzia_proj.components.Report(new Long(0001), "Report 1", new Geometry(29.0, 49.0), new Date(), user);
+		return new evacuatzia_proj.components.Report(new Long(0001), "Report 1", "content", new Geometry(29.0, 49.0), new Date(), user);
 	}
 	
 	/**

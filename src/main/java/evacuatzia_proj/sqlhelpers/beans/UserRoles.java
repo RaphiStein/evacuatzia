@@ -17,12 +17,8 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "user_roles")
-public class UserRoles implements java.io.Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 9173905289222774084L;
+public class UserRoles {
+	public static final int ROLE_TEXT_LENGTH = 15;
 	private UserRolesId id;
 	private LoginAccounts loginAccounts;
 
@@ -36,8 +32,8 @@ public class UserRoles implements java.io.Serializable {
 
 	@EmbeddedId
 	@AttributeOverrides({
-			@AttributeOverride(name = "userName", column = @Column(name = "userName", nullable = false, length = 20)),
-			@AttributeOverride(name = "roleName", column = @Column(name = "roleName", nullable = false, length = 15)) })
+			@AttributeOverride(name = "userName", column = @Column(name = "userName", nullable = false, length = LoginAccounts.USERNAME_TEXT_LENGTH)),
+			@AttributeOverride(name = "roleName", column = @Column(name = "roleName", nullable = false, length = ROLE_TEXT_LENGTH)) })
 	public UserRolesId getId() {
 		return this.id;
 	}

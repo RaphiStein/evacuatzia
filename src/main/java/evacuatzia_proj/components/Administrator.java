@@ -9,6 +9,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import evacuatzia_proj.components.helpers.CommonUtils;
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
@@ -24,6 +25,10 @@ public enum Administrator {
 	private static final SessionFactory sf = SessionFactoryUtil.getSessionFactory();
 
 	public Event createEvent(Geometry location, Date estimatedTime, String meansOfEvacuation, int capacity) {
+		CommonUtils.validateGeometrySupplied(location);
+		CommonUtils.validateDateSupplied(estimatedTime);
+		CommonUtils.validateMeansOfEvac(meansOfEvacuation);
+		CommonUtils.validateEventCapacity(capacity);
 		EvacuationEvent dbEvent = new EvacuationEvent(location.getLongitude(), location.getLatitude(), estimatedTime, meansOfEvacuation, capacity);
 		Long id;
 		Session s = sf.openSession();

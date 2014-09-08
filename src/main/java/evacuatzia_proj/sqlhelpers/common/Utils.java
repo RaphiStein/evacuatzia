@@ -20,4 +20,8 @@ public class Utils {
 		Geometry geom = new Geometry(longitude, latitude);
 		return geom;
 	}
+	
+	public static Point createJtsFromOurGeometry(Geometry loc) {
+		return getPointFromDecimalValues(loc.getLongitude(), loc.getLatitude());
+	}
 }
