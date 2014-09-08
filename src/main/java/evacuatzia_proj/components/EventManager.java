@@ -49,7 +49,6 @@ public class EventManager extends LocationBasedItemManager {
 				throw new IllegalEventCapacity("New capacity is lower than the number of registered users");
 			}
 			dbEvent.setLocation(Utils.getPointFromDecimalValues(location.getLongitude(), location.getLatitude()));
-			dbEvent.setRadius(location.getRadius());
 			dbEvent.setTime(estimatedTime);
 			dbEvent.setMeans(meansOfEvacuation);
 			dbEvent.setCapacity(capacity);
@@ -209,19 +208,13 @@ public class EventManager extends LocationBasedItemManager {
 	}
 
 	// package protected
-	static Event getDbEventByAllInfo(Geometry location, Date time, String meansOfEvacuation, int capacity) {
+	static Event getApiEventById(Long id) {
 		Event retEvent;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
 			Criteria cr = s.createCriteria(EvacuationEvent.class);
-			com.vividsolutions.jts.geom.Geometry jtsGeom = Utils.getPointFromDecimalValues(location.getLongitude(),
-					location.getLatitude());
-			cr.add(Restrictions.eq("time", time));
-			cr.add(Restrictions.eq("location", jtsGeom));
-			cr.add(Restrictions.eq("radius", location.getRadius()));
-			cr.add(Restrictions.eq("means", meansOfEvacuation));
-			cr.add(Restrictions.eq("capacity", capacity));
+			cr.add(Restrictions.eq("id", id));
 			EvacuationEvent dbEvent = (EvacuationEvent) cr.uniqueResult();
 			ensureEventFoundInDb(dbEvent);
 			retEvent = createEventOutOfDbEvent(dbEvent);
@@ -242,7 +235,7 @@ public class EventManager extends LocationBasedItemManager {
 	}
 
 	static Event createEventOutOfDbEvent(EvacuationEvent dbEvent) {
-		Geometry geom = Utils.createOurGeometryFromJtsAndRadius(dbEvent.getLocation(), dbEvent.getRadius());
+		Geometry geom = Utils.createOurGeometryFromJts(dbEvent.getLocation());
 		return new Event(dbEvent.getId(), geom, dbEvent.getTime(), dbEvent.getMeans(),
 				dbEvent.getCapacity(), dbEvent.getRegisteredUsers().size());
 	}
@@ -287,4 +280,5 @@ public class EventManager extends LocationBasedItemManager {
 			throw new MissingInDatabaseException("Event was not found in Database. Was it Deleted?");
 		}
 	}
+
 }

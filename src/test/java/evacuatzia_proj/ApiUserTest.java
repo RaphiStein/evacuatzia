@@ -111,13 +111,13 @@ public class ApiUserTest {
 		try { 
 		String username = "myUsaName"; 
 		User user = UserManager.register(username, "12312", "Usa");
-		report = ReportManager.createNewReport(user, "title", "content", new Geometry(1.0, 2.0, 3.0), new Date());
+		report = ReportManager.createNewReport(user, "title", "content", new Geometry(1.0, 2.0), new Date());
 		UserManager.unregisterUser(user);
 		} catch (RuntimeException e) {
 			fail("unexpected exception thrown: " + e.getMessage());
 			return; // only to make static analysis succeed...
 		}
-		ReportManager.editReport(report, "bla", new Geometry(2.0, 4.4, 324.0), new Date());
+		ReportManager.editReport(report, "bla", new Geometry(2.0, 4.4), new Date());
 	}
 	
 	@Test
@@ -126,7 +126,7 @@ public class ApiUserTest {
 		try { 
 		String username = "myUsaName"; 
 		User user = UserManager.register(username, "12312", "Usa");
-		event = Administrator.INSTANCE.createEvent(new Geometry(1.0, 2.0, 3.0), TestUtils.createFutureDate(), "boat", 5);
+		event = Administrator.INSTANCE.createEvent(new Geometry(1.0, 2.0), TestUtils.createFutureDate(), "boat", 5);
 		EventManager.registerToEvent(user, event);
 		// Sanity check:
 		assertEquals(1, EventManager.getRegisteredUsers(event).size());

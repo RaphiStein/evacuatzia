@@ -2,6 +2,7 @@ package evacuatzia_proj.sqlhelpers.beans;
 
 import java.util.Date;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,20 +26,20 @@ import evacuatzia_proj.sqlhelpers.common.Utils;
 public class Report {
 	private Long id;
 	private UserInfo userReported;
-	private Double radius;
+//	private Double radius;
 	private Geometry location;
 	private Date time;
 	private String title;
 	private String content;
 	
-	public Report(UserInfo userReported, String title, String content, Double geoLongitude, Double geoLatitude, Double radius, Date time) {
+	public Report(UserInfo userReported, String title, String content, Double geoLongitude, Double geoLatitude, Date time) {
 		super();
 		this.userReported = userReported;
 		this.title = title;
 		this.content = content;
 		this.time = time;
 		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
-		this.radius = radius;
+//		this.radius = radius;
 	}
 
 	public Report() {
@@ -65,6 +66,7 @@ public class Report {
 		this.userReported = userReported;
 	}
 	
+	@Column(length=500)
 	public String getTitle() {
 		return title;
 	}
@@ -73,6 +75,7 @@ public class Report {
 		this.title = title;
 	}
 	
+	@Column(length=1500)
 	public String getContent() {
 		return content;
 	}
@@ -100,13 +103,13 @@ public class Report {
 		this.location = location;
 	}
 
-	public Double getRadius() {
-		return radius;
-	}
-
-	public void setRadius(Double radius) {
-		this.radius = radius;
-	}
+//	public Double getRadius() {
+//		return radius;
+//	}
+//
+//	public void setRadius(Double radius) {
+//		this.radius = radius;
+//	}
 
 	@Override
 	public int hashCode() {

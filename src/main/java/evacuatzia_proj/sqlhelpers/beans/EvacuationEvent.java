@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -32,21 +33,21 @@ public class EvacuationEvent {
 	String means;
 	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
 	private Date time;
-	private Double radius;
+//	private Double radius;
 	private Geometry location;
 	
 	public EvacuationEvent() {
 		super();
 	}
 
-	public EvacuationEvent(Double geoLongitude, Double geoLatitude, Double radius, Date time,
+	public EvacuationEvent(Double geoLongitude, Double geoLatitude, Date time,
 			String meansOfEvac, Integer capacity) {
 		super();
 		this.capacity = capacity;
 		this.means = meansOfEvac;
 		this.time = time;
 		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
-		this.radius = radius;
+//		this.radius = radius;
 	}
 
 	@Id
@@ -60,6 +61,7 @@ public class EvacuationEvent {
 		this.id = id;
 	}
 	
+	@Column(nullable = false, length = 500)
 	public String getMeans() {
 		return means;
 	}
@@ -120,14 +122,14 @@ public class EvacuationEvent {
 	public void setLocation(Geometry location) {
 		this.location = location;
 	}
-
-	public Double getRadius() {
-		return radius;
-	}
-
-	public void setRadius(Double radius) {
-		this.radius = radius;
-	}
+//
+//	public Double getRadius() {
+//		return radius;
+//	}
+//
+//	public void setRadius(Double radius) {
+//		this.radius = radius;
+//	}
 
 	@Override
 	public int hashCode() {

@@ -14,13 +14,13 @@ public class Geometry implements Serializable{
 	private static final long serialVersionUID = 5658227831728369278L;
 	private final Double longitude;
 	private final Double latitude;
-	private final Double radius;
+//	private final Double radius;
 	
-	public Geometry(Double longitude, Double latitude, Double radius) {
+	public Geometry(Double longitude, Double latitude) {
 		super();
 		this.longitude = longitude;
 		this.latitude = latitude;
-		this.radius = radius;
+//		this.radius = radius;
 	}
 
 	public double getLongitude() {
@@ -30,16 +30,16 @@ public class Geometry implements Serializable{
 	public double getLatitude() {
 		return latitude;
 	}
-
-	public double getRadius() {
-		return radius;
-	}
+//
+//	public double getRadius() {
+//		return radius;
+//	}
 	
 	
 
 	@Override
 	public String toString() {
-		return "Geometry [longitude=" + longitude + ", latitude=" + latitude + ", radius=" + radius + "]";
+		return "Geometry [longitude=" + longitude + ", latitude=" + latitude + "]";
 	}
 
 	@Override
@@ -48,7 +48,6 @@ public class Geometry implements Serializable{
 		int result = 1;
 		result = prime * result + ((latitude == null) ? 0 : latitude.hashCode());
 		result = prime * result + ((longitude == null) ? 0 : longitude.hashCode());
-		result = prime * result + ((radius == null) ? 0 : radius.hashCode());
 		return result;
 	}
 
@@ -70,11 +69,6 @@ public class Geometry implements Serializable{
 			if (other.longitude != null)
 				return false;
 		} else if (!longitude.equals(other.longitude))
-			return false;
-		if (radius == null) {
-			if (other.radius != null)
-				return false;
-		} else if (!radius.equals(other.radius))
 			return false;
 		return true;
 	}

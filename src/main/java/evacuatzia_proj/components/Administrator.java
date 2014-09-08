@@ -24,12 +24,12 @@ public enum Administrator {
 	private static final SessionFactory sf = SessionFactoryUtil.getSessionFactory();
 
 	public Event createEvent(Geometry location, Date estimatedTime, String meansOfEvacuation, int capacity) {
-		EvacuationEvent dbEvent = new EvacuationEvent(location.getLongitude(), location.getLatitude(),
-				location.getRadius(), estimatedTime, meansOfEvacuation, capacity);
+		EvacuationEvent dbEvent = new EvacuationEvent(location.getLongitude(), location.getLatitude(), estimatedTime, meansOfEvacuation, capacity);
+		Long id;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			s.save(dbEvent);
+			id = (Long) s.save(dbEvent);
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
@@ -37,7 +37,7 @@ public enum Administrator {
 		} finally {
 			s.close();
 		}
-		return EventManager.getDbEventByAllInfo(location, estimatedTime, meansOfEvacuation, capacity);
+		return EventManager.getApiEventById(id);
 	}
 
 	public void deleteEvent(Event event) {

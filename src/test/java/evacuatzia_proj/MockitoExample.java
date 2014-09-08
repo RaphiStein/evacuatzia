@@ -20,7 +20,7 @@ public class MockitoExample {
 	public void simpleExample() {
 		String title = "some report title";
 		String content = "content";
-		Geometry loc = new Geometry(-73.65, 45.30, 100.0);
+		Geometry loc = new Geometry(-73.65, 45.30);
 		Date date = new Date();
 		User user = Mockito.mock(User.class);
 		Report report = ReportManager.createNewReport(user, title, content, loc, date);

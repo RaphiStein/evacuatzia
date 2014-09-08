@@ -91,7 +91,6 @@ public class HibernateSimpleConnection {
 		assertEquals(report.getTitle(), returnedReport.getTitle());
 		assertEquals(report.getContent(), returnedReport.getContent());
 		assertEquals(report.getLocation(), returnedReport.getLocation());
-		assertEquals(report.getRadius(), returnedReport.getRadius());
 		assertEquals(report.getTime(), returnedReport.getTime());
 	}
 	
@@ -103,7 +102,7 @@ public class HibernateSimpleConnection {
 		Double geoLong = 10.0;
 		Double geoLat = 10.0;
 		Double radius = 5.0;
-		return new Report(user, "some report title" + uniqueNum++, "some content", geoLong, geoLat, radius, time);
+		return new Report(user, "some report title" + uniqueNum++, "some content", geoLong, geoLat, time);
 	}
 
 
@@ -199,7 +198,6 @@ public class HibernateSimpleConnection {
 		assertEquals(origEvent.getTime(), returnedEvent.getTime());
 		assertEquals(origEvent.getCapacity(), returnedEvent.getCapacity());
 		assertEquals(origEvent.getLocation(), returnedEvent.getLocation());
-		assertEquals(origEvent.getRadius(), returnedEvent.getRadius());
 	}
 
 	private EvacuationEvent createEvacEvent() throws ParseException {
@@ -212,7 +210,7 @@ public class HibernateSimpleConnection {
 //		Double radius = 10.0;
 		Date time = sdf.parse("13.12.2011");
 		Integer capacity = 20;
-		EvacuationEvent origEvent = new EvacuationEvent(geoLong, geoLat, radius, time, means, capacity);
+		EvacuationEvent origEvent = new EvacuationEvent(geoLong, geoLat, time, means, capacity);
 		return origEvent;
 	}
 

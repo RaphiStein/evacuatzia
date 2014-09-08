@@ -13,11 +13,11 @@ public class Utils {
 		return gf.createPoint(coor);
 	}
 	
-	public static Geometry createOurGeometryFromJtsAndRadius(com.vividsolutions.jts.geom.Geometry loc, Double radius) {
+	public static Geometry createOurGeometryFromJts(com.vividsolutions.jts.geom.Geometry loc) {
 		Coordinate coor = loc.getCoordinate();
 		Double longitude = coor.x;
 		Double latitude = coor.y;
-		Geometry geom = new Geometry(longitude, latitude, radius);
+		Geometry geom = new Geometry(longitude, latitude);
 		return geom;
 	}
 }

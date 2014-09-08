@@ -1,6 +1,7 @@
 package evacuatzia_proj.servlets;
 
 import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.FileSystem;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import evacuatzia_proj.components.ReportManager;
 import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.utils.ParsingUtils;
-
 
 public class InitFileUpload extends HttpServlet {
 
@@ -107,17 +107,13 @@ public class InitFileUpload extends HttpServlet {
 			out.println("<title>Servlet upload</title>");
 			out.println("</head>");
 			out.println("<body>");
-//			while (i.hasNext()) {
-			// we upload only one file - 
+			// while (i.hasNext()) {
+			// we upload only one file -
 			if (i.hasNext()) {
 				FileItem fi = (FileItem) i.next();
 				if (!fi.isFormField()) {
 					// Get the uploaded file parameters
-					String fieldName = fi.getFieldName();
 					String fileName = fi.getName();
-					String contentType = fi.getContentType();
-					boolean isInMemory = fi.isInMemory();
-					long sizeInBytes = fi.getSize();
 					// Write the file
 					if (fileName.lastIndexOf(File.separator) >= 0) {
 						file = new File(filePath + fileName.substring(fileName.lastIndexOf(File.separator)));
@@ -137,10 +133,12 @@ public class InitFileUpload extends HttpServlet {
 			System.out.println(ex);
 		}
 		// file finished uploading correctly - see if in valid format
-		
+
 		JSONParser parser = new JSONParser();
 		try {
-			Object obj = parser.parse(file.getCanonicalPath());
+			System.out.println(file.getCanonicalPath());
+			System.out.println(file.getAbsoluteFile());
+			Object obj = parser.parse(new FileReader(file.getCanonicalPath()));
 			JSONObject jsonObject = (JSONObject) obj;
 			// all good till here - clear database:
 			// TODO: clear DB
@@ -165,38 +163,46 @@ public class InitFileUpload extends HttpServlet {
 
 	private void createAllUsers(JSONObject jsonObject) {
 		JSONArray usersJAarray = (JSONArray) jsonObject.get("users");
-		for( int i = 0; i<usersJAarray.size(); ++i) {
-			JSONObject jUser = (JSONObject) usersJAarray.get(i);
-			String username = (String) jUser.get("username");
-			String password = (String) jUser.get("password");
-			String name = (String) jUser.get("name");
+		for (int i = 0; i < usersJAarray.size(); ++i) {
+			String username;
+			String password;
+			String name;
+			try {
+				JSONObject jUser = (JSONObject) usersJAarray.get(i);
+				username = (String) jUser.get("username");
+				password = (String) jUser.get("password");
+				name = (String) jUser.get("name");
+			} catch (RuntimeException e) {
+				throw new EvacuatziaException("Error parsing user number " + Integer.toString(i) + " from json file.");
+			}
 			UserManager.register(username, password, name);
 		}
 	}
 
 	private void createAllEvents(JSONObject jsonObject) {
 		JSONArray eventsJAarray = (JSONArray) jsonObject.get("evacuationEvents");
-		for( int i = 0; i<eventsJAarray.size(); ++i) {
+		for (int i = 0; i < eventsJAarray.size(); ++i) {
 			Geometry geom;
 			Date estimatedTime;
-			String meansOfEvacuation;
+			String meanOfEvacuation;
 			int capacity;
 			try {
 				JSONObject jEvent = (JSONObject) eventsJAarray.get(i);
 				geom = getGeometryEvent(jEvent);
 				estimatedTime = ParsingUtils.parseJsonDate((String) jEvent.get("estimatedTime"));
-				meansOfEvacuation = (String) jEvent.get("meansOfEvacuation");
-				capacity = Integer.parseInt((String) jEvent.get("capacity"));
+				meanOfEvacuation = (String) jEvent.get("meanOfEvacuation");
+				capacity = ((Long) jEvent.get("capacity")).intValue();
 			} catch (RuntimeException e) {
+				System.out.println(e.getMessage());
 				throw new EvacuatziaException("Error parsing event number " + Integer.toString(i) + " from json file.");
 			}
-			Administrator.INSTANCE.createEvent(geom, estimatedTime, meansOfEvacuation, capacity);
+			Administrator.INSTANCE.createEvent(geom, estimatedTime, meanOfEvacuation, capacity);
 		}
 	}
 
 	private void createAllReports(JSONObject jsonObject) throws EvacuatziaException {
 		JSONArray reportsJAarray = (JSONArray) jsonObject.get("reports");
-		for( int i = 0; i<reportsJAarray.size(); ++i) {
+		for (int i = 0; i < reportsJAarray.size(); ++i) {
 			String username;
 			Geometry geom;
 			String title;
@@ -208,7 +214,7 @@ public class InitFileUpload extends HttpServlet {
 				// only points should be supported
 				geom = getGeometryEvent(jEvent);
 				title = (String) jEvent.get("title");
-				content = (String) jEvent.get("content"); 
+				content = (String) jEvent.get("content");
 				expirationTime = ParsingUtils.parseJsonDate((String) jEvent.get("expirationTime"));
 			} catch (RuntimeException e) {
 				throw new EvacuatziaException("Error parsing report number " + Integer.toString(i) + " from json file.");
@@ -220,10 +226,10 @@ public class InitFileUpload extends HttpServlet {
 
 	private Geometry getGeometryEvent(JSONObject e) {
 		Geometry geom;
-		JSONArray jPoint = (JSONArray)  ((JSONObject) e.get("geometry")).get("coordinates");
-		Double longitude  = Double.parseDouble((String) jPoint.get(0));
-		Double latitude  = Double.parseDouble((String) jPoint.get(1));
-		geom = new Geometry(longitude, latitude, null);
+		JSONArray jPoint = (JSONArray) ((JSONObject) e.get("geometry")).get("coordinates");
+		Double longitude = (Double) jPoint.get(0);
+		Double latitude = (Double) jPoint.get(1);
+		geom = new Geometry(longitude, latitude);
 		return geom;
 	}
 }

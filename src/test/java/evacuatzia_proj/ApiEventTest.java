@@ -19,7 +19,7 @@ import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.IllegalEventCapacity;
 
 public class ApiEventTest {
-	private Geometry geom = new Geometry(10.0, 20.0, 5.0);
+	private Geometry geom = new Geometry(10.0, 20.0);
 	
 	@Before
 	public void setup() {
@@ -57,12 +57,12 @@ public class ApiEventTest {
 	@Test
 	public void canEditEvent() throws IllegalEventCapacity {
 		String title1 = "title1";
-		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
+		Geometry geom1 = new Geometry(10.0, 20.0);
 		Date date1 = TestUtils.createFutureDate();
 		String means1 = "hot air baloon";
 		int cap1 = 5;
 		String title2 = "title2";
-		Geometry geom2 = new Geometry(100.0, 200.0, 50.0);
+		Geometry geom2 = new Geometry(100.0, 200.0);
 		Date date2 = new Date(date1.getTime()+60000L);
 		String means2 = "snorkling";
 		int cap2 = 20;
@@ -74,7 +74,7 @@ public class ApiEventTest {
 	
 	@Test(expected=IllegalEventCapacity.class)
 	public void cannotEditEventIfWantsLessUsersThanRegistered() throws IllegalEventCapacity {
-		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
+		Geometry geom1 = new Geometry(10.0, 20.0);
 		Date date1 = TestUtils.createFutureDate();
 		String means1 = "hot air baloon";
 		int cap1 = 5;
