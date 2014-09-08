@@ -5,7 +5,10 @@
 
 <body>
 	<%@ include file="../includes/header.jsp"%>
+	<script src="https://maps.googleapis.com/maps/api/js"></script>
+	<script type="text/javascript" src="/evacuatzia/resources/js/initializeMap.js"></script>
 
+	
 	<div class="container">
 		<form class="form form-inline form-multiline">
 			<div class="col-lg-6 col-lg-offset-3">

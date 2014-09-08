@@ -20,6 +20,8 @@ public class Home extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
+		System.out.println("Context Path:" + request.getContextPath());
+		System.out.println("--------------------------------------------------");
 		System.out.println("Servlet \"Home\" doGet working");
 		System.out.println("PathInfo: " + request.getRequestURL());
 		//If admin logged in, go to adminhome
