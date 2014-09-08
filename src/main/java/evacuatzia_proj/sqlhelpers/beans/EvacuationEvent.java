@@ -32,6 +32,7 @@ public class EvacuationEvent {
 	private Long id;
 	private Integer capacity;
 	private String means;
+	private Integer registrationCount;
 	private Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
 	private Date time;
 //	private Double radius;
@@ -45,6 +46,7 @@ public class EvacuationEvent {
 			String meansOfEvac, Integer capacity) {
 		super();
 		this.capacity = capacity;
+		registrationCount = new Integer(0);
 		this.means = meansOfEvac;
 		this.time = time;
 		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
@@ -79,6 +81,14 @@ public class EvacuationEvent {
 		this.capacity = capacity;
 	}
 
+	public Integer getRegistrationCount() {
+		return registrationCount;
+	}
+
+	public void setRegistrationCount(Integer registrationCount) {
+		this.registrationCount = registrationCount;
+	}
+
 	@ManyToMany(fetch = FetchType.LAZY)
 	@JoinTable( name = "evac_registration",
 	joinColumns = @JoinColumn(name="Event_ID"),
@@ -96,13 +106,15 @@ public class EvacuationEvent {
 	}
 	
 	public void registerUser(UserInfo user) {
-		// TODO: change the assert to check and throw statement
-		assert(registeredUsers.size() < capacity);
+		++registrationCount;
 		registeredUsers.add(user);
 	}
 
 	public void removeUser(UserInfo user) {
-		registeredUsers.remove(user);
+		if (registeredUsers.remove(user)) {
+			// if user was really listed to event, decrease registration count.
+			--registrationCount;
+		}
 	}
 	
 	@Temporal(TemporalType.TIMESTAMP)

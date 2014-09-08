@@ -9,6 +9,7 @@ import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.criterion.Example;
 import org.hibernate.criterion.Restrictions;
 
 import com.vividsolutions.jts.geom.Coordinate;
@@ -177,9 +178,22 @@ public class ReportManager {
 	}
 
 	public static List<Report> getReportsByPartialTitle(String partialTitle) {
-		// TODO (tomorrow)
-		return null;
-
+		List<Report> resReports;
+		Session s = sf.openSession();
+		Transaction t = s.beginTransaction();
+		try {
+			Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
+			cr.add(Restrictions.ilike("title", "%"+partialTitle+"%"));
+			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = cr.list();
+			resReports = createApiReportListFromDbReportList(dbReportList);
+			t.commit();
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw e;
+		} finally {
+			s.close();
+		}
+		return resReports;
 	}
 
 	private static List<Report> createApiReportListFromDbReportListAndUser(User user,

@@ -35,4 +35,15 @@ public class ApiReportTest {
 		assertEquals(2, matchingReports.size());
 	}
 
+	@Test
+	public void partialMatchInReportTitleWorks() {
+		User u = UserManager.register("hello", "nopass", "bla");
+		u.createReport("some report of mine", "content", new Geometry(1D, 1D), new Date()); // has port
+		u.createReport("my name is mr rapoport!", "content", new Geometry(4D, 4D), new Date()); // has port
+		u.createReport("hello to you", "content", new Geometry(25D, 25D), new Date());
+		u.createReport("adfasdfawefar", "content", new Geometry(25D, 25D), new Date());
+		u.createReport("argaergerportaefaef", "content", new Geometry(25D, 25D), new Date()); // has port
+		List<Report> matchingReports = ReportManager.getReportsByPartialTitle("port");
+		assertEquals(3, matchingReports.size());
+	}
 }

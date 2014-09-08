@@ -46,7 +46,7 @@ public class EventManager {
 		try {
 			EvacuationEvent dbEvent = getDbEventByApiEvent(event, s);
 			ensureEventFoundInDb(dbEvent);
-			if (dbEvent.getRegisteredUsers().size() > capacity) {
+			if (dbEvent.getRegistrationCount() > capacity) {
 				throw new IllegalEventCapacity("New capacity is lower than the number of registered users");
 			}
 			dbEvent.setLocation(Utils.getPointFromDecimalValues(location.getLongitude(), location.getLatitude()));
@@ -77,11 +77,11 @@ public class EventManager {
 		try {
 			dbEvent = getDbEventByApiEvent(event, s);
 			ensureEventFoundInDb(dbEvent);
-			if (dbEvent.getCapacity() <= dbEvent.getRegisteredUsers().size()) {
-				throw new EventFullException("Event maximum capacity reached.");
-			}
 			if (dbEvent.getTime().before(new Date())) {
-				throw new EventTimePassed("Event time passed. Can't register to event.");
+				throw new EventTimePassed("Event time passed. Can't register.");
+			}
+			if (dbEvent.getCapacity() <= dbEvent.getRegistrationCount()) {
+				throw new EventFullException("Event maximum capacity reached.");
 			}
 			UserInfo userInfo = getDbUserByApiUser(user, s);
 			if (null == userInfo) {
@@ -114,11 +114,11 @@ public class EventManager {
 			// if this is null it must mean the event was removed already -
 			if (null != dbEvent) {
 				UserInfo dbUser = getDbUserByApiUser(user, s);
-				if (null != dbUser && dbEvent.getRegisteredUsers().contains(dbUser)) {
+				if (null != dbUser) {
 					// just making sure the user still exists. and is registered to
 					// the event.
 					// if the user exists but not registered - no need to update.
-					dbEvent.getRegisteredUsers().remove(dbUser);
+					dbEvent.removeUser(dbUser);
 					s.update(dbEvent);
 				}
 			}
@@ -238,7 +238,7 @@ public class EventManager {
 	static Event createEventOutOfDbEvent(EvacuationEvent dbEvent) {
 		Geometry geom = Utils.createOurGeometryFromJts(dbEvent.getLocation());
 		return new Event(dbEvent.getId(), geom, dbEvent.getTime(), dbEvent.getMeans(),
-				dbEvent.getCapacity(), dbEvent.getRegisteredUsers().size());
+				dbEvent.getCapacity(), dbEvent.getRegistrationCount());
 	}
 
 	static void unregisterUserFromFutureEvents(UserInfo dbUser, Session s) {
