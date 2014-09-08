@@ -57,7 +57,7 @@ public class Event extends HttpServlet {
 	}
 
 	private evacuatzia_proj.components.Event generateFakeEvent() {
-		return new evacuatzia_proj.components.Event(1L, "some event title", new Geometry(29.0, 49.0, 5.0), new Date(), "some means of evacuation", 300, 2);
+		return new evacuatzia_proj.components.Event(1L, new Geometry(29.0, 49.0, 5.0), new Date(), "some means of evacuation", 300, 2);
 	}
 	
 	private List<evacuatzia_proj.components.User> generateFakeUsersList() {

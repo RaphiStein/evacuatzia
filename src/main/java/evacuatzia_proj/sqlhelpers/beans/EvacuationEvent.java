@@ -31,7 +31,6 @@ public class EvacuationEvent {
 	Integer capacity;
 	String means;
 	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
-	private String title;
 	private Date time;
 	private Double radius;
 	private Geometry location;
@@ -40,12 +39,11 @@ public class EvacuationEvent {
 		super();
 	}
 
-	public EvacuationEvent(String title, Double geoLongitude, Double geoLatitude, Double radius, Date time,
+	public EvacuationEvent(Double geoLongitude, Double geoLatitude, Double radius, Date time,
 			String meansOfEvac, Integer capacity) {
 		super();
 		this.capacity = capacity;
 		this.means = meansOfEvac;
-		this.title = title;
 		this.time = time;
 		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
 		this.radius = radius;
@@ -102,14 +100,6 @@ public class EvacuationEvent {
 
 	public void removeUser(UserInfo user) {
 		registeredUsers.remove(user);
-	}
-	
-	public String getTitle() {
-		return title;
-	}
-
-	public void setTitle(String title) {
-		this.title = title;
 	}
 	
 	@Temporal(TemporalType.TIMESTAMP)

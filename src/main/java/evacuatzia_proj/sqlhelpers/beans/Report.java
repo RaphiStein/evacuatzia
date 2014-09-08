@@ -23,18 +23,19 @@ import evacuatzia_proj.sqlhelpers.common.Utils;
 //This will be a table in the DB
 @Table(name = "report")
 public class Report {
-	Long id;
-	UserInfo userReported;
-//	String title;
+	private Long id;
+	private UserInfo userReported;
 	private Double radius;
 	private Geometry location;
 	private Date time;
 	private String title;
+	private String content;
 	
-	public Report(UserInfo userReported, String title, Double geoLongitude, Double geoLatitude, Double radius, Date time) {
+	public Report(UserInfo userReported, String title, String content, Double geoLongitude, Double geoLatitude, Double radius, Date time) {
 		super();
 		this.userReported = userReported;
 		this.title = title;
+		this.content = content;
 		this.time = time;
 		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
 		this.radius = radius;
@@ -72,6 +73,14 @@ public class Report {
 		this.title = title;
 	}
 	
+	public String getContent() {
+		return content;
+	}
+
+	public void setContent(String content) {
+		this.content = content;
+	}
+
 	@Temporal(TemporalType.TIMESTAMP)
 	// Setting up a specific DB date type
 	public Date getTime() {

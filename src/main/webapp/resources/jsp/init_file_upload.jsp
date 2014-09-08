@@ -4,12 +4,14 @@
 <body>
 	<%@ include file="../includes/header.jsp"%>
 	<div class="container">
-		<h3>File Upload:</h3>
-		<div>
-			<div>
-    			Select a file to upload:
+    	<div class="row">
+	   	   <h2>File Upload:</h2>
+	   </div>
+		<div class="row">
+			<div class="row">
+    			<h3>Select initialization file to upload:</h3>
 			</div>
-			<div>
+			<div class="row">
 				<form action="" method="POST" enctype="multipart/form-data">
 					<input type="file" name="file"/>
 					<input type="submit" value="Upload File" />

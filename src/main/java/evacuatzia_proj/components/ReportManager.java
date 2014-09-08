@@ -57,7 +57,7 @@ public class ReportManager extends LocationBasedItemManager {
 		return new Report(report.getEventID(), title, location, reportTime, report.getUser());
 	}
 
-	public static Report createNewReport(User user, String title, Geometry location, Date reportTime) {
+	public static Report createNewReport(User user, String title, String content, Geometry location, Date reportTime) {
 		evacuatzia_proj.sqlhelpers.beans.Report dbReport;
 		UserInfo dbUser;
 		Session s = sf.openSession();
@@ -68,7 +68,7 @@ public class ReportManager extends LocationBasedItemManager {
 				throw new MissingInDatabaseException("User is missing from database. Were he/she removed?");
 			}
 			dbReport = new evacuatzia_proj.sqlhelpers.beans.Report(dbUser,
-					title, location.getLongitude(), location.getLatitude(), location.getRadius(), reportTime);
+					title, content, location.getLongitude(), location.getLatitude(), location.getRadius(), reportTime);
 			s.save(dbReport);
 			t.commit();
 		} catch (RuntimeException e) {
@@ -258,4 +258,5 @@ public class ReportManager extends LocationBasedItemManager {
 		cr.add(Restrictions.eq("id", user.getId()));
 		return (UserInfo) cr.uniqueResult();
 	}
+
 }

@@ -19,13 +19,14 @@ public class MockitoExample {
 	@Test
 	public void simpleExample() {
 		String title = "some report title";
+		String content = "content";
 		Geometry loc = new Geometry(-73.65, 45.30, 100.0);
 		Date date = new Date();
 		User user = Mockito.mock(User.class);
-		Report report = ReportManager.createNewReport(user, title, loc, date);
-		Mockito.when(user.createReport(title, loc, date)).thenReturn(report);
+		Report report = ReportManager.createNewReport(user, title, content, loc, date);
+		Mockito.when(user.createReport(title, content, loc, date)).thenReturn(report);
 		
-		Report example = user.createReport(title, loc, date);
+		Report example = user.createReport(title, content, loc, date);
 		assertTrue(example == report);
 	}
 }

@@ -31,8 +31,8 @@ public class User implements Serializable{
 		return id;
 	}
 	
-	public Report createReport(String title, Geometry location, Date reportTime) {
-		return ReportManager.createNewReport(this, title, location, reportTime);
+	public Report createReport(String title, String content, Geometry location, Date reportTime) {
+		return ReportManager.createNewReport(this, title, content, location, reportTime);
 	}
 	
 	public void deleteReport(Report report) {
@@ -79,6 +79,7 @@ public class User implements Serializable{
 			return false;
 		return true;
 	}
+
 	
 	
 }

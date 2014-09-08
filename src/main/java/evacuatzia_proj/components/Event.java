@@ -14,10 +14,8 @@ public class Event extends LocationBasedItem {
 	private final int capacity;
 	private final int registrationCount;
 	
-	public Event(Long eventID, String title, Geometry location,
-			Date estimatedTime, String meansOfEvacuation, int capacity,
-			int registrationCount) {
-		super(eventID, title, location);
+	public Event(Long eventID, Geometry location, Date estimatedTime, String meansOfEvacuation, int capacity, int registrationCount) {
+		super(eventID, location);
 		this.estimatedTime = estimatedTime;
 		this.meansOfEvacuation = meansOfEvacuation;
 		this.capacity = capacity;

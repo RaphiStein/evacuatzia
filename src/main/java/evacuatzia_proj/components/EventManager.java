@@ -29,12 +29,11 @@ public class EventManager extends LocationBasedItemManager {
 	 * event in the database and update with the new info. return an updated
 	 * version or Event
 	 */
-	public static Event editEvent(Event event, String title, Geometry location, Date estimatedTime,
+	public static Event editEvent(Event event, Geometry location, Date estimatedTime,
 			String meansOfEvacuation, int capacity) throws IllegalEventCapacity {
 		if (null == event) {
 			throw new EvacuatziaException("user must not be null");
 		}
-		CommonUtils.validateTitleSupplied(title);
 		CommonUtils.validateGeometrySupplied(location);
 		CommonUtils.validateDateSupplied(estimatedTime);
 		CommonUtils.validateMeansOfEvac(meansOfEvacuation);
@@ -48,7 +47,6 @@ public class EventManager extends LocationBasedItemManager {
 			if (dbEvent.getRegisteredUsers().size() > capacity) {
 				throw new IllegalEventCapacity("New capacity is lower than the number of registered users");
 			}
-			dbEvent.setTitle(title);
 			dbEvent.setLocation(Utils.getPointFromDecimalValues(location.getLongitude(), location.getLatitude()));
 			dbEvent.setRadius(location.getRadius());
 			dbEvent.setTime(estimatedTime);
@@ -207,7 +205,7 @@ public class EventManager extends LocationBasedItemManager {
 	}
 
 	// package protected
-	static Event getDbEventByAllInfo(String title, Geometry location, Date time, String meansOfEvacuation, int capacity) {
+	static Event getDbEventByAllInfo(Geometry location, Date time, String meansOfEvacuation, int capacity) {
 		Event retEvent;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
@@ -215,7 +213,6 @@ public class EventManager extends LocationBasedItemManager {
 			Criteria cr = s.createCriteria(EvacuationEvent.class);
 			com.vividsolutions.jts.geom.Geometry jtsGeom = Utils.getPointFromDecimalValues(location.getLongitude(),
 					location.getLatitude());
-			cr.add(Restrictions.eq("title", title));
 			cr.add(Restrictions.eq("time", time));
 			cr.add(Restrictions.eq("location", jtsGeom));
 			cr.add(Restrictions.eq("radius", location.getRadius()));
@@ -242,7 +239,7 @@ public class EventManager extends LocationBasedItemManager {
 
 	static Event createEventOutOfDbEvent(EvacuationEvent dbEvent) {
 		Geometry geom = Utils.createOurGeometryFromJtsAndRadius(dbEvent.getLocation(), dbEvent.getRadius());
-		return new Event(dbEvent.getId(), dbEvent.getTitle(), geom, dbEvent.getTime(), dbEvent.getMeans(),
+		return new Event(dbEvent.getId(), geom, dbEvent.getTime(), dbEvent.getMeans(),
 				dbEvent.getCapacity(), dbEvent.getRegisteredUsers().size());
 	}
 

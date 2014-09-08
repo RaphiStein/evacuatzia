@@ -3,6 +3,8 @@ package evacuatzia_proj.servlets;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.FileSystem;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
@@ -14,6 +16,18 @@ import javax.servlet.http.HttpServletResponse;
 import org.apache.commons.fileupload.FileItem;
 import org.apache.commons.fileupload.disk.DiskFileItemFactory;
 import org.apache.commons.fileupload.servlet.ServletFileUpload;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+
+import evacuatzia_proj.components.Administrator;
+import evacuatzia_proj.components.Geometry;
+import evacuatzia_proj.components.ReportManager;
+import evacuatzia_proj.components.UserManager;
+import evacuatzia_proj.exceptions.EvacuatziaException;
+import evacuatzia_proj.utils.ParsingUtils;
+
 
 public class InitFileUpload extends HttpServlet {
 
@@ -57,6 +71,7 @@ public class InitFileUpload extends HttpServlet {
 		isMultipart = ServletFileUpload.isMultipartContent(request);
 		response.setContentType("text/html");
 		java.io.PrintWriter out = response.getWriter();
+		// upload file
 		if (!isMultipart) {
 			out.println("<html>");
 			out.println("<head>");
@@ -92,7 +107,9 @@ public class InitFileUpload extends HttpServlet {
 			out.println("<title>Servlet upload</title>");
 			out.println("</head>");
 			out.println("<body>");
-			while (i.hasNext()) {
+//			while (i.hasNext()) {
+			// we upload only one file - 
+			if (i.hasNext()) {
 				FileItem fi = (FileItem) i.next();
 				if (!fi.isFormField()) {
 					// Get the uploaded file parameters
@@ -110,15 +127,103 @@ public class InitFileUpload extends HttpServlet {
 					fi.write(file);
 					out.println("Uploaded Filename: " + fileName + "<br>");
 				}
+			} else {
+				out.println("No files have been uploaded." + "<br>");
+				out.println("</body>");
+				out.println("</html>");
+				return;
 			}
-			out.println("</body>");
-			out.println("</html>");
 		} catch (Exception ex) {
 			System.out.println(ex);
 		}
+		// file finished uploading correctly - see if in valid format
+		
+		JSONParser parser = new JSONParser();
+		try {
+			Object obj = parser.parse(file.getCanonicalPath());
+			JSONObject jsonObject = (JSONObject) obj;
+			// all good till here - clear database:
+			// TODO: clear DB
+			out.println("Cleared old data from database." + "<br>");
+			// create all users
+			createAllUsers(jsonObject);
+			createAllEvents(jsonObject);
+			createAllReports(jsonObject);
+			out.println("Loaded data from json successfully");
+		} catch (EvacuatziaException e) {
+			out.println("Error: Parse problem in json file." + "<br>");
+			out.println("Error: " + e.getMessage() + "<br>");
+			return;
+		} catch (ParseException e) {
+			out.println("Error: Parse problem in json file." + "<br>");
+			return;
+		} finally {
+			out.println("</body>");
+			out.println("</html>");
+		}
+	}
 
-		// upload file
-		// if finished uploading correctly - empty database
-		// parse file and call required functions
+	private void createAllUsers(JSONObject jsonObject) {
+		JSONArray usersJAarray = (JSONArray) jsonObject.get("users");
+		for( int i = 0; i<usersJAarray.size(); ++i) {
+			JSONObject jUser = (JSONObject) usersJAarray.get(i);
+			String username = (String) jUser.get("username");
+			String password = (String) jUser.get("password");
+			String name = (String) jUser.get("name");
+			UserManager.register(username, password, name);
+		}
+	}
+
+	private void createAllEvents(JSONObject jsonObject) {
+		JSONArray eventsJAarray = (JSONArray) jsonObject.get("evacuationEvents");
+		for( int i = 0; i<eventsJAarray.size(); ++i) {
+			Geometry geom;
+			Date estimatedTime;
+			String meansOfEvacuation;
+			int capacity;
+			try {
+				JSONObject jEvent = (JSONObject) eventsJAarray.get(i);
+				geom = getGeometryEvent(jEvent);
+				estimatedTime = ParsingUtils.parseJsonDate((String) jEvent.get("estimatedTime"));
+				meansOfEvacuation = (String) jEvent.get("meansOfEvacuation");
+				capacity = Integer.parseInt((String) jEvent.get("capacity"));
+			} catch (RuntimeException e) {
+				throw new EvacuatziaException("Error parsing event number " + Integer.toString(i) + " from json file.");
+			}
+			Administrator.INSTANCE.createEvent(geom, estimatedTime, meansOfEvacuation, capacity);
+		}
+	}
+
+	private void createAllReports(JSONObject jsonObject) throws EvacuatziaException {
+		JSONArray reportsJAarray = (JSONArray) jsonObject.get("reports");
+		for( int i = 0; i<reportsJAarray.size(); ++i) {
+			String username;
+			Geometry geom;
+			String title;
+			String content;
+			Date expirationTime;
+			try {
+				JSONObject jEvent = (JSONObject) reportsJAarray.get(i);
+				username = (String) jEvent.get("user");
+				// only points should be supported
+				geom = getGeometryEvent(jEvent);
+				title = (String) jEvent.get("title");
+				content = (String) jEvent.get("content"); 
+				expirationTime = ParsingUtils.parseJsonDate((String) jEvent.get("expirationTime"));
+			} catch (RuntimeException e) {
+				throw new EvacuatziaException("Error parsing report number " + Integer.toString(i) + " from json file.");
+			}
+			evacuatzia_proj.components.User u = UserManager.getUserByUsername(username);
+			u.createReport(title, content, geom, expirationTime);
+		}
+	}
+
+	private Geometry getGeometryEvent(JSONObject e) {
+		Geometry geom;
+		JSONArray jPoint = (JSONArray)  ((JSONObject) e.get("geometry")).get("coordinates");
+		Double longitude  = Double.parseDouble((String) jPoint.get(0));
+		Double latitude  = Double.parseDouble((String) jPoint.get(1));
+		geom = new Geometry(longitude, latitude, null);
+		return geom;
 	}
 }

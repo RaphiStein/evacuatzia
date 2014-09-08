@@ -6,24 +6,18 @@ public class LocationBasedItem implements Serializable{
 	/**
 	 * 
 	 */
-	private static final long serialVersionUID = -6049693734298729987L;
+	private static final long serialVersionUID = -5378174757991626352L;
 	private final Long eventID;
-	private final String title;
 	private final Geometry location;
 
-	public LocationBasedItem(Long eventID, String title, Geometry location) {
+	public LocationBasedItem(Long eventID, Geometry location) {
 		super();
 		this.eventID = eventID;
-		this.title = title;
 		this.location = location;
 	}
 
 	public Long getEventID() {
 		return eventID;
-	}
-
-	public String getTitle() {
-		return title;
 	}
 
 	public Geometry getLocation() {
@@ -36,7 +30,6 @@ public class LocationBasedItem implements Serializable{
 		int result = 1;
 		result = prime * result + ((eventID == null) ? 0 : eventID.hashCode());
 		result = prime * result + ((location == null) ? 0 : location.hashCode());
-		result = prime * result + ((title == null) ? 0 : title.hashCode());
 		return result;
 	}
 
@@ -59,13 +52,7 @@ public class LocationBasedItem implements Serializable{
 				return false;
 		} else if (!location.equals(other.location))
 			return false;
-		if (title == null) {
-			if (other.title != null)
-				return false;
-		} else if (!title.equals(other.title))
-			return false;
 		return true;
 	}
-
 	
 }
