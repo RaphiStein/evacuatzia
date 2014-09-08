@@ -24,6 +24,8 @@ import evacuatzia_proj.sqlhelpers.common.Utils;
 //This will be a table in the DB
 @Table(name = "report")
 public class Report {
+	public static final int TITLE_TEXT_LENGTH = 500;
+	public static final int CONTENT_TEXT_LENGTH = 1500;
 	private Long id;
 	private UserInfo userReported;
 //	private Double radius;
@@ -66,7 +68,7 @@ public class Report {
 		this.userReported = userReported;
 	}
 	
-	@Column(length=500)
+	@Column(length=TITLE_TEXT_LENGTH)
 	public String getTitle() {
 		return title;
 	}
@@ -75,7 +77,7 @@ public class Report {
 		this.title = title;
 	}
 	
-	@Column(length=1500)
+	@Column(length=CONTENT_TEXT_LENGTH)
 	public String getContent() {
 		return content;
 	}

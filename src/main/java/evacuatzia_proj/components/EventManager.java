@@ -12,6 +12,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 
+import evacuatzia_proj.components.helpers.CommonUtils;
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.EventFullException;
 import evacuatzia_proj.exceptions.EventTimePassed;
@@ -22,7 +23,7 @@ import evacuatzia_proj.sqlhelpers.beans.EvacuationEvent;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
 import evacuatzia_proj.sqlhelpers.common.Utils;
 
-public class EventManager extends LocationBasedItemManager {
+public class EventManager {
 	private static final SessionFactory sf = SessionFactoryUtil.getSessionFactory();
 
 	/*
@@ -33,7 +34,7 @@ public class EventManager extends LocationBasedItemManager {
 	public static Event editEvent(Event event, Geometry location, Date estimatedTime,
 			String meansOfEvacuation, int capacity) throws IllegalEventCapacity {
 		if (null == event) {
-			throw new EvacuatziaException("user must not be null");
+			throw new EvacuatziaException("Event must not be null");
 		}
 		CommonUtils.validateGeometrySupplied(location);
 		CommonUtils.validateDateSupplied(estimatedTime);

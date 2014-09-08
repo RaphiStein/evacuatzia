@@ -10,6 +10,7 @@ import org.hibernate.Transaction;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.ConstraintViolationException;
 
+import evacuatzia_proj.components.helpers.CommonUtils;
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.missingParam.PasswordException;
 import evacuatzia_proj.exceptions.missingParam.UsernameException;

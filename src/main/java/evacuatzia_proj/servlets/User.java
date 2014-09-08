@@ -51,9 +51,9 @@ public class User extends HttpServlet {
 	}
 
 	private ArrayList<evacuatzia_proj.components.Report> generateFakeReports(evacuatzia_proj.components.User user) {
-		evacuatzia_proj.components.Report report1 = new evacuatzia_proj.components.Report(new Long(0001), "Report 1", new Geometry(29.0, 49.0), new Date(), user);
-		evacuatzia_proj.components.Report report2 = new evacuatzia_proj.components.Report(new Long(0001), "Report 2", new Geometry(30.0, 40.0), new Date(), user);
-		evacuatzia_proj.components.Report report3 = new evacuatzia_proj.components.Report(new Long(0001), "Report 3", new Geometry(29.0, 50.0), new Date(), user);
+		evacuatzia_proj.components.Report report1 = new evacuatzia_proj.components.Report(new Long(0001), "Report 1", "content1", new Geometry(29.0, 49.0), new Date(), user);
+		evacuatzia_proj.components.Report report2 = new evacuatzia_proj.components.Report(new Long(0001), "Report 2", "content2", new Geometry(30.0, 40.0), new Date(), user);
+		evacuatzia_proj.components.Report report3 = new evacuatzia_proj.components.Report(new Long(0001), "Report 3", "content3", new Geometry(29.0, 50.0), new Date(), user);
 		
 		ArrayList<evacuatzia_proj.components.Report> reports = new ArrayList<evacuatzia_proj.components.Report>();
 		reports.add(report1);

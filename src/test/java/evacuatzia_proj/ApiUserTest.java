@@ -117,7 +117,7 @@ public class ApiUserTest {
 			fail("unexpected exception thrown: " + e.getMessage());
 			return; // only to make static analysis succeed...
 		}
-		ReportManager.editReport(report, "bla", new Geometry(2.0, 4.4), new Date());
+		ReportManager.editReport(report, "bla", "content", new Geometry(2.0, 4.4), new Date());
 	}
 	
 	@Test

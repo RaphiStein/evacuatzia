@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Polygon;
 
+import evacuatzia_proj.components.helpers.CommonUtils;
 import evacuatzia_proj.components.helpers.CompUtils;
 import evacuatzia_proj.components.helpers.OurPoint;
 import evacuatzia_proj.exceptions.EvacuatziaException;
@@ -22,14 +23,17 @@ import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
 import evacuatzia_proj.sqlhelpers.beans.UserInfo;
 import evacuatzia_proj.sqlhelpers.common.Utils;
 
-public class ReportManager extends LocationBasedItemManager {
+public class ReportManager {
 	private static final SessionFactory sf = SessionFactoryUtil.getSessionFactory();
 
-	public static Report editReport(Report report, String title, Geometry location, Date reportTime) {
+	public static Report editReport(Report report, String title, String content, Geometry location, Date expirationTime) {
 		if (null == report) {
 			throw new EvacuatziaException("report must not be null");
 		}
-		// TODO: check/validate all "must have" fields
+		CommonUtils.validateReportTitleSupplied(title);
+		CommonUtils.validateGeometrySupplied(location);
+		CommonUtils.validateDateSupplied(expirationTime);
+		CommonUtils.validateReportContent(content);
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		Long reportId = report.getEventID();
@@ -43,18 +47,21 @@ public class ReportManager extends LocationBasedItemManager {
 				throw new MissingInDatabaseException("Report is missing from database. Was it removed?");
 			}
 			dbReport.setTitle(title);
-			// TODO: set coordinates or change to setting Geometry directly (i
-			// preffer the latter)
-			dbReport.setTime(reportTime);
+			dbReport.setContent(content);
+			dbReport.setLocation(Utils.createJtsFromOurGeometry(location));
+			dbReport.setTime(expirationTime);
 			s.update(dbReport);
 			t.commit();
-		} catch (RuntimeException e) {
+		} catch (EvacuatziaException e) {
 			t.rollback();
 			throw e;
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Couldn't edit report. Please try again later");
 		} finally {
 			s.close();
 		}
-		return new Report(report.getEventID(), title, location, reportTime, report.getUser());
+		return new Report(report.getEventID(), title, content, location, expirationTime, report.getUser());
 	}
 
 	public static Report createNewReport(User user, String title, String content, Geometry location, Date reportTime) {
@@ -152,7 +159,7 @@ public class ReportManager extends LocationBasedItemManager {
 	public static List<Report> getReportsByTitle(String title) {
 		// TODO - answer: do we realy want this? maybe we can do with the
 		// function for partial match?
-		CommonUtils.validateTitleSupplied(title);
+		CommonUtils.validateReportTitleSupplied(title);
 		List<Report> resReports;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
@@ -179,9 +186,8 @@ public class ReportManager extends LocationBasedItemManager {
 			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
 		List<Report> retReportList = new ArrayList<>();
 		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : dbReportList) {
-			Coordinate coor = dbReport.getLocation().getCoordinate();
-			Geometry geom = new Geometry(coor.x, coor.y);
-			retReportList.add(new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(), user));
+			Geometry geom = Utils.createOurGeometryFromJts(dbReport.getLocation());
+			retReportList.add(new Report(dbReport.getId(), dbReport.getTitle(), dbReport.getContent(), geom, dbReport.getTime(), user));
 		}
 		return retReportList;
 	}
@@ -254,7 +260,7 @@ public class ReportManager extends LocationBasedItemManager {
 	private static Report createApiReportFromDbReportAndDbUser(evacuatzia_proj.sqlhelpers.beans.Report dbReport,
 			UserInfo dbUser) {
 		Geometry geom = Utils.createOurGeometryFromJts(dbReport.getLocation());
-		return new Report(dbReport.getId(), dbReport.getTitle(), geom, dbReport.getTime(),
+		return new Report(dbReport.getId(), dbReport.getTitle(), dbReport.getContent(), geom, dbReport.getTime(),
 				UserManager.createApiUserFromDbUser(dbUser));
 	}
 

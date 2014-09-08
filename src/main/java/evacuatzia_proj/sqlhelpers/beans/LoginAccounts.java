@@ -18,12 +18,10 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "login_accounts")
-public class LoginAccounts implements java.io.Serializable {
-
-	/**
-	 * 
-	 */
-	private static final long serialVersionUID = 7715423562250531448L;
+public class LoginAccounts {
+	public static final int USERNAME_TEXT_LENGTH = 20;
+	public static final int PASSWORD_TEXT_LENGTH = 32;
+	
 	private String userName;
 	private String userPass;
 	private Set<UserRoles> userRoles = new HashSet<UserRoles>();
@@ -43,7 +41,7 @@ public class LoginAccounts implements java.io.Serializable {
 	}
 
 	@Id
-	@Column(name = "userName", unique = true, nullable = false, length = 20)
+	@Column(name = "userName", unique = true, nullable = false, length = USERNAME_TEXT_LENGTH)
 	public String getUserName() {
 		return this.userName;
 	}
@@ -52,7 +50,7 @@ public class LoginAccounts implements java.io.Serializable {
 		this.userName = userName;
 	}
 
-	@Column(name = "userPass", nullable = false, length = 32)
+	@Column(name = "userPass", nullable = false, length = PASSWORD_TEXT_LENGTH)
 	public String getUserPass() {
 		return this.userPass;
 	}

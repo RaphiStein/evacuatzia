@@ -28,10 +28,11 @@ import evacuatzia_proj.sqlhelpers.common.Utils;
 // This will be a table in the DB
 @Table(name = "evac_event")
 public class EvacuationEvent { 
-	Long id;
-	Integer capacity;
-	String means;
-	Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
+	public static final int MEANS_TEXT_LENGTH = 500;
+	private Long id;
+	private Integer capacity;
+	private String means;
+	private Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
 	private Date time;
 //	private Double radius;
 	private Geometry location;
@@ -61,7 +62,7 @@ public class EvacuationEvent {
 		this.id = id;
 	}
 	
-	@Column(nullable = false, length = 500)
+	@Column(nullable = false, length = MEANS_TEXT_LENGTH)
 	public String getMeans() {
 		return means;
 	}
