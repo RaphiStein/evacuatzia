@@ -75,7 +75,17 @@ public class Event extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet \"Event\" doPost working");
-		request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);
+			if ((boolean) request.getSession().getAttribute("isAdmin")){
+				String username = request.getParameter("username");
+				// Remove USERNAME from Event
+				//After performing work, call the doGet to reload the page
+				doGet(request, response);
+			}
+			else {
+				request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);
+			}
+		
+		
 	}
 
 }
