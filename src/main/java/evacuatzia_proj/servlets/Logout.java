@@ -25,7 +25,9 @@ public class Logout extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		request.getSession().invalidate();
+		response.sendRedirect("/evacuatzia/home");
+		//request.getRequestDispatcher("/resources/jsp/home_login_register.jsp").(request, response);
 	}
 
 	/**

@@ -26,7 +26,7 @@ public class CreateEvent extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Servlet \"AllEvents\" doGet working");
+		System.out.println("Servlet \"CreateEvent\" doGet working");
 		request.getRequestDispatcher("/resources/jsp/create_event.jsp").forward(request, response);
 	}
 
