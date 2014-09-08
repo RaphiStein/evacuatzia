@@ -22,10 +22,13 @@ public class Home extends HttpServlet {
 		// TODO Auto-generated method stub
 		System.out.println("Servlet \"Home\" doGet working");
 		System.out.println("PathInfo: " + request.getRequestURL());
-		//If logged in, go to home page
-		request.getRequestDispatcher("/resources/jsp/home.jsp").forward(request, response);
-		//If not, go to login/register page
-		// TODO
+		//If admin logged in, go to adminhome
+		request.getRequestDispatcher("/resources/jsp/home_admin.jsp").forward(request, response);
+		//Else If logged in, go to home page
+		// TODO request.getRequestDispatcher("/resources/jsp/home.jsp").forward(request, response);
+		//Else If, go to login/register page
+		// TODO request.getRequestDispatcher("/resources/jsp/home_login_register.jsp").forward(request, response);
+
 	}
 
 }

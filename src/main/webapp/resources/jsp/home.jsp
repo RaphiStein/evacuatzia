@@ -33,8 +33,8 @@
 		<div class="row">
 			<div class="text-center">
 				<a href="/evacuatzia/search"><button type="submit" class="btn btn-info btn-lg">Explore By Map</button></a>
-				<a href="/evacuatzia/search/events"><button type="submit" class="btn btn-info btn-lg">Explore Reports</button></a>
-				<a href="/evacuatzia/search/reports"><button type="submit" class="btn btn-info btn-lg">Find Nearest Evacuation</button></a>
+				<a href="/evacuatzia/search/reports"><button type="submit" class="btn btn-info btn-lg">Explore Reports</button></a>
+				<a href="/evacuatzia/search/events"><button type="submit" class="btn btn-info btn-lg">Find Nearest Evacuation</button></a>
 			</div>
 		</div>
 

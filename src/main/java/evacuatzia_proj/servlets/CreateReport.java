@@ -28,7 +28,7 @@ public class CreateReport extends HttpServlet {
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Check if user is loggedin
 		System.out.println("Servlet \"CreateReport\" doGet working");
-		request.getRequestDispatcher("../resources/jsp/create_report.jsp").forward(request, response);
+		request.getRequestDispatcher("/resources/jsp/create_report.jsp").forward(request, response);
 	}
 
 	/**
