@@ -54,21 +54,16 @@ public class ApiEventTest {
 		assertEquals(expectedEvent, returnedEvent);
 	}
 
-	private Event createStamEvent() {
-		Event e = Administrator.INSTANCE.createEvent(geom, new Date(), "raft", 3);
-		return e;
-	}
-	
 	@Test
 	public void canEditEvent() throws IllegalEventCapacity {
 		String title1 = "title1";
 		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
-		Date date1 = new Date();
+		Date date1 = TestUtils.createFutureDate();
 		String means1 = "hot air baloon";
 		int cap1 = 5;
 		String title2 = "title2";
 		Geometry geom2 = new Geometry(100.0, 200.0, 50.0);
-		Date date2 = new Date(date1.getTime()+10000L);
+		Date date2 = new Date(date1.getTime()+60000L);
 		String means2 = "snorkling";
 		int cap2 = 20;
 		Event e = Administrator.INSTANCE.createEvent(geom1, date1, means1, cap1);
@@ -80,7 +75,7 @@ public class ApiEventTest {
 	@Test(expected=IllegalEventCapacity.class)
 	public void cannotEditEventIfWantsLessUsersThanRegistered() throws IllegalEventCapacity {
 		Geometry geom1 = new Geometry(10.0, 20.0, 5.0);
-		Date date1 = new Date();
+		Date date1 = TestUtils.createFutureDate();
 		String means1 = "hot air baloon";
 		int cap1 = 5;
 		int cap2 = 2;
@@ -151,12 +146,17 @@ public class ApiEventTest {
 	public void canGetEventByUser() {
 		User user1 = UserManager.register("1", "p", "name");
 		assertNull(EventManager.getEventByUser(user1));
-		Event event1 = Administrator.INSTANCE.createEvent(geom, new Date(), "swimming", 4);
-		Event event2 = Administrator.INSTANCE.createEvent(geom, new Date(), "party boat", 40);
+		Event event1 = Administrator.INSTANCE.createEvent(geom, TestUtils.createFutureDate(), "swimming", 4);
+		Event event2 = Administrator.INSTANCE.createEvent(geom, TestUtils.createFutureDate(), "party boat", 40);
 		EventManager.registerToEvent(user1, event1);
 		Event returnedEvent = EventManager.getEventByUser(user1);
 		// can't compare events since number of registered users will be different. comparing only mean of evacuation instead.
 		assertEquals(event1.getMeansOfEvacuation(), returnedEvent.getMeansOfEvacuation());
 		assertFalse(event2.getMeansOfEvacuation().equals(returnedEvent.getMeansOfEvacuation()));
+	}
+
+	private Event createStamEvent() {
+		Event e = Administrator.INSTANCE.createEvent(geom, TestUtils.createFutureDate(), "raft", 3);
+		return e;
 	}
 }

@@ -1,5 +1,6 @@
 package evacuatzia_proj.common;
 
+import java.util.Date;
 import java.util.List;
 
 import org.hibernate.Query;
@@ -17,6 +18,12 @@ public class TestUtils {
 		}
 		s.getTransaction().commit();
 	}
+
+	public static Date createFutureDate() {
+		Date now = new Date();
+		return new Date(now.getTime()+60000L); // 60 seconds from now
+	}
+	
 	private static void hqlTruncate(String myType, Session s){
 		List<Object> objs = queryAllObjectsInDB(myType, s);
 		for (Object obj: objs) {
@@ -31,4 +38,5 @@ public class TestUtils {
 		}
 		return null;
 	}
+	
 }

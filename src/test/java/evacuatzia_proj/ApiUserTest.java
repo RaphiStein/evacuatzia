@@ -126,7 +126,7 @@ public class ApiUserTest {
 		try { 
 		String username = "myUsaName"; 
 		User user = UserManager.register(username, "12312", "Usa");
-		event = Administrator.INSTANCE.createEvent(new Geometry(1.0, 2.0, 3.0), new Date(), "boat", 5);
+		event = Administrator.INSTANCE.createEvent(new Geometry(1.0, 2.0, 3.0), TestUtils.createFutureDate(), "boat", 5);
 		EventManager.registerToEvent(user, event);
 		// Sanity check:
 		assertEquals(1, EventManager.getRegisteredUsers(event).size());

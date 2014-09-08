@@ -106,7 +106,7 @@ public class UserManager {
 		try {
 			UserInfo dbUser = getUserInfoByUsername(username, s);
 			ReportManager.removeReportsByDbUser(dbUser, s);
-			EventManager.unregisterUserFromEvents(dbUser, s);
+			EventManager.unregisterUserFromFutureEvents(dbUser, s);
 			LoginAccounts account = getLoginAccountByUsername(username, s);
 			deleteIfNotNull(account, s);
 			deleteIfNotNull(dbUser, s);

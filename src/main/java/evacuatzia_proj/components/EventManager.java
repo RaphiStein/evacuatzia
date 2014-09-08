@@ -14,6 +14,7 @@ import org.hibernate.criterion.Restrictions;
 
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.EventFullException;
+import evacuatzia_proj.exceptions.EventTimePassed;
 import evacuatzia_proj.exceptions.IllegalEventCapacity;
 import evacuatzia_proj.exceptions.MissingInDatabaseException;
 import evacuatzia_proj.sqlhelpers.SessionFactoryUtil;
@@ -79,11 +80,14 @@ public class EventManager extends LocationBasedItemManager {
 			if (dbEvent.getCapacity() <= dbEvent.getRegisteredUsers().size()) {
 				throw new EventFullException("Event maximum capacity reached.");
 			}
+			if (dbEvent.getTime().before(new Date())) {
+				throw new EventTimePassed("Event time passed. Can't register to event.");
+			}
 			UserInfo userInfo = getDbUserByApiUser(user, s);
 			if (null == userInfo) {
 				throw new MissingInDatabaseException("User was not found in Database. Was account deleted?");
 			}
-			unregisterUserFromEvents(userInfo, s);
+			unregisterUserFromFutureEvents(userInfo, s);
 			dbEvent.registerUser(userInfo);
 			s.update(dbEvent);
 			t.commit();
@@ -136,7 +140,7 @@ public class EventManager extends LocationBasedItemManager {
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
 		try {
-			EvacuationEvent dbEvent = getDbEventByUserId(user.getId(), s);
+			EvacuationEvent dbEvent = getFutureDbEventByUserId(user.getId(), s);
 			if (null == dbEvent) {
 				t.commit();
 				return null;
@@ -243,8 +247,8 @@ public class EventManager extends LocationBasedItemManager {
 				dbEvent.getCapacity(), dbEvent.getRegisteredUsers().size());
 	}
 
-	static void unregisterUserFromEvents(UserInfo dbUser, Session s) {
-		EvacuationEvent dbEvent = getDbEventByUserId(dbUser.getId(), s);
+	static void unregisterUserFromFutureEvents(UserInfo dbUser, Session s) {
+		EvacuationEvent dbEvent = getFutureDbEventByUserId(dbUser.getId(), s);
 		if (null == dbEvent) {
 			return;
 		}
@@ -260,10 +264,13 @@ public class EventManager extends LocationBasedItemManager {
 		return events;
 	}
 	
-	private static EvacuationEvent getDbEventByUserId(Long userId, Session s) {
-		String hql = "select distinct e from EvacuationEvent e " + "join e.registeredUsers u " + "where u.id = :userId";
+	private static EvacuationEvent getFutureDbEventByUserId(Long userId, Session s) {
+		String hql = "select distinct e from EvacuationEvent e " + 
+					"join e.registeredUsers u " +
+					"where u.id = :userId and e.time > :currentTime";
 		Query q = s.createQuery(hql);
 		q.setParameter("userId", userId);
+		q.setTimestamp("currentTime", new Date());
 		EvacuationEvent dbEvent = (EvacuationEvent) q.uniqueResult();
 		return dbEvent;
 	}
