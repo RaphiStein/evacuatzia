@@ -34,7 +34,7 @@
 			</div>
 			<div class="row" style="padding: 10px;">
 				<div class="">
-					<input type="text" class="form-control" placeholder="Geocode">
+					<input id="geocodeInput" type="text" class="form-control" placeholder="Geocode">
 					<div id="map-canvas" style="height: 200px;" /></div>
 				</div>
 			</div>

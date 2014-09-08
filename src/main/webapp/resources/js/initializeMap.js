@@ -21,6 +21,7 @@ function initialize() {
 	});
 	google.maps.event.addListener(marker, 'dragend', function(evt){
 	   console.log('Marker dropped: Current Lat: ' + evt.latLng.lat().toFixed(3) + ' Current Lng: ' + evt.latLng.lng().toFixed(3));
+	   document.getElementById("geocodeInput").value = evt.latLng.lat().toFixed(6) + ", " + evt.latLng.lng().toFixed(6);
 	});
 }
 google.maps.event.addDomListener(window, 'load', initialize);
