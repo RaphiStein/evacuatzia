@@ -4,6 +4,7 @@ import java.util.Date;
 
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.ReportManager;
+import evacuatzia_proj.exceptions.EventCapacityExcpetion;
 import evacuatzia_proj.exceptions.TextTooLongException;
 import evacuatzia_proj.exceptions.missingParam.DateException;
 import evacuatzia_proj.exceptions.missingParam.GeometryException;

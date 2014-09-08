@@ -1,6 +1,5 @@
-package evacuatzia_proj.components.helpers;
+package evacuatzia_proj.exceptions;
 
-import evacuatzia_proj.exceptions.EvacuatziaException;
 
 public class EventCapacityExcpetion extends EvacuatziaException {
 
