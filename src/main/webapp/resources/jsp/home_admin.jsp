@@ -19,7 +19,7 @@
 		</div>
 		<div class="row">
 			<div class="text-center">
-				<a href="/evacuatzia/resources/create_event.jsp"><button type="submit" class="btn btn-info btn-lg">Create
+				<a href="/evacuatzia/admin/action/create_event"><button type="submit" class="btn btn-info btn-lg">Create
 						Evacuation Event</button></a> <a href="/evacuatzia/resources/see_all_events.jsp"><button type="submit"
 						class="btn btn-info btn-lg">Remove Evacuation Event</button></a>
 			</div>

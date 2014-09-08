@@ -29,7 +29,7 @@
                 <li><a href="#">Another action</a></li>
                 <li><a href="#">Something else here</a></li>
                 <li class="divider"></li>
-                <li><a href="">Sign Out</a></li>
+                <li><a href="/evacuatzia/logout">Log Out</a></li>
               </ul>
             </li>
           </ul>
