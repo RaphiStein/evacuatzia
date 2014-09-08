@@ -22,10 +22,22 @@
         <property name="connection.password">R3gul4r</property>
         <!--  Commit on demand -->
         <property name="connection.autocommit">false</property>
+        <!-- Set isolation level to "Read_committed" -->
+        <property name="connection.isolation">4</property>
+        
         <!-- <property name="transaction.factory_class">org.hibernate.transaction.JDBCTransactionFactory</property> -->
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">40</property>
+        <!-- <property name="connection.pool_size">40</property> -->
+        
+        <!-- configuration pool via c3p0-->   
+        <property name="c3p0.acquire_increment">1</property>   
+        <property name="c3p0.idle_test_period">100</property> <!-- seconds -->   
+        <property name="c3p0.max_size">100</property>   
+        <property name="c3p0.max_statements">0</property>   
+        <property name="c3p0.min_size">10</property>   
+        <property name="c3p0.timeout">100</property> <!-- seconds -->  
+        
 
         <!-- Echo all executed SQL to stdout -->
         <property name="show_sql">true</property>

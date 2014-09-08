@@ -8,19 +8,19 @@ import java.util.List;
 import org.junit.Before;
 import org.junit.Test;
 
-import evacuatzia_proj.common.TestUtils;
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.Report;
 import evacuatzia_proj.components.ReportManager;
 import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.components.helpers.OurPoint;
+import evacuatzia_proj.utils.ClearDatabase;
 
 public class ApiReportTest {
 
 	@Before
 	public void setup() {
-		TestUtils.dropAllTables();
+		ClearDatabase.dropAllTables();
 	}
 	
 	@Test

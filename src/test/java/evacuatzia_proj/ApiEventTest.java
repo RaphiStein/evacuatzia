@@ -17,13 +17,14 @@ import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.EvacuatziaException;
 import evacuatzia_proj.exceptions.IllegalEventCapacity;
+import evacuatzia_proj.utils.ClearDatabase;
 
 public class ApiEventTest {
 	private Geometry geom = new Geometry(10.0, 20.0);
 	
 	@Before
 	public void setup() {
-		TestUtils.dropAllTables();
+		ClearDatabase.dropAllTables();
 	}
 
 	@Test

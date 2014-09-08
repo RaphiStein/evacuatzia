@@ -27,7 +27,9 @@ import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.ReportManager;
 import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.EvacuatziaException;
+import evacuatzia_proj.utils.ClearDatabase;
 import evacuatzia_proj.utils.ParsingUtils;
+import evacuatzia_proj.utils.StringHashingUtils;
 
 public class InitFileUpload extends HttpServlet {
 
@@ -108,8 +110,7 @@ public class InitFileUpload extends HttpServlet {
 			out.println("</head>");
 			out.println("<body>");
 			// while (i.hasNext()) {
-			// we upload only one file -
-			if (i.hasNext()) {
+			while (i.hasNext()) {
 				FileItem fi = (FileItem) i.next();
 				if (!fi.isFormField()) {
 					// Get the uploaded file parameters
@@ -123,11 +124,6 @@ public class InitFileUpload extends HttpServlet {
 					fi.write(file);
 					out.println("Uploaded Filename: " + fileName + "<br>");
 				}
-			} else {
-				out.println("No files have been uploaded." + "<br>");
-				out.println("</body>");
-				out.println("</html>");
-				return;
 			}
 		} catch (Exception ex) {
 			System.out.println(ex);
@@ -141,7 +137,7 @@ public class InitFileUpload extends HttpServlet {
 			Object obj = parser.parse(new FileReader(file.getCanonicalPath()));
 			JSONObject jsonObject = (JSONObject) obj;
 			// all good till here - clear database:
-			// TODO: clear DB
+			ClearDatabase.dropAllTables();
 			out.println("Cleared old data from database." + "<br>");
 			// create all users
 			createAllUsers(jsonObject);

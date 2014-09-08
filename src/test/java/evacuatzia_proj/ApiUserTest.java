@@ -24,12 +24,13 @@ import evacuatzia_proj.components.UserManager;
 import evacuatzia_proj.exceptions.MissingInDatabaseException;
 import evacuatzia_proj.exceptions.missingParam.PasswordException;
 import evacuatzia_proj.exceptions.missingParam.UsernameException;
+import evacuatzia_proj.utils.ClearDatabase;
 
 public class ApiUserTest {
 	
 	@Before
 	public void setup() {
-		TestUtils.dropAllTables();
+		ClearDatabase.dropAllTables();
 	}
 	
 	@Test
