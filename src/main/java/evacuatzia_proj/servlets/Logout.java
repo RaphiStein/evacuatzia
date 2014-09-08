@@ -1,6 +1,7 @@
 package evacuatzia_proj.servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -26,7 +27,7 @@ public class Logout extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.getSession().invalidate();
-		response.sendRedirect("/evacuatzia/home");
+		response.sendRedirect(request.getContextPath() + "/home");
 		//request.getRequestDispatcher("/resources/jsp/home_login_register.jsp").(request, response);
 	}
 
