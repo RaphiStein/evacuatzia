@@ -36,7 +36,31 @@ public class CreateReport extends HttpServlet {
 	 */
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
+		boolean inputIsValid = false;
+		
+		String title = request.getParameter("title");
+		String content = request.getParameter("content");
+		String geocode = request.getParameter("geocode");
+		
+		System.out.println(title + "\n" + content + "\n" + geocode);
+		
+		// validate input
+		if (
+				(title != null) &&
+				(content != null) &&
+				(geocode != null)
+			){
+			inputIsValid = true;
+		}
+				
+		if (inputIsValid){
+			request.setAttribute("message", "Success! Your Report Has Been Successfully Added");
+			request.getRequestDispatcher("/resources/jsp/result.jsp").forward(request, response);
+		}
+		else {
+			request.setAttribute("message", "There was an error with you input. Please try again");
+			request.getRequestDispatcher("/resources/jsp/create_report.jsp").forward(request, response);
+		}
 	}
 
 }

@@ -20,7 +20,8 @@
 		<div class="row">
 			<div class="text-center">
 				<a href="/evacuatzia/admin/action/create_event"><button type="submit" class="btn btn-info btn-lg">Create
-						Evacuation Event</button></a> <a href="/evacuatzia/resources/see_all_events.jsp"><button type="submit"
+						Evacuation Event</button></a> 
+						<a href="/evacuatzia/event/all"><button type="submit"
 						class="btn btn-info btn-lg">Remove Evacuation Event</button></a>
 			</div>
 		</div>
@@ -32,8 +33,9 @@
 		</div>
 		<div class="row">
 			<div class="text-center">
-				<a href=""><button type="submit" class="btn btn-info btn-lg">Add
-						User to Event</button></a> <a href=""><button type="submit"
+				<a href="/evacuatzia/event/all"><button type="submit" class="btn btn-info btn-lg">Add
+						User to Event</button></a> 
+				<a href="/evacuatzia/event/all"><button type="submit"
 						class="btn btn-info btn-lg">Remove User from Event</button></a>
 			</div>
 		</div>
