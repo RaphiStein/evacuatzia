@@ -3,5 +3,10 @@ Stuff to do before submitting:
 - remove facebook login button.
 - in hibernate.cfg.xml, change "hbm2ddl.auto" to update (it is currently set to create).
 - can change show_sql to false as well.
-- report has only expiration time. no time start time
 - not alow signing to past events.
+- users in events see only events details - admins sees registered users and can remove or add them.
+
+
+
+
+---> password for admin account cs236369z
