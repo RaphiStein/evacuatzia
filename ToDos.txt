@@ -1,9 +1,7 @@
 Stuff to do before submitting:
-- remove user pictures.
-- remove facebook login button.
 - in options menu - shouldn't show logout if not logged in.
 			login should work.
-- in hibernate.cfg.xml, change "hbm2ddl.auto" to update (it is currently set to create).
+Done - in hibernate.cfg.xml, change "hbm2ddl.auto" to update (it is currently set to create).
 - can change show_sql to false as well.
 - not alow signing to past events.
 - users in events see only events details - admins sees registered users and can remove or add them.
