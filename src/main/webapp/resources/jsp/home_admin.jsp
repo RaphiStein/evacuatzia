@@ -12,6 +12,11 @@
 				<h2 class="text-center">Evacuatzia Administration</h2>
 			</div>
 		</div>
+		<div class="row">
+		  <div class="col-lg-6 col-lg-offset-3">
+                <a href="/evacuatzia/upload_init"><button type="submit" class="btn btn-info btn-lg">Upload initialization file (json format)</button></a>
+            </div>
+		</div>
 		<div class="row top-buffer">
 			<div class="col-lg-6 col-lg-offset-3">
 				<h4 class="text-center">Evacuation Event Management</h4>

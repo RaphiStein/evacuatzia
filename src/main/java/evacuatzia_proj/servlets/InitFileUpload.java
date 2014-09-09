@@ -62,7 +62,7 @@ public class InitFileUpload extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(filePath);
-		Boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
+		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");
 		if (null == isAdmin || !isAdmin) {
 			// shouldn't be here on the first place, so we'll just throw him back home...
 			response.sendRedirect(request.getContextPath() + "/home");
@@ -74,7 +74,7 @@ public class InitFileUpload extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
-		Boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
+		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");
 		if (null == isAdmin || !isAdmin) {
 			// shouldn't be here on the first place, so we'll just throw him back home...
 			response.sendRedirect(request.getContextPath() + "/home");
