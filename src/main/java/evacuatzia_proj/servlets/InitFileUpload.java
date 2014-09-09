@@ -60,15 +60,26 @@ public class InitFileUpload extends HttpServlet {
 	}
 
 	@Override
-	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println(filePath);
-
-		req.getRequestDispatcher("/resources/jsp/init_file_upload.jsp").forward(req, resp);
+		Boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
+		if (null == isAdmin || !isAdmin) {
+			// shouldn't be here on the first place, so we'll just throw him back home...
+			response.sendRedirect(request.getContextPath() + "/home");
+			return;
+		}
+		request.getRequestDispatcher("/resources/jsp/init_file_upload.jsp").forward(request, response);
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException,
 			IOException {
+		Boolean isAdmin = (Boolean) request.getAttribute("isAdmin");
+		if (null == isAdmin || !isAdmin) {
+			// shouldn't be here on the first place, so we'll just throw him back home...
+			response.sendRedirect(request.getContextPath() + "/home");
+			return;
+		}
 		// Check that we have a file upload request
 		isMultipart = ServletFileUpload.isMultipartContent(request);
 		response.setContentType("text/html");

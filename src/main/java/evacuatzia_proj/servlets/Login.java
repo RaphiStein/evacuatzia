@@ -1,12 +1,15 @@
 package evacuatzia_proj.servlets;
 
 import java.io.IOException;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import evacuatzia_proj.components.User;
 import evacuatzia_proj.components.UserManager;
+import evacuatzia_proj.utils.StringHashingUtils;
 
 
 
@@ -38,16 +41,20 @@ public class Login extends HttpServlet {
 		String username = request.getParameter("user");
         String pwd = request.getParameter("password");
         User user;
-        
-        if (UserManager.login(username, pwd)){ //login is sucessful
-        	//instantiate user object
-        	user = UserManager.getUserByUsername(username);
-        	request.getSession().setAttribute("user", user);
-        	request.getRequestDispatcher("resources/jsp/user/" + user.getUsername() + ".jsp").forward(request, response);
-        }
-        else{
-        	request.setAttribute("error", "Bad username or password. Please retry");
-            request.getRequestDispatcher("/resources/jsp/login.jsp").forward(request, response);
+        if (null != username && null != pwd && username == "admin" && StringHashingUtils.stringMatchMD5(pwd, "7e9dd83412613500e293f4804d44c9ce")) {
+        	request.setAttribute("isAdmin", new Boolean(true));
+        	request.getRequestDispatcher("evacuatzia/home").forward(request, response);
+        } else {
+	        if (UserManager.login(username, pwd)){ //login is sucessful
+	        	//instantiate user object
+	        	user = UserManager.getUserByUsername(username);
+	        	request.getSession().setAttribute("user", user);
+	        	request.getRequestDispatcher("resources/jsp/user/" + user.getUsername() + ".jsp").forward(request, response);
+	        }
+	        else{
+	        	request.setAttribute("error", "Bad username or password. Please retry");
+	            request.getRequestDispatcher("/resources/jsp/login.jsp").forward(request, response);
+	        }
         }
         
 	}
