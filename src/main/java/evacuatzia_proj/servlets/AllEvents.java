@@ -1,11 +1,14 @@
 package evacuatzia_proj.servlets;
 
 import java.io.IOException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import evacuatzia_proj.components.EventManager;
 
 /**
  * Servlet implementation class AllEvents
@@ -27,7 +30,10 @@ public class AllEvents extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet \"AllEvents\" doGet working");
-		request.getRequestDispatcher("../resources/jsp/see_all_events.jsp").forward(request, response);
+		
+		List<evacuatzia_proj.components.Event> allEvents = EventManager.getAllEvents();
+		request.setAttribute("events", allEvents);
+		request.getRequestDispatcher("/resources/jsp/see_all_events.jsp").forward(request, response);
 	}
 
 	/**
