@@ -10,6 +10,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import evacuatzia_proj.components.Administrator;
+import evacuatzia_proj.components.EventManager;
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.utils.ParsingUtils;
 
@@ -68,28 +70,32 @@ public class CreateEvent extends HttpServlet {
 		}
 
 		//Parse Data
+		Geometry geoParsed = null;
+		Date dateParsed = null;
+		Date timeParsed = null;
+		int capacityParsed = 0;		
 		try {
-			Geometry geometry = ParsingUtils.parseGeocode(geoRaw);
+			geoParsed = ParsingUtils.parseGeocode(geoRaw);
 		}
 		catch (Exception e){
 			badInputTryAgain(request, response, "Geocode");
 		}
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-			Date dateParsed = format.parse(dateRaw);
+			dateParsed = format.parse(dateRaw);
 		} catch (ParseException e) {
 			badInputTryAgain(request, response, "Date");
 			return;
 		}
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("H:mm");
-			Date timeParsed = format.parse(timeRaw);
+			timeParsed = format.parse(timeRaw);
 		} catch (ParseException e) {
 			badInputTryAgain(request, response, "Time");
 			return;
 		}
 		try {
-			int capacityParsed = Integer.parseInt(capacityRaw);
+			capacityParsed = Integer.parseInt(capacityRaw);
 		}
 		catch (Exception e){
 			badInputTryAgain(request, response, "Time");
@@ -98,6 +104,7 @@ public class CreateEvent extends HttpServlet {
 		
 		
 		if (inputIsValid){
+			Administrator.INSTANCE.createEvent(geoParsed, timeParsed, means, capacityParsed);
 			request.setAttribute("message", "Success! Your Event Has Been Successfully Added");
 			request.getRequestDispatcher("/resources/jsp/result.jsp").forward(request, response);
 		}

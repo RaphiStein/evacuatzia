@@ -19,8 +19,8 @@ public class Home extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		boolean isAdmin = (boolean) request.getSession().getAttribute("isAdmin");
-		boolean isLoggedIn = (boolean) request.getSession().getAttribute("isLoggedIn");
+		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");
+		Boolean isLoggedIn = (Boolean) request.getSession().getAttribute("isLoggedIn");
 		
 		// TODO Auto-generated method stub
 		System.out.println("Context Path:" + request.getContextPath());
@@ -28,10 +28,10 @@ public class Home extends HttpServlet {
 		System.out.println("Servlet \"Home\" doGet working");
 		System.out.println("PathInfo: " + request.getRequestURL());
 		
-		if (isAdmin){
+		if ((isAdmin != null) && isAdmin){
 			request.getRequestDispatcher("/resources/jsp/home_admin.jsp").forward(request, response);
 		}
-		else if (isLoggedIn) {
+		else if ((isLoggedIn != null) && isLoggedIn) {
 			request.getRequestDispatcher("/resources/jsp/home.jsp").forward(request, response);
 		}
 		else {
