@@ -56,9 +56,12 @@ public class EventManager {
 			s.update(dbEvent);
 			retEvent = createEventOutOfDbEvent(dbEvent);
 			t.commit();
-		} catch (RuntimeException e) {
+		} catch (EvacuatziaException e) {
 			t.rollback();
 			throw e;
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -91,9 +94,12 @@ public class EventManager {
 			dbEvent.registerUser(userInfo);
 			s.update(dbEvent);
 			t.commit();
-		} catch (RuntimeException e) {
+		} catch (EvacuatziaException e) {
 			t.rollback();
 			throw e;
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -115,9 +121,7 @@ public class EventManager {
 			if (null != dbEvent) {
 				UserInfo dbUser = getDbUserByApiUser(user, s);
 				if (null != dbUser) {
-					// just making sure the user still exists. and is registered to
-					// the event.
-					// if the user exists but not registered - no need to update.
+					// just making sure the user still exists
 					dbEvent.removeUser(dbUser);
 					s.update(dbEvent);
 				}
@@ -125,7 +129,7 @@ public class EventManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -149,7 +153,7 @@ public class EventManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -201,7 +205,7 @@ public class EventManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -222,7 +226,7 @@ public class EventManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}

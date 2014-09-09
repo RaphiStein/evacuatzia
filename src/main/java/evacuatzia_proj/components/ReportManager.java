@@ -79,9 +79,12 @@ public class ReportManager {
 					location.getLatitude(), reportTime);
 			s.save(dbReport);
 			t.commit();
-		} catch (RuntimeException e) {
+		} catch (EvacuatziaException e) {
 			t.rollback();
 			throw e;
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -104,7 +107,7 @@ public class ReportManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -123,7 +126,7 @@ public class ReportManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -141,7 +144,7 @@ public class ReportManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -158,8 +161,6 @@ public class ReportManager {
 	}
 
 	public static List<Report> getReportsByTitle(String title) {
-		// TODO - answer: do we realy want this? maybe we can do with the
-		// function for partial match?
 		CommonUtils.validateReportTitleSupplied(title);
 		List<Report> resReports;
 		Session s = sf.openSession();
@@ -170,7 +171,7 @@ public class ReportManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -178,32 +179,12 @@ public class ReportManager {
 	}
 
 	public static List<Report> getReportsByPartialTitle(String partialTitle) {
-		List<Report> resReports;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
-		try {
-			Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
-			cr.add(Restrictions.ilike("title", "%"+partialTitle+"%"));
-			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = cr.list();
-			resReports = createApiReportListFromDbReportList(dbReportList);
-			t.commit();
-		} catch (RuntimeException e) {
-			t.rollback();
-			throw e;
-		} finally {
-			s.close();
-		}
-		return resReports;
-	}
-
-	private static List<Report> createApiReportListFromDbReportListAndUser(User user,
-			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
-		List<Report> retReportList = new ArrayList<>();
-		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : dbReportList) {
-			Geometry geom = Utils.createOurGeometryFromJts(dbReport.getLocation());
-			retReportList.add(new Report(dbReport.getId(), dbReport.getTitle(), dbReport.getContent(), geom, dbReport.getTime(), user));
-		}
-		return retReportList;
+		Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
+		cr.add(Restrictions.ilike("title", "%" + partialTitle + "%"));
+		// no need for all the try and catch, they are in the called function.
+		return getReportsByCriteria(s, t, cr);
 	}
 
 	public static List<Report> getAllReportsInRectangle(OurPoint p1, OurPoint p2) {
@@ -224,25 +205,58 @@ public class ReportManager {
 		return reportsInPolygon(poly);
 	}
 
-	private static List<Report> reportsInPolygon(Polygon poly) {
-		Session s = sf.openSession();
-		Transaction t = s.beginTransaction();
-		String hql = "select r from Report r where within(r.location, :filter) = true";
-		Query q = s.createQuery(hql);
-		q.setParameter("filter", poly);
-		List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = q.list();
-		List<Report> resReports = createApiReportListFromDbReportList(dbReportList);
-		t.commit();
-		s.close();
-		return resReports;
-	}
-
 	// Package protected
 	static void removeReportsByDbUser(UserInfo user, Session s) {
 		List<evacuatzia_proj.sqlhelpers.beans.Report> userReportList = ReportManager.getDbReportsByDbUser(user, s);
 		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : userReportList) {
 			s.delete(dbReport);
 		}
+	}
+
+	private static List<Report> reportsInPolygon(Polygon poly) {
+		List<Report> resReports;
+		Session s = sf.openSession();
+		Transaction t = s.beginTransaction();
+		try {
+			String hql = "select r from Report r where within(r.location, :filter) = true";
+			Query q = s.createQuery(hql);
+			q.setParameter("filter", poly);
+			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = q.list();
+			resReports = createApiReportListFromDbReportList(dbReportList);
+			t.commit();
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Error occurred, please try again later.");
+		} finally {
+			s.close();
+		}
+		return resReports;
+	}
+
+	private static List<Report> getReportsByCriteria(Session s, Transaction t, Criteria cr) {
+		List<Report> resReports;
+		try {
+			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList = cr.list();
+			resReports = createApiReportListFromDbReportList(dbReportList);
+			t.commit();
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Error occurred, please try again later.");
+		} finally {
+			s.close();
+		}
+		return resReports;
+	}
+
+	private static List<Report> createApiReportListFromDbReportListAndUser(User user,
+			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
+		List<Report> retReportList = new ArrayList<>();
+		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : dbReportList) {
+			Geometry geom = Utils.createOurGeometryFromJts(dbReport.getLocation());
+			retReportList.add(new Report(dbReport.getId(), dbReport.getTitle(), dbReport.getContent(), geom, dbReport
+					.getTime(), user));
+		}
+		return retReportList;
 	}
 
 	private static List<evacuatzia_proj.sqlhelpers.beans.Report> getDbReportsByDbUser(UserInfo user, Session s) {

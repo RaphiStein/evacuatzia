@@ -38,7 +38,7 @@ public enum Administrator {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -59,7 +59,7 @@ public enum Administrator {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -80,7 +80,7 @@ public enum Administrator {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
