@@ -58,6 +58,7 @@ public class Register extends HttpServlet {
 			request.setAttribute("message", "There was an error with your input");
             request.getRequestDispatcher("/resources/jsp/register_new_account.jsp").forward(request, response);
 		} else {
+			request.getSession().setAttribute("isLoggedIn", true);
 			request.getSession().setAttribute("user", user);
             response.sendRedirect("home");
 		}

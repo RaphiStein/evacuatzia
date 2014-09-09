@@ -19,15 +19,13 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
-            <li><a href="">${user.username}</a></li>
+            <li><a href="/evacuatzia/user/${user.username}">${user.username}</a></li>
             <li><a href="#">My Account</a></li>
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>
               <ul class="dropdown-menu">
-                <li><a href="">Log In</a></li>
-                <li><a href="#">Another action</a></li>
-                <li><a href="#">Something else here</a></li>
+                <li><a href="/evacuatzia/home">Home</a></li>
                 <li class="divider"></li>
                 <li><a href="/evacuatzia/logout">Log Out</a></li>
               </ul>
