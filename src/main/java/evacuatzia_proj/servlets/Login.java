@@ -46,14 +46,15 @@ public class Login extends HttpServlet {
         String pwd = request.getParameter("password");
         User user;
         if (null != username && null != pwd && username.equals("admin") && StringHashingUtils.stringMatchMD5(pwd, "3db5200f67f447507983c60dddb323b3")) {
-        	request.setAttribute("isAdmin", new Boolean(true));
+        	request.getSession().setAttribute("isAdmin", new Boolean(true));
         	response.sendRedirect(request.getContextPath() + "/home");
         } else {
 	        if (UserManager.login(username, pwd)){ //login is successful
 	        	//instantiate user object
 	        	user = UserManager.getUserByUsername(username);
 	        	request.getSession().setAttribute("user", user);
-	        	request.getRequestDispatcher("resources/jsp/user/" + user.getUsername() + ".jsp").forward(request, response);
+	        	request.getSession().setAttribute("isLoggedIn", new Boolean(true));
+	        	request.getRequestDispatcher("/evacuatzia/user/" + user.getUsername()).forward(request, response);
 	        }
 	        else{
 	        	request.setAttribute("error", "Bad username or password. Please retry");

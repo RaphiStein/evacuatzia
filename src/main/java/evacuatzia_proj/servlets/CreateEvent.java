@@ -34,8 +34,17 @@ public class CreateEvent extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		Boolean isAdmin = (Boolean) request.getSession().getAttribute("isAdmin");
+
 		System.out.println("Servlet \"CreateEvent\" doGet working");
-		request.getRequestDispatcher("/resources/jsp/create_event.jsp").forward(request, response);
+		if (isAdmin != null && isAdmin){
+			request.getRequestDispatcher("/resources/jsp/create_event.jsp").forward(request, response);			
+		}
+		else {
+			request.setAttribute("message", "Sorry, you cannot access that page.");
+			request.getRequestDispatcher("/resources/jsp/result.jsp").forward(request, response);			
+
+		}
 	}
 
 	/**
@@ -78,31 +87,30 @@ public class CreateEvent extends HttpServlet {
 			geoParsed = ParsingUtils.parseGeocode(geoRaw);
 		}
 		catch (Exception e){
-			badInputTryAgain(request, response, "Geocode");
+			ParsingUtils.badInputTryAgain(request, response, "Geocode");
 		}
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 			dateParsed = format.parse(dateRaw);
 		} catch (ParseException e) {
-			badInputTryAgain(request, response, "Date");
+			ParsingUtils.badInputTryAgain(request, response, "Date");
 			return;
 		}
 		try {
 			SimpleDateFormat format = new SimpleDateFormat("H:mm");
 			timeParsed = format.parse(timeRaw);
 		} catch (ParseException e) {
-			badInputTryAgain(request, response, "Time");
+			ParsingUtils.badInputTryAgain(request, response, "Time");
 			return;
 		}
 		try {
 			capacityParsed = Integer.parseInt(capacityRaw);
 		}
 		catch (Exception e){
-			badInputTryAgain(request, response, "Time");
+			ParsingUtils.badInputTryAgain(request, response, "Time");
 			return;
 		}
-		
-		
+
 		if (inputIsValid){
 			Administrator.INSTANCE.createEvent(geoParsed, timeParsed, means, capacityParsed);
 			request.setAttribute("message", "Success! Your Event Has Been Successfully Added");
@@ -115,11 +123,6 @@ public class CreateEvent extends HttpServlet {
 		}
 	}
 
-	private void badInputTryAgain(HttpServletRequest request,
-			HttpServletResponse response, String badInputItem) throws ServletException, IOException {
-		String message = badInputItem + " not entered in the correct format. Please try again";
-		request.setAttribute("message", message);
-		request.getRequestDispatcher("/resources/jsp/create_event.jsp").forward(request, response);
-	}
+
 
 }
