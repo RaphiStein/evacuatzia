@@ -34,6 +34,9 @@ public class User implements Serializable{
 	public Report createReport(String title, String content, Geometry location, Date reportTime) {
 		return ReportManager.createNewReport(this, title, content, location, reportTime);
 	}
+	public Report createReport(String title, String content, Geometry location) {
+		return ReportManager.createNewReport(this, title, content, location, null);
+	}
 	
 	public void deleteReport(Report report) {
 		ReportManager.removeReport(report);

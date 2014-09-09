@@ -10,7 +10,8 @@
 	<div class="col-lg-6 col-lg-offset-3">
 		<form action="" method="POST">
 			<div class="row">
-				<h1 class="col-lg-9 text-left">Register to Evacuatzia!</h1>
+				<h1 class="col-lg-9 text-center">Register to Evacuatzia!</h1>
+				<p>${message}</p>
 			</div>
 			<div class="row" style="padding: 10px;">
 				<div class="row">
@@ -19,7 +20,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<input type="text" class="form-control" name="name"
+					<input name="name" type="text" class="form-control" name="name"
 						placeholder="Your name">
 				</div>
 			</div>
@@ -30,7 +31,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<input type="text" class="form-control" name="username"
+					<input name="username" type="text" class="form-control" name="username"
 						placeholder="Desired username">
 				</div>
 			</div>
@@ -41,7 +42,7 @@
 					</div>
 				</div>
 				<div class="row">
-					<input type="password" class="form-control" name="password"
+					<input name="password" type="password" class="form-control" name="password"
 						placeholder="Password">
 				</div>
 			</div>
