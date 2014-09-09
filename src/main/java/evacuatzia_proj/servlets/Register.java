@@ -55,7 +55,7 @@ public class Register extends HttpServlet {
 			error = "Error has occurred. Please try again.";
 		}
 		if (null == user) {
-			request.setAttribute("error", error);
+			request.setAttribute("message", "There was an error with your input");
             request.getRequestDispatcher("/resources/jsp/register_new_account.jsp").forward(request, response);
 		} else {
 			request.getSession().setAttribute("user", user);

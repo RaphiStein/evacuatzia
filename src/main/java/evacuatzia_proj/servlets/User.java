@@ -3,6 +3,7 @@ package evacuatzia_proj.servlets;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -13,6 +14,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.Report;
+import evacuatzia_proj.components.UserManager;
 
 /**
  * Servlet implementation class User
@@ -41,8 +43,9 @@ public class User extends HttpServlet {
 		if (matcher.matches()){
 			String userPath = matcher.group(1);
 			//evacuatzia_proj.components.User user = UserManager.getUserByUsername(userPath);
-			evacuatzia_proj.components.User user = new evacuatzia_proj.components.User("raphis", "Raphi Stein", new Long(0001));
-			ArrayList<Report> reports = generateFakeReports(user);
+			//evacuatzia_proj.components.User user = new evacuatzia_proj.components.User("raphis", "Raphi Stein", new Long(0001));
+			evacuatzia_proj.components.User user = UserManager.getUserByUsername(userPath);
+			List<Report> reports = user.getReports();
 			request.getSession().setAttribute("user", user);
 			request.getSession().setAttribute("reports", reports);
 			request.getRequestDispatcher("/resources/jsp/user_home.jsp").forward(request, response);
