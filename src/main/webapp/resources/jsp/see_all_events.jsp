@@ -16,13 +16,13 @@
   <div class="row">
     <div id="list" class="col-lg-6 col-lg-offset-3">
       <div id="" class="list-group">
-        <c:foreach items="${events}" var="event">
-        <a href="#" id="${event.getEventId}" class="list-group-item">
+        <c:forEach items="${events}" var="event">
+        <a href="#" id="${event.eventID}" class="list-group-item">
             <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/clock.png"/>
-            <h4 class="list-group-item-heading">${event.getMeansOfEvacuation}</span></h4>
-            <p class="list-group-item-text">${event.getEstimatedTime}</p>
+            <h4 class="list-group-item-heading">${event.meansOfEvacuation}</span></h4>
+            <p class="list-group-item-text">${event.estimatedTime}</p>
         </a>
-        </c:foreach> 
+        </c:forEach> 
       </div>
     </div>
   </div>
