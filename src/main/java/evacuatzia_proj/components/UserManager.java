@@ -43,9 +43,12 @@ public class UserManager {
 		} catch (ConstraintViolationException e) {
 			t.rollback();
 			throw new UsernameException("Username " + username + " already in use.");
-		} catch (RuntimeException e) {
+		} catch (EvacuatziaException e) {
 			t.rollback();
 			throw e;
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Couldn't register account. Please try again later");
 		} finally {
 			s.close();
 		}
@@ -71,9 +74,12 @@ public class UserManager {
 			} else {
 				throw new PasswordException("Existing password incorrect");
 			}
-		} catch (RuntimeException e) {
+		} catch (EvacuatziaException e) {
 			t.rollback();
 			throw e;
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Couldn't change password. Please try again later");
 		} finally {
 			s.close();
 		}
@@ -89,7 +95,7 @@ public class UserManager {
 			return avail;
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -114,7 +120,7 @@ public class UserManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -131,14 +137,14 @@ public class UserManager {
 		Transaction t = s.beginTransaction();
 		try {
 			LoginAccounts account = getLoginAccountByUsername(username, s);
-			if (null == account) {
-				throw new UsernameException("Username not in database");
-			}
 			t.commit();
+			if (null == account) {
+				return false;
+			}
 			return StringHashingUtils.stringMatchMD5(password, account.getUserPass());
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -154,7 +160,7 @@ public class UserManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -170,9 +176,8 @@ public class UserManager {
 			info = getUserInfoByUsername(username, s);
 			t.commit();
 		} catch (RuntimeException e) {
-			System.out.println("GILAD: error - " + e.getMessage());
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}
@@ -197,7 +202,7 @@ public class UserManager {
 			t.commit();
 		} catch (RuntimeException e) {
 			t.rollback();
-			throw e;
+			throw new EvacuatziaException("Error occurred, please try again later.");
 		} finally {
 			s.close();
 		}

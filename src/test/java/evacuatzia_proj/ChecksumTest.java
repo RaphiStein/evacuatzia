@@ -19,6 +19,6 @@ public class ChecksumTest {
 	@Ignore
 	@Test
 	public void createKey() {
-		System.out.println(StringHashingUtils.toMD5("sc236369z"));
+		System.out.println(StringHashingUtils.toMD5("cs236369z"));
 	}
 }

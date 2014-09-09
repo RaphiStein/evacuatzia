@@ -19,8 +19,12 @@ import evacuatzia_proj.utils.StringHashingUtils;
  * Servlet implementation class Login
  */
 public class Login extends HttpServlet {
-	private static final long serialVersionUID = 1L;
        
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 7108692250775487730L;
 
 	/**
 	 * @see HttpServlet#doGet(HttpServletRequest request, HttpServletResponse response)
@@ -41,11 +45,11 @@ public class Login extends HttpServlet {
 		String username = request.getParameter("user");
         String pwd = request.getParameter("password");
         User user;
-        if (null != username && null != pwd && username == "admin" && StringHashingUtils.stringMatchMD5(pwd, "7e9dd83412613500e293f4804d44c9ce")) {
+        if (null != username && null != pwd && username.equals("admin") && StringHashingUtils.stringMatchMD5(pwd, "3db5200f67f447507983c60dddb323b3")) {
         	request.setAttribute("isAdmin", new Boolean(true));
-        	request.getRequestDispatcher("evacuatzia/home").forward(request, response);
+        	response.sendRedirect(request.getContextPath() + "/home");
         } else {
-	        if (UserManager.login(username, pwd)){ //login is sucessful
+	        if (UserManager.login(username, pwd)){ //login is successful
 	        	//instantiate user object
 	        	user = UserManager.getUserByUsername(username);
 	        	request.getSession().setAttribute("user", user);
