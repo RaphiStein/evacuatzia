@@ -13,7 +13,7 @@
 			</div>
 		</div>
 		<div class="row">
-		  <div class="col-lg-6 col-lg-offset-3">
+		  <div class="text-center">
                 <a href="/evacuatzia/upload_init"><button type="submit" class="btn btn-info btn-lg">Upload initialization file (json format)</button></a>
             </div>
 		</div>

@@ -2,6 +2,7 @@ package evacuatzia_proj.servlets;
 
 import java.io.IOException;
 
+import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -45,16 +46,21 @@ public class Login extends HttpServlet {
 		String username = request.getParameter("user");
         String pwd = request.getParameter("password");
         User user;
-        if (null != username && null != pwd && username.equals("admin") && StringHashingUtils.stringMatchMD5(pwd, "3db5200f67f447507983c60dddb323b3")) {
+        if ((username != null) && (pwd != null) && username.equals("admin") && StringHashingUtils.stringMatchMD5(pwd, "3db5200f67f447507983c60dddb323b3")) {
         	request.getSession().setAttribute("isAdmin", new Boolean(true));
         	response.sendRedirect(request.getContextPath() + "/home");
         } else {
-	        if (UserManager.login(username, pwd)){ //login is successful
+	        if ((username != null) && UserManager.login(username, pwd)){ //login is successful
 	        	//instantiate user object
+	        	System.out.println("Login was successful!");
+	        	request.getSession().setAttribute("isLoggedIn", true); //set session to logged in
 	        	user = UserManager.getUserByUsername(username);
-	        	request.getSession().setAttribute("user", user);
-	        	request.getSession().setAttribute("isLoggedIn", new Boolean(true));
-	        	request.getRequestDispatcher("/evacuatzia/user/" + user.getUsername()).forward(request, response);
+	        	System.out.println("username: " + username);	  
+	        	System.out.println("user: " + user);
+	        	//request.getSession().setAttribute("user", user);
+	        	//request.getSession().setAttribute("isLoggedIn", new Boolean(true));
+	        	String userPage = "/evacuatzia/user/" + username;
+	        	response.sendRedirect(userPage);
 	        }
 	        else{
 	        	request.setAttribute("error", "Bad username or password. Please retry");

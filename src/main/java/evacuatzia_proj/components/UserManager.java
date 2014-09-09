@@ -127,6 +127,7 @@ public class UserManager {
 	}
 
 	public static boolean login(String username, String password) {
+		
 		try {
 			CommonUtils.validateUsernameSupplied(username);
 			CommonUtils.validatePasswordSupplied(password);

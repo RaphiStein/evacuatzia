@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import evacuatzia_proj.components.EventManager;
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.Report;
 import evacuatzia_proj.components.UserManager;
@@ -38,7 +39,7 @@ public class User extends HttpServlet {
 		}
 		
 		//Find user id in the path by pattern matching
-		Pattern urlPattern = Pattern.compile("^/([^/]+)$");
+		Pattern urlPattern = Pattern.compile("/([^/]+)$");
 		Matcher matcher = urlPattern.matcher(pathInfo);
 		if (matcher.matches()){
 			String userPath = matcher.group(1);
@@ -46,8 +47,11 @@ public class User extends HttpServlet {
 			//evacuatzia_proj.components.User user = new evacuatzia_proj.components.User("raphis", "Raphi Stein", new Long(0001));
 			evacuatzia_proj.components.User user = UserManager.getUserByUsername(userPath);
 			List<Report> reports = user.getReports();
+			evacuatzia_proj.components.Event event = EventManager.getEventByUser(user);
+			System.out.println("User: " + user + "\nReports: " + reports);
 			request.getSession().setAttribute("user", user);
 			request.getSession().setAttribute("reports", reports);
+			request.getSession().setAttribute("event", event);
 			request.getRequestDispatcher("/resources/jsp/user_home.jsp").forward(request, response);
 		}
 		

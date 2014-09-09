@@ -11,7 +11,7 @@
 		<form action="" method="POST">
 			<div class="row">
 				<h1 class="col-lg-9 text-center">Register to Evacuatzia!</h1>
-				<p>${message}</p>
+				<p class="text-center">${message}</p>
 			</div>
 			<div class="row" style="padding: 10px;">
 				<div class="row">

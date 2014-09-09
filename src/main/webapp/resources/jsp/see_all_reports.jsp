@@ -15,22 +15,13 @@
   <div class="row">
     <div id="list" class="col-lg-6 col-lg-offset-3">
       <div id="" class="list-group">
+      <c:forEach items="${reports}" var="report">
         <a href="#" id="user1" class="list-group-item">
             <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/report.png"/>
-            <h4 class="list-group-item-heading">Some report</span></h4>
-            <p class="list-group-item-text">Details</p>
+            <h4 class="list-group-item-heading">${report.title}</span></h4>
+            <p class="list-group-item-text">${report.content}</p>
         </a> 
-        <a href="#" id="user1" class="list-group-item">
-            <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/report.png"/>
-            <h4 class="list-group-item-heading">Some report</span></h4>
-            <p class="list-group-item-text">Details</p>
-        </a> 
-        <a href="#" id="user1" class="list-group-item">
-            <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/report.png"/>
-            <h4 class="list-group-item-heading">Some report</span></h4>
-            <p class="list-group-item-text">Details</p>
-        </a> 
-               
+        </c:forEach>
       </div>
     </div>
   </div>

@@ -33,13 +33,13 @@
 			<div id="list" class="col-lg-6 col-lg-offset-3">
 				<div class="row">
 					<div id="" class="list-group">
-					<c:forEach items="${reports}" var="report">
+					<c:if test="${empty event}">
 						<a href="#" id="user1" class="list-group-item"> <img class=""
-							style="float: left; padding-right: 20px;" src="/evacuatzia/resources/img/report.png" />
-							<h4 class="list-group-item-heading">${report.title}</span></h4>
-							<p class="list-group-item-text">Details</p>
+							style="float: left; padding-right: 20px;" src="/evacuatzia/resources/img/event.png" />
+							<h4 class="list-group-item-heading">${event.title}</span></h4>
+							<p class="list-group-item-text">${event.means}</p>
 						</a>
-						</c:forEach>
+						</c:if>
 					</div>
 				</div>
 			</div>
