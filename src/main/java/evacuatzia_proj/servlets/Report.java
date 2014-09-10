@@ -33,11 +33,11 @@ public class Report extends HttpServlet {
 			// TODO: use this to get the real report by id later
 			String reportIdStr = matcher.group(1);
 			System.out.println("report id from uri: " + reportIdStr);
-//			evacuatzia_proj.components.User user1 = generateFakeUser1();
+			evacuatzia_proj.components.User user1 = generateFakeUser1();
 //			evacuatzia_proj.components.User user2 = generateFakeUser2();
-//			evacuatzia_proj.components.Report report = generateFakeReport(user1);
+			evacuatzia_proj.components.Report report = generateFakeReport(user1);
 //			request.getSession().setAttribute("user", user2);
-			evacuatzia_proj.components.Report report = ReportManager.getReportsByTitle(title);
+			//evacuatzia_proj.components.Report report = ReportManager.getReportsById(title);
 			request.getSession().setAttribute("report", report);
 			request.getRequestDispatcher("/resources/jsp/report_view.jsp").forward(request, response);
 		} else {
