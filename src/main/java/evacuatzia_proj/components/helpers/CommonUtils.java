@@ -3,11 +3,11 @@ package evacuatzia_proj.components.helpers;
 import java.util.Date;
 
 import evacuatzia_proj.components.Geometry;
-import evacuatzia_proj.components.ReportManager;
 import evacuatzia_proj.exceptions.EventCapacityExcpetion;
 import evacuatzia_proj.exceptions.TextTooLongException;
 import evacuatzia_proj.exceptions.missingParam.DateException;
 import evacuatzia_proj.exceptions.missingParam.GeometryException;
+import evacuatzia_proj.exceptions.missingParam.IdException;
 import evacuatzia_proj.exceptions.missingParam.NameException;
 import evacuatzia_proj.exceptions.missingParam.PasswordException;
 import evacuatzia_proj.exceptions.missingParam.TitleException;
@@ -36,6 +36,12 @@ public class CommonUtils {
 			throw new TitleException("Must supply a title");
 		if (title.length() > Report.TITLE_TEXT_LENGTH)
 			throw new TextTooLongException(generateTooLongErrMsg("Report", "title", Report.TITLE_TEXT_LENGTH));
+	}
+	
+	public static void validateReportIdSupplied(Long id) {
+		if (null == id) {
+			throw new IdException("Must supply id");
+		}
 	}
 	
 	public  static void validateGeometrySupplied(Geometry geo) {
@@ -79,4 +85,5 @@ public class CommonUtils {
 	private static String generateTooLongErrMsg(String objectName, String fieldName, int maxSize) {
 		return objectName  + "'s " + fieldName + " supplied is too long. Please keep it within "  + Integer.toString(maxSize) + " characters.";
 	}
+
 }

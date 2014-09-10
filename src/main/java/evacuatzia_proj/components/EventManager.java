@@ -212,8 +212,7 @@ public class EventManager {
 		return retUserList;
 	}
 
-	// package protected
-	static Event getApiEventById(Long id) {
+	public static Event getEventById(Long id) {
 		Event retEvent;
 		Session s = sf.openSession();
 		Transaction t = s.beginTransaction();
@@ -233,6 +232,7 @@ public class EventManager {
 		return retEvent;
 	}
 	
+	// package protected
 	static EvacuationEvent getDbEventByApiEvent(Event event, Session s) {
 		Criteria cr = s.createCriteria(EvacuationEvent.class);
 		cr.add(Restrictions.eq("id", event.getEventID()));
