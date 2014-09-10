@@ -42,7 +42,7 @@ public enum Administrator {
 		} finally {
 			s.close();
 		}
-		return EventManager.getApiEventById(id);
+		return EventManager.getEventById(id);
 	}
 
 	public void deleteEvent(Event event) {

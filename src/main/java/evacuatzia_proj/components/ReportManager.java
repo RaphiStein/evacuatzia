@@ -88,7 +88,7 @@ public class ReportManager {
 		} finally {
 			s.close();
 		}
-		return createApiReportFromDbReportAndDbUser(dbReport, dbUser);
+		return createApiReportFromDbReport(dbReport);
 	}
 
 	public static void removeReport(Report report) {
@@ -177,8 +177,28 @@ public class ReportManager {
 		}
 		return resReports;
 	}
-	public static List<Report> getReportByID(Long id){
-		return null;
+	
+	public static Report getReportById(Long id){
+		CommonUtils.validateReportIdSupplied(id);
+		evacuatzia_proj.sqlhelpers.beans.Report dbReport;
+		Session s = sf.openSession();
+		Transaction t = s.beginTransaction();
+		try {
+			dbReport = getDbReportsById(id, s);
+			if (null == dbReport) {
+				throw new EvacuatziaException("Report with matching ID wasn't found in database");
+			}
+			t.commit();
+		} catch (EvacuatziaException e) {
+			t.rollback();
+			throw e;
+		} catch (RuntimeException e) {
+			t.rollback();
+			throw new EvacuatziaException("Error occurred, please try again later.");
+		} finally {
+			s.close();
+		}
+		return createApiReportFromDbReport(dbReport);
 	}
 
 	public static List<Report> getReportsByPartialTitle(String partialTitle) {
@@ -277,19 +297,26 @@ public class ReportManager {
 		dbReportList = cr.list();
 		return dbReportList;
 	}
+	
+	private static evacuatzia_proj.sqlhelpers.beans.Report getDbReportsById(Long id, Session s) {
+		evacuatzia_proj.sqlhelpers.beans.Report dbReport;
+		Criteria cr = s.createCriteria(evacuatzia_proj.sqlhelpers.beans.Report.class);
+		cr.add(Restrictions.eq("id", id));
+		dbReport = (evacuatzia_proj.sqlhelpers.beans.Report) cr.uniqueResult();
+		return dbReport;
+	}
 
 	private static List<Report> createApiReportListFromDbReportList(
 			List<evacuatzia_proj.sqlhelpers.beans.Report> dbReportList) {
 		List<Report> reports = new ArrayList<>();
 		for (evacuatzia_proj.sqlhelpers.beans.Report dbReport : dbReportList) {
-			UserInfo dbUser = dbReport.getUserReported();
-			reports.add(createApiReportFromDbReportAndDbUser(dbReport, dbUser));
+			reports.add(createApiReportFromDbReport(dbReport));
 		}
 		return reports;
 	}
 
-	private static Report createApiReportFromDbReportAndDbUser(evacuatzia_proj.sqlhelpers.beans.Report dbReport,
-			UserInfo dbUser) {
+	private static Report createApiReportFromDbReport(evacuatzia_proj.sqlhelpers.beans.Report dbReport) {
+		UserInfo dbUser = dbReport.getUserReported();
 		Geometry geom = Utils.createOurGeometryFromJts(dbReport.getLocation());
 		return new Report(dbReport.getId(), dbReport.getTitle(), dbReport.getContent(), geom, dbReport.getTime(),
 				UserManager.createApiUserFromDbUser(dbUser));

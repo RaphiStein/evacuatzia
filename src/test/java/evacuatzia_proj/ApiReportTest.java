@@ -46,4 +46,12 @@ public class ApiReportTest {
 		List<Report> matchingReports = ReportManager.getReportsByPartialTitle("port");
 		assertEquals(3, matchingReports.size());
 	}
+	
+	@Test
+	public void getReportByIdWorks() {
+		User u = UserManager.register("hello", "nopass", "bla");
+		Report r1 = u.createReport("some report of mine", "content", new Geometry(1D, 1D), new Date());
+		Report r2 = ReportManager.getReportById(r1.getEventID());
+		assertEquals(r1, r2);
+	}
 }
