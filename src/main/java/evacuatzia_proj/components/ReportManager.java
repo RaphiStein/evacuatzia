@@ -177,6 +177,9 @@ public class ReportManager {
 		}
 		return resReports;
 	}
+	public static List<Report> getReportByID(Long id){
+		return null;
+	}
 
 	public static List<Report> getReportsByPartialTitle(String partialTitle) {
 		Session s = sf.openSession();
