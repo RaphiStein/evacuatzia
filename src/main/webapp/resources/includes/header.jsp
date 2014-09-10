@@ -1,3 +1,5 @@
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <header class="row">
     <nav class="navbar navbar-default" role="navigation">
       <div class="container-fluid middle">
@@ -19,8 +21,16 @@
 
           </ul>
           <ul class="nav navbar-nav navbar-right">
+          <c:if test="${isLoggedIn}">
             <li><a href="/evacuatzia/user/${user.username}">${user.username}</a></li>
-            <li><a href="#">My Account</a></li>
+           </c:if>
+           <c:if test="${isAdmin}">
+            <li><a href="/evacuatzia/admin">Admin</a></li>
+           </c:if>
+            <c:if test="${(not isLoggedIn) && (not isAdmin)}">
+            <li><a href="/evacuatzia/home">My Account</a></li>
+           </c:if>
+            
 
             <li class="dropdown">
               <a href="#" class="dropdown-toggle" data-toggle="dropdown">Options <b class="caret"></b></a>

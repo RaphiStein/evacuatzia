@@ -33,7 +33,7 @@ public class AllReports extends HttpServlet {
 		System.out.println("Servlet \"AllReports\" doGet working");
 
 		Boolean isLoggedIn = (Boolean) request.getSession().getAttribute("isLoggedIn");
-		if (isLoggedIn != null && isLoggedIn){
+		if ((isLoggedIn != null) && isLoggedIn){
 			List<Report> allReports = ReportManager.getAllReports();
 			request.setAttribute("reports", allReports);
 			request.getRequestDispatcher("../resources/jsp/see_all_reports.jsp").forward(request, response);
