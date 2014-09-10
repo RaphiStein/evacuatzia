@@ -283,16 +283,4 @@ public class HibernateSimpleConnection {
 		}
 		return null;
 	}
-	
-//	@Test
-//	public void tmpTest() {
-//		Coordinate coor1 = new Coordinate(20.0, 10.0);
-//		Coordinate coor2 = new Coordinate(20.0, 11.0);
-//		GeometryFactory gf = new GeometryFactory();
-//		Geometry p1 = gf.createPoint(coor1);
-//		Geometry p2 = gf.createPoint(coor1);
-//		Geometry p3 = gf.createPoint(coor2);
-//		assertEquals(p1, p2);
-//		assertFalse(p1.equals(p3));
-//	}
 }
