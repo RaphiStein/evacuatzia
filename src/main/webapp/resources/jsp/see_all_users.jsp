@@ -14,31 +14,14 @@
   <div class="row">
     <div id="list" class="col-lg-6 col-lg-offset-3">
       <div id="" class="list-group">
-        <a href="#" id="user1" class="list-group-item">
+        <c:forEach items="${users}" var="user">
+        <a href="/evacuatzia/user/${user.username}" class="list-group-item">
             <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/user2.png"/>
-            <h4 class="list-group-item-heading">John Smith</span></h4>
+            <h4 class="list-group-item-heading">${user.name}</span></h4>
             <p class="list-group-item-text">User since: 01/01/01 BC</p>
         </a>
-        <a href="#" id="user1" class="list-group-item">
-            <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/user2.png"/>
-            <h4 class="list-group-item-heading">John Smith</span></h4>
-            <p class="list-group-item-text">User since: 01/01/01 BC</p>
-        </a>
-        <a href="#" id="user1" class="list-group-item">
-            <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/user2.png"/>
-            <h4 class="list-group-item-heading">John Smith</span></h4>
-            <p class="list-group-item-text">User since: 01/01/01 BC</p>
-        </a>
-        <a href="#" id="user1" class="list-group-item">
-            <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/user2.png"/>
-            <h4 class="list-group-item-heading">John Smith</span></h4>
-            <p class="list-group-item-text">User since: 01/01/01 BC</p>
-        </a>
-        <a href="#" id="user1" class="list-group-item">
-            <img class="" style="float: left; padding-right: 20px; "src="./evacuatzia/resources/img/user2.png"/>
-            <h4 class="list-group-item-heading">John Smith</span></h4>
-            <p class="list-group-item-text">User since: 01/01/01 BC</p>
-        </a>
+        </c:forEach>
+        
       </div>
     </div>
   </div>

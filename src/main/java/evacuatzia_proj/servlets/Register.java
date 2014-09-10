@@ -45,17 +45,17 @@ public class Register extends HttpServlet {
 		String username = request.getParameter("username");
 		String password = request.getParameter("password");
 //		System.out.println("name: " + name + " username: " + username + " password: " + password);
-		String error = null;
+		String message = "There was an error. Please try again";
 		evacuatzia_proj.components.User user = null; 
 		try {
 			user = UserManager.register(username, password, name);
 		} catch (EvacuatziaException e) {
-			error = e.getMessage();
+			message = e.getMessage();
 		} catch (RuntimeException e) {
-			error = "Error has occurred. Please try again.";
+			message = "Error has occurred. Please try again.";
 		}
-		if (null == user) {
-			request.setAttribute("message", "There was an error with your input");
+		if (user == null) {
+			request.setAttribute("message", message);
             request.getRequestDispatcher("/resources/jsp/register_new_account.jsp").forward(request, response);
 		} else {
 			request.getSession().setAttribute("isLoggedIn", true);

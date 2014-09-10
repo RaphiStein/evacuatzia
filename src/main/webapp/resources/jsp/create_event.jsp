@@ -25,7 +25,7 @@
 				<div class="row" style="padding: 10px;">
 					<div class="col-lg-6">
 						<input name="date" type="date" class="form-control"
-							placeholder="Estimate Date">
+							placeholder="Estimate Date e.g. ">
 					</div>
 					<div class="col-lg-6">
 						<input name="time" type="time" class="form-control"

@@ -135,7 +135,8 @@
 										<h4 class="list-group-item-heading">
 											$
 											<user.username>
-										</h4> <c:if test="${isAdmin}">
+										</h4> 
+										<c:if test="${isAdmin}">
 											<form action="" method=POST>
 												<!--  If Admin clicks X, Submit a form that issues a POST to have this user removed -->
 												<input type="hidden" name="username" value="User1" /> 

@@ -37,9 +37,13 @@ public class UserManager {
 		Transaction t = s.beginTransaction();
 		try {
 			s.save(loginAccount);
+			System.out.println("s.save(loginAccount);");
 			s.save(role);
+			System.out.println("s.save(role);");
 			s.save(userInfo);
+			System.out.println("s.save(userInfo);");
 			t.commit();
+			System.out.println("t.commit();");
 		} catch (ConstraintViolationException e) {
 			t.rollback();
 			throw new UsernameException("Username " + username + " already in use.");
@@ -132,6 +136,7 @@ public class UserManager {
 			CommonUtils.validateUsernameSupplied(username);
 			CommonUtils.validatePasswordSupplied(password);
 		} catch (RuntimeException e) {
+			e.printStackTrace();
 			return false;
 		}
 		Session s = sf.openSession();
@@ -139,7 +144,8 @@ public class UserManager {
 		try {
 			LoginAccounts account = getLoginAccountByUsername(username, s);
 			t.commit();
-			if (null == account) {
+			if (account == null) {
+				System.out.println("Attempted login by username. Account is null");
 				return false;
 			}
 			return StringHashingUtils.stringMatchMD5(password, account.getUserPass());

@@ -33,7 +33,6 @@ public class Login extends HttpServlet {
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Login doGet");
-//		request.getSession().setAttribute("name", 123);
 		request.getRequestDispatcher("/resources/jsp/login.jsp").forward(request, response);
 	}
 
@@ -53,11 +52,13 @@ public class Login extends HttpServlet {
 	        if ((username != null) && UserManager.login(username, pwd)){ //login is successful
 	        	//instantiate user object
 	        	System.out.println("Login was successful!");
+	        	//Set attributes
 	        	request.getSession().setAttribute("isLoggedIn", true); //set session to logged in
 	        	user = UserManager.getUserByUsername(username);
+	        	request.getSession().setAttribute("user", user);
+	        	
 	        	System.out.println("username: " + username);	  
 	        	System.out.println("user: " + user);
-	        	//request.getSession().setAttribute("user", user);
 	        	//request.getSession().setAttribute("isLoggedIn", new Boolean(true));
 	        	String userPage = "/evacuatzia/user/" + username;
 	        	response.sendRedirect(userPage);

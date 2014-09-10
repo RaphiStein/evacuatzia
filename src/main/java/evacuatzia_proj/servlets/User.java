@@ -42,16 +42,26 @@ public class User extends HttpServlet {
 		Pattern urlPattern = Pattern.compile("/([^/]+)$");
 		Matcher matcher = urlPattern.matcher(pathInfo);
 		if (matcher.matches()){
-			String userPath = matcher.group(1);
-			//evacuatzia_proj.components.User user = UserManager.getUserByUsername(userPath);
-			//evacuatzia_proj.components.User user = new evacuatzia_proj.components.User("raphis", "Raphi Stein", new Long(0001));
-			evacuatzia_proj.components.User user = UserManager.getUserByUsername(userPath);
+			String username = matcher.group(1);
+			System.out.println("username: " + username);
+			
+			//Check if this user is logged in
+			evacuatzia_proj.components.User user = (evacuatzia_proj.components.User) request.getSession().getAttribute("user");
+			if ((user != null) && user.getUsername().equalsIgnoreCase(username)){
+				// If its his own page, add features
+				request.setAttribute("currentUserHomePage", true); 
+			}
+			else{
+				request.setAttribute("currentUserHomePage", false);			
+			}
+			user = UserManager.getUserByUsername(username);
+			System.out.println("user: " + user);
 			List<Report> reports = user.getReports();
 			evacuatzia_proj.components.Event event = EventManager.getEventByUser(user);
-			System.out.println("User: " + user + "\nReports: " + reports);
-			request.getSession().setAttribute("user", user);
-			request.getSession().setAttribute("reports", reports);
-			request.getSession().setAttribute("event", event);
+			System.out.println("\nReports: " + reports + "\nEvent: " + event);
+			request.setAttribute("userProfile", user);
+			request.setAttribute("reports", reports);
+			request.setAttribute("event", event);	
 			request.getRequestDispatcher("/resources/jsp/user_home.jsp").forward(request, response);
 		}
 		
