@@ -39,8 +39,8 @@
         </div>
         <div class="row">
           <c:if test="${user.id.equals(report.user.id)}">
-            <button type="button" class="btn btn-default">Edit report</button>
-            <button type="button" class="btn btn-default">Delete report</button>
+             <a href="/evacuatzia/report/edit/${report.eventID}"><button type="button" class="btn btn-default">Edit report</button></a>
+            <a href="/evacuatzia/report/remove/${report.eventID}"><button type="button" class="btn btn-default">Delete report</button></a>
           </c:if>
        </div>
      </div>

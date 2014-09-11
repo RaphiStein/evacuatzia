@@ -24,21 +24,19 @@ public class Report extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		System.out.println("Servlet \"Report\" doGet working");
+		evacuatzia_proj.utils.DebugUtils.servletWorkingPrintout(getServletName(), "doGet");
+
 		//Find report id in the path by pattern matching
 		String pathInfo = request.getPathInfo();
-		Pattern urlPattern = Pattern.compile("^/(\\d+)$");
+		Pattern urlPattern = Pattern.compile("^/(\\d+)$"); // starts with slash, then anything other than another slash
 		Matcher matcher = urlPattern.matcher(pathInfo);
 		if (matcher.matches()) {
-			// TODO: use this to get the real report by id later
 			String reportIdStr = matcher.group(1);
-			System.out.println("report id from uri: " + reportIdStr);
-			evacuatzia_proj.components.User user1 = generateFakeUser1();
-//			evacuatzia_proj.components.User user2 = generateFakeUser2();
-			evacuatzia_proj.components.Report report = generateFakeReport(user1);
-//			request.getSession().setAttribute("user", user2);
-			//evacuatzia_proj.components.Report report = ReportManager.getReportsById(title);
-			request.getSession().setAttribute("report", report);
+			Long reportIdLong = Long.parseLong(reportIdStr);
+			System.out.println("ReportIDStr: " + reportIdStr);
+			System.out.println("Report ID from uri: " + reportIdStr);
+			evacuatzia_proj.components.Report report = ReportManager.getReportById(reportIdLong);
+			request.setAttribute("report", report);
 			request.getRequestDispatcher("/resources/jsp/report_view.jsp").forward(request, response);
 		} else {
 			request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);

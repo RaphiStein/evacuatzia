@@ -38,7 +38,7 @@
 							src="/evacuatzia/resources/img/clock.png" /> <c:if
 								test="${currentUserHomePage}">
 								<span id="${event.eventID}"
-									class="x glyphicon glyphicon-remove float-right"></span>
+									class="x_event glyphicon glyphicon-remove float-right"></span>
 							</c:if>
 							<h4 class="list-group-item-heading">
 								<span>${event.meansOfEvacuation}</span>
@@ -68,9 +68,14 @@
 			<div class="row">
 				<div id="" class="list-group">
 					<c:forEach var="report" items="${reports}">
-						<a href="#" id="user1" class="list-group-item"> <img class=""
+						<a href="/evacuatzia/report/${report.eventID}" id="user1" class="list-group-item"> <img class=""
 							style="float: left; padding-right: 20px;"
 							src="/evacuatzia/resources/img/report.png" />
+							<c:if
+								test="${currentUserHomePage}">
+								<span id="${report.eventID}"
+									class="x_report glyphicon glyphicon-remove float-right"></span>
+							</c:if>
 							<h4 class="list-group-item-heading">
 								<span>${report.title}</span>
 							</h4>
@@ -82,10 +87,15 @@
 		</div>
 	</div>
 	<script>
-$('.x').click(function(event){
+$('.x_event').click(function(event){
     event.preventDefault();
     alert("You will be deregistered from " + event.target.id);
     document.location = '/evacuatzia/event/leave/' + event.target.id;
+});
+$('.x_report').click(function(report){
+    report.preventDefault();
+    alert("Report " + report.target.id + " will be removed");
+    document.location = '/evacuatzia/report/remove/' + report.target.id;
 });
 </script>
 </body>

@@ -79,6 +79,12 @@ public class Report extends LocationBasedItem {
 			return false;
 		return true;
 	}
+	@Override
+	public String toString() {
+		return "Report [user=" + user + ", reportTime=" + reportTime
+				+ ", title=" + title + ", content=" + content
+				+ ", getEventID()=" + getEventID() + "]";
+	}
 	
 	
 }
