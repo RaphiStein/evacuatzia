@@ -11,17 +11,18 @@
 	
   <div class="row">
     <div class="col-lg-6 col-lg-offset-3">
-      <h2 class="text-center"> Find Nearest Evacuation To You </h2>
+      <h1 class="text-center"> Find Nearest Evacuation To You </h1>
+      <p class="text-center red">${message}</p>
     </div>
   </div>
   <div class="row top-buffer">
     <div class="row"> <!-- Location Form -->
       <div class="col-lg-6 col-lg-offset-3">
-        <form class="form-horizontal">
+        <form action="" method="POST" class="form-horizontal">
           <div class="form-group">
             <label class="col-sm-3 control-label" for="locationInput">Your Location:</label>
             <div class="col-sm-6">
-              <input id="locationInput" type="text" class="form-control">
+              <input name="geocode" type="text" class="form-control">
             </div>
             <button type="submit" class="btn btn-default">Search</button>
           </div>
