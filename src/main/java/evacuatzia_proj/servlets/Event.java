@@ -12,9 +12,12 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.mchange.v1.util.DebugUtils;
+
 import evacuatzia_proj.components.EventManager;
 import evacuatzia_proj.components.Geometry;
 import evacuatzia_proj.components.User;
+import evacuatzia_proj.components.UserManager;
 
 /**
  * Servlet implementation class Event
@@ -28,10 +31,8 @@ public class Event extends HttpServlet {
 	 */
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO if user is logging in, 
-		//	if admin is logged in, enable deleting user
+		evacuatzia_proj.utils.DebugUtils.servletWorkingPrintout(getServletName(), "doGet");
 		
-		System.out.println("Servlet \"Event\" doGet working");
 		String pathInfo = request.getPathInfo();
 		Pattern urlPattern = Pattern.compile("^/(\\d+)$");
 		Matcher matcher = urlPattern.matcher(pathInfo);
@@ -44,12 +45,41 @@ public class Event extends HttpServlet {
 			List<User> users = event.getRegisteredUsers();
 //			evacuatzia_proj.components.Event event = generateFakeEvent();
 //			List<evacuatzia_proj.components.User> userList = generateFakeUsersList();
+			boolean userIsRegisteredToThisEvent = userIsRegisteredToEvent(users, (User) request.getSession().getAttribute("user"));
+			System.out.println("userIsRegisteredToEvent: " + userIsRegisteredToThisEvent);
+			request.setAttribute("userIsRegisteredToThisEvent", userIsRegisteredToThisEvent);
 			request.setAttribute("event", event);
-			request.setAttribute("registeredUsers", users);
+			request.setAttribute("users", users);
 			request.getRequestDispatcher("/resources/jsp/event_view.jsp").forward(request, response);
 		} else {
 			request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);
 		}
+	}
+
+	private boolean userIsRegisteredToEvent(
+			List<User> users, User user) {
+		users.contains(user);
+		if (users.contains(user)){
+			return true;
+		}
+		else{
+			return false;
+		}
+		/*
+		if (user == null){
+			return false;
+		}
+		else {
+			evacuatzia_proj.components.Event usersEvent = EventManager.getEventByUser(user);
+			System.out.println("User " + user.getUsername() + " is registered to " + usersEvent);
+			for (int i = 0; i < event.get)
+			if ((usersEvent != null) && usersEvent.equals(event)){ // if the users event and the event of the page is the same
+				return true;
+			}
+			else
+				return false;
+		}
+		*/
 	}
 
 	private evacuatzia_proj.components.Event generateFakeEvent() {

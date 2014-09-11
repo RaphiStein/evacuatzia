@@ -25,7 +25,7 @@
             <li><a href="/evacuatzia/user/${user.username}">${user.username}</a></li>
            </c:if>
            <c:if test="${isAdmin}">
-            <li><a href="/evacuatzia/admin">Admin</a></li>
+            <li><a href="/evacuatzia/home">Admin</a></li>
            </c:if>
             <c:if test="${(not isLoggedIn) && (not isAdmin)}">
             <li><a href="/evacuatzia/home">My Account</a></li>

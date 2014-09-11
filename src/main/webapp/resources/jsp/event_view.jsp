@@ -62,67 +62,47 @@
 						<p>${event.registrationCount}</p>
 					</div>
 				</div>
-				<c:choose>
-					<c:when test="${isAdmin}">
-						<div class="row">
-							<button type="button" class="btn btn-default">Delete
-								this Event (Admin)</button>
-						</div>
-					</c:when>
-					<c:otherwise>
-						<c:choose>
-							<c:when test="${isRegisteredToEvent}">
-								<div class="row">
+				<div class="row">
+					<c:choose>
+						<c:when test="${isAdmin}">
+							<div class="row">
+								<button type="button" class="btn btn-default">Delete
+									this Event </button>
+							</div>
+						</c:when>
+						<c:otherwise>
+							<c:choose>
+								<c:when test="${userIsRegisteredToThisEvent}">
 									<h4>You are registered for this event</h4>
-								</div>
-								<div class="row">
-									<button type="button" class="btn btn-default">Leave
-										this Event</button>
-								</div>
-							</c:when>
-							<c:otherwise>
-								<div class="row">
-									<h4>
-										You are
-										<mark>not</mark>
-										registered for this event
-									</h4>
-								</div>
-								<c:if test="${event.registrationCount < event.capacity}">
 									<div class="row">
-										<form action="" method="POST">
-											<button type="submit" class="btn btn-default">Join
-												this Event</button>
-										</form>
+										<button type="button" class="btn btn-default">Leave
+											this Event</button>
 									</div>
-								</c:if>
-							</c:otherwise>
-						</c:choose>
-					</c:otherwise>
-				</c:choose>
+								</c:when>
+								<c:when
+									test="${(not userIsRegisteredToThisEvent) && (isLoggedIn)}">
+									<h4>You are not registered for this event</h4>
+									<c:if test="${(event.registrationCount < event.capacity)}">
+										<div class="row">
+											<form action="/evacuatzia/event/join/${event.eventID}"
+												method="GET">
+												<button type="submit" class="btn btn-default">Join
+													this Event</button>
+											</form>
+										</div>
+									</c:if>
+								</c:when>
+								<c:when
+									test="${(not userIsRegisteredToThisEvent) && (not isLoggedIn)}">
+									<h4>Log in to register for this event</h4>
+								</c:when>
+							</c:choose>
+						</c:otherwise>
+					</c:choose>
+				</div>
+
 			</div>
 			<div class="col-lg-6">
-				<!--       
-       <div class="row border-bottom">
-        <div class="row">
-          <h4> Add Users to this Event (Admin) </h4>
-        </div>
-        <div class="row">
-          <select class="form-control">
-            <option value="one">User 1</option>
-            <option value="two">User 2</option>
-            <option value="three">User 3</option>
-            <option value="four">User 4</option>
-            <option value="five">User 5</option>
-          </select>
-        </div>
-        <div class="row"><div class="buffer"></div></div>
-        <div class="row">
-          <button type="button" class="btn btn-default">Add User</button>
-        </div>
-        <div class="row"><div class="buffer"></div></div>
-      </div> 
--->
 				<div class="row">
 					<div class="row">
 						<h4>List of Users Registered for this Event</h4>
@@ -134,16 +114,13 @@
 									<a href="/evacuatzia/user/${user.username}"
 										class="list-group-item user-list"> <img class=""
 										style="float: left; padding-right: 20px;"
-										src="/evacuatzia/resources/img/user2.png" />
-										<h4 class="list-group-item-heading">${user.username}</h4> <c:if
+										src="/evacuatzia/resources/img/user2.png" /> <c:if
 											test="${isAdmin}">
-											<form action="" method=POST>
-												<!--  If Admin clicks X, Submit a form that issues a POST to have this user removed -->
-												<input type="hidden" name="username" value="User1" /> <a
-													href="javascript:void(0);" onclick="this.form.submit()"><span
-													class="glyphicon glyphicon-remove float-right"></span></a>
-											</form>
-										</c:if> <!-- <p class="list-group-item-text">User since: 01/01/01 BC</p> -->
+											<!--  If Admin clicks X, Submit a form that issues a POST to have this user removed -->
+											<span class="glyphicon glyphicon-remove float-right x"></span>
+											<p class="list-group-item-text">User since: 01/01/01 BC</p>
+										</c:if>
+										<h4 class="list-group-item-heading">${user.username}</h4>
 									</a>
 								</c:forEach>
 							</div>
@@ -154,6 +131,11 @@
 		</div>
 
 	</div>
+	<script>
+		$('.x').click(function(id) {
+			document.location = 'http://google.com/';
+		});
+	</script>
 </body>
 
 </html>

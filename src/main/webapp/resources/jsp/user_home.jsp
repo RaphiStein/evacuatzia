@@ -28,17 +28,22 @@
 				</div>
 			</div>
 			<div class="row">
-				<h3 class="text-left">Listed to event:</h3>
+				<h3 class="text-left">Registered to event:</h3>
 			</div>
 			<div class="row">
 				<div id="" class="list-group">
 					<c:if test="${not empty event}">
-						<a href="#" id="user1" class="list-group-item"> 
-						<img class=""
+						<a href="/evacuatzia/event/${event.eventID}" id="user1" class="list-group-item"> <img class=""
 							style="float: left; padding-right: 20px;"
-							src="/evacuatzia/resources/img/event.png" />
-							<h4 class="list-group-item-heading"><span>${event.means}</span></h4>
-							<p class="list-group-item-text"></p>
+							src="/evacuatzia/resources/img/clock.png" /> <c:if
+								test="${currentUserHomePage}">
+								<span id="${event.eventID}"
+									class="x glyphicon glyphicon-remove float-right"></span>
+							</c:if>
+							<h4 class="list-group-item-heading">
+								<span>${event.meansOfEvacuation}</span>
+							</h4>
+							<p class="list-group-item-text">${event.estimatedTime}</p>
 						</a>
 					</c:if>
 					<c:if test="${empty event}">
@@ -76,6 +81,13 @@
 			</div>
 		</div>
 	</div>
+	<script>
+$('.x').click(function(event){
+    event.preventDefault();
+    alert("You will be deregistered from " + event.target.id);
+    document.location = '/evacuatzia/event/leave/' + event.target.id;
+});
+</script>
 </body>
 
 </html>

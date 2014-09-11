@@ -12,6 +12,14 @@ public class Event extends LocationBasedItem {
 	private final Date estimatedTime;
 	private final String meansOfEvacuation;
 	private final int capacity;
+	@Override
+	public String toString() {
+		return "Event [estimatedTime=" + estimatedTime + ", meansOfEvacuation="
+				+ meansOfEvacuation + ", capacity=" + capacity
+				+ ", registrationCount=" + registrationCount
+				+ ", getEventID()=" + getEventID() + "]";
+	}
+
 	private final int registrationCount;
 	
 	public Event(Long eventID, Geometry location, Date estimatedTime, String meansOfEvacuation, int capacity, int registrationCount) {

@@ -122,6 +122,27 @@
         <servlet-name>About</servlet-name>
         <servlet-class>evacuatzia_proj.servlets.About</servlet-class>
 	</servlet>
+	<servlet>
+		<description>
+		Called when current user selects to join an event. Then redirected back to user page</description>
+		<display-name>EventJoin</display-name>
+		<servlet-name>EventJoin</servlet-name>
+		<servlet-class>evacuatzia_proj.servlets.restful.EventJoin</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		</description>
+		<display-name>EventRemove</display-name>
+		<servlet-name>EventRemove</servlet-name>
+		<servlet-class>evacuatzia_proj.servlets.restful.EventRemove</servlet-class>
+	</servlet>
+	<servlet>
+		<description>
+		Deregisters a user from an event</description>
+		<display-name>EventLeave</display-name>
+		<servlet-name>EventLeave</servlet-name>
+		<servlet-class>evacuatzia_proj.servlets.restful.EventLeave</servlet-class>
+	</servlet>
 	
 	<servlet-mapping>
 		<servlet-name>Home</servlet-name>
@@ -198,6 +219,18 @@
     <servlet-mapping>
         <servlet-name>About</servlet-name>
         <url-pattern>/about</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>EventJoin</servlet-name>
+    	<url-pattern>/event/join/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>EventRemove</servlet-name>
+    	<url-pattern>/event/remove/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+    	<servlet-name>EventLeave</servlet-name>
+    	<url-pattern>/event/leave/*</url-pattern>
     </servlet-mapping>
     
     <welcome-file-list>

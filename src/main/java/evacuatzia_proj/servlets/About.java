@@ -16,6 +16,8 @@ public class About extends HttpServlet{
 
 	@Override
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+		evacuatzia_proj.utils.DebugUtils.servletWorkingPrintout(getServletName(), "doGet");
+
 		request.getRequestDispatcher("/resources/jsp/about.jsp").forward(request, response);
 	}
 

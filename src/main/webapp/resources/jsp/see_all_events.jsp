@@ -17,25 +17,27 @@
 		<div id="list" class="col-lg-6 col-lg-offset-3">
 			<div id="" class="list-group">
 				<c:forEach items="${events}" var="event">
-					<a href="/evacuatzia/event/${event.eventID}" id="${event.eventID}" class="list-group-item"> <img
-						class="" style="float: left; padding-right: 20px;"
+					<a href="/evacuatzia/event/${event.eventID}" id="${event.eventID}"
+						class="list-group-item"> <img class=""
+						style="float: left; padding-right: 20px;"
 						src="/evacuatzia/resources/img/clock.png" />
 						<h4 class="list-group-item-heading">${event.meansOfEvacuation}</span>
-						</h4>
+						</h4> <c:if test="${isAdmin}">
+							<!--  If Admin clicks X, Submit a form that issues a POST to have this user removed -->
+							<span id="${event.eventID}" class="x glyphicon glyphicon-remove float-right"></span>
+						</c:if>
 						<p class="list-group-item-text">${event.estimatedTime}</p>
 					</a>
-					<c:if test="${isAdmin}">
-						<form action="" method=POST>
-							<!--  If Admin clicks X, Submit a form that issues a POST to have this user removed -->
-							<input type="hidden" name="delete" value="${event.eventID}" /> <a
-								href="javascript:void(0);" onclick="this.form.submit()"><span
-								class="glyphicon glyphicon-remove float-right"></span></a>
-						</form>
-					</c:if>
 				</c:forEach>
 			</div>
 		</div>
 	</div>
 
-
+	<script>
+$('.x').click(function(event){
+    event.preventDefault();
+    alert("Event " + event.target.id + " will be removed.");
+    document.location = '/evacuatzia/event/remove/' + event.target.id;
+});
+</script>
 </body>

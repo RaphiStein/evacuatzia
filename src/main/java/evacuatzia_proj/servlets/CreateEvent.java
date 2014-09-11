@@ -110,9 +110,17 @@ public class CreateEvent extends HttpServlet {
 			ParsingUtils.badInputTryAgain(request, response, "Time");
 			return;
 		}
-
+		//combine calendar date and clock time into one date object
+		Date dateFull = new Date(dateParsed.getYear(), dateParsed.getMonth(), dateParsed.getDay(), timeParsed.getHours(), timeParsed.getMinutes());
+		
+		System.out.println(geoParsed + "\n" + 
+				dateParsed + "\n" +
+				timeParsed + "\n" +
+				means + "\n" +
+				capacityParsed);
+		
 		if (inputIsValid){
-			Administrator.INSTANCE.createEvent(geoParsed, timeParsed, means, capacityParsed);
+			Administrator.INSTANCE.createEvent(geoParsed, dateFull, means, capacityParsed);
 			request.setAttribute("message", "Success! Your Event Has Been Successfully Added");
 			request.getRequestDispatcher("/resources/jsp/result.jsp").forward(request, response);
 		}

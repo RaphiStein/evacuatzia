@@ -40,6 +40,7 @@ public class SearchReports extends HttpServlet {
 		
 		String partialTitle = request.getParameter("locationInput");
 		List<Report> reports = ReportManager.getReportsByPartialTitle(partialTitle);
+		System.out.println("Printing Reports of size " + reports.size());
 		for (int i = 0; i < reports.size(); i++){
 			System.out.println(reports.get(i));
 		}
