@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.annotation.Generated;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -16,6 +17,7 @@ import javax.persistence.ManyToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import javax.persistence.Version;
 
 import org.hibernate.annotations.GenericGenerator;
 import org.hibernate.annotations.Type;
@@ -27,30 +29,30 @@ import evacuatzia_proj.sqlhelpers.common.Utils;
 @Entity
 // This will be a table in the DB
 @Table(name = "evac_event")
-public class EvacuationEvent { 
+public class EvacuationEvent {
 	public static final int MEANS_TEXT_LENGTH = 500;
 	private Long id;
+	private Integer version;
 	private Integer capacity;
 	private String means;
 	private Integer registrationCount;
 	private Set<UserInfo> registeredUsers = new HashSet<UserInfo>();
 	private Date time;
-//	private Double radius;
+	// private Double radius;
 	private Geometry location;
-	
+
 	public EvacuationEvent() {
 		super();
 	}
 
-	public EvacuationEvent(Double geoLongitude, Double geoLatitude, Date time,
-			String meansOfEvac, Integer capacity) {
+	public EvacuationEvent(Double geoLongitude, Double geoLatitude, Date time, String meansOfEvac, Integer capacity) {
 		super();
 		this.capacity = capacity;
 		registrationCount = new Integer(0);
 		this.means = meansOfEvac;
 		this.time = time;
 		location = Utils.getPointFromDecimalValues(geoLongitude, geoLatitude);
-//		this.radius = radius;
+		// this.radius = radius;
 	}
 
 	@Id
@@ -63,7 +65,16 @@ public class EvacuationEvent {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	
+
+	@Version
+	public Integer getVersion() {
+		return version;
+	}
+
+	public void setVersion(Integer version) {
+		this.version = version;
+	}
+
 	@Column(nullable = false, length = MEANS_TEXT_LENGTH)
 	public String getMeans() {
 		return means;
@@ -90,9 +101,7 @@ public class EvacuationEvent {
 	}
 
 	@ManyToMany(fetch = FetchType.LAZY)
-	@JoinTable( name = "evac_registration",
-	joinColumns = @JoinColumn(name="Event_ID"),
-	inverseJoinColumns = @JoinColumn(name="User_ID"))
+	@JoinTable(name = "evac_registration", joinColumns = @JoinColumn(name = "Event_ID"), inverseJoinColumns = @JoinColumn(name = "User_ID"))
 	public Set<UserInfo> getRegisteredUsers() {
 		return registeredUsers;
 	}
@@ -104,7 +113,7 @@ public class EvacuationEvent {
 	public int availablePlaces() {
 		return capacity - registeredUsers.size();
 	}
-	
+
 	public void registerUser(UserInfo user) {
 		++registrationCount;
 		registeredUsers.add(user);
@@ -116,7 +125,7 @@ public class EvacuationEvent {
 			--registrationCount;
 		}
 	}
-	
+
 	@Temporal(TemporalType.TIMESTAMP)
 	// Setting up a specific DB date type
 	public Date getTime() {
@@ -127,7 +136,7 @@ public class EvacuationEvent {
 		this.time = time;
 	}
 
-	@Type(type="org.hibernate.spatial.GeometryType")
+	@Type(type = "org.hibernate.spatial.GeometryType")
 	public Geometry getLocation() {
 		return location;
 	}
@@ -135,14 +144,15 @@ public class EvacuationEvent {
 	public void setLocation(Geometry location) {
 		this.location = location;
 	}
-//
-//	public Double getRadius() {
-//		return radius;
-//	}
-//
-//	public void setRadius(Double radius) {
-//		this.radius = radius;
-//	}
+
+	//
+	// public Double getRadius() {
+	// return radius;
+	// }
+	//
+	// public void setRadius(Double radius) {
+	// this.radius = radius;
+	// }
 
 	@Override
 	public int hashCode() {
