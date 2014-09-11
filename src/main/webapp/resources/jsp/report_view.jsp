@@ -12,7 +12,7 @@
   <div class="container">
     <div class="row">
       <div class="row">
-        <img class="" style="float: left; padding-right: 20px; "src="resources/img/report.png"/>
+        <img class="" style="float: left; padding-right: 20px; "src="/evacuatzia/resources/img/report.png"/>
         <h3 class="border-bottom"> Report </h3>
       </div>
       <div class="col-lg-6">

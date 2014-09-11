@@ -33,12 +33,12 @@
 			<div class="row">
 				<div id="" class="list-group">
 					<c:if test="${not empty event}">
-						<a href="#" id="user1" class="list-group-item"> <img class=""
+						<a href="#" id="user1" class="list-group-item"> 
+						<img class=""
 							style="float: left; padding-right: 20px;"
 							src="/evacuatzia/resources/img/event.png" />
-							<h4 class="list-group-item-heading">${event.title}</span>
-							</h4>
-							<p class="list-group-item-text">${event.means}</p>
+							<h4 class="list-group-item-heading"><span>${event.means}</span></h4>
+							<p class="list-group-item-text"></p>
 						</a>
 					</c:if>
 					<c:if test="${empty event}">

@@ -12,7 +12,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import evacuatzia_proj.components.EventManager;
 import evacuatzia_proj.components.Geometry;
+import evacuatzia_proj.components.User;
 
 /**
  * Servlet implementation class Event
@@ -36,13 +38,14 @@ public class Event extends HttpServlet {
 		if (matcher.matches()) {
 			// TODO: use this to get the real report by id later
 			String eventIdStr = matcher.group(1);
+			Long eventIdInt = Long.parseLong(eventIdStr);
 			System.out.println("event id from uri: " + eventIdStr);
-			evacuatzia_proj.components.Event event = generateFakeEvent();
-			List<evacuatzia_proj.components.User> userList = generateFakeUsersList();
-			request.getSession().setAttribute("isAdmin", false); // is the current user logged as admin?
-			request.getSession().setAttribute("isRegisteredToEvent", false); // is the current user registerd to this event
-			request.getSession().setAttribute("event", event);
-			request.getSession().setAttribute("registeredUsers", userList);
+			evacuatzia_proj.components.Event event = EventManager.getEventById(eventIdInt);
+			List<User> users = event.getRegisteredUsers();
+//			evacuatzia_proj.components.Event event = generateFakeEvent();
+//			List<evacuatzia_proj.components.User> userList = generateFakeUsersList();
+			request.setAttribute("event", event);
+			request.setAttribute("registeredUsers", users);
 			request.getRequestDispatcher("/resources/jsp/event_view.jsp").forward(request, response);
 		} else {
 			request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);
@@ -68,15 +71,24 @@ public class Event extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet \"Event\" doPost working");
-			if ((boolean) request.getSession().getAttribute("isAdmin")){
-				String username = request.getParameter("username");
+		if ((Boolean) request.getSession().getAttribute("isAdmin")){
+			request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);
+		}
+		else if ((Boolean) request.getSession().getAttribute("isLoggedIn")){
+			User user = (User) request.getSession().getAttribute("user");
+			// get user
+		}
+		else {
+			request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);
+		}
+				
 				// Remove USERNAME from Event
 				//After performing work, call the doGet to reload the page
 				doGet(request, response);
-			}
-			else {
+		
+	
 				request.getRequestDispatcher("/resources/jsp/404.jsp").forward(request, response);
-			}
+			
 		
 		
 	}

@@ -88,10 +88,12 @@
 										registered for this event
 									</h4>
 								</div>
-								<c:if test="${event.capacity < event.registrationCount}">
+								<c:if test="${event.registrationCount < event.capacity}">
 									<div class="row">
-										<button type="button" class="btn btn-default">Join
-											this Event</button>
+										<form action="" method="POST">
+											<button type="submit" class="btn btn-default">Join
+												this Event</button>
+										</form>
 									</div>
 								</c:if>
 							</c:otherwise>
@@ -128,19 +130,17 @@
 					<div class="row">
 						<div id="list" class="">
 							<div id="" class="list-group">
-								<c:forEach var="user" items="${registeredUsers}">
-									<a href="#" id="user1" class="list-group-item user-list"> <img
-										class="" style="float: left; padding-right: 20px;"
+								<c:forEach var="user" items="${users}">
+									<a href="/evacuatzia/user/${user.username}"
+										class="list-group-item user-list"> <img class=""
+										style="float: left; padding-right: 20px;"
 										src="/evacuatzia/resources/img/user2.png" />
-										<h4 class="list-group-item-heading">
-											$
-											<user.username>
-										</h4> 
-										<c:if test="${isAdmin}">
+										<h4 class="list-group-item-heading">${user.username}</h4> <c:if
+											test="${isAdmin}">
 											<form action="" method=POST>
 												<!--  If Admin clicks X, Submit a form that issues a POST to have this user removed -->
-												<input type="hidden" name="username" value="User1" /> 
-												<a href="javascript:void(0);" onclick="this.form.submit()"><span
+												<input type="hidden" name="username" value="User1" /> <a
+													href="javascript:void(0);" onclick="this.form.submit()"><span
 													class="glyphicon glyphicon-remove float-right"></span></a>
 											</form>
 										</c:if> <!-- <p class="list-group-item-text">User since: 01/01/01 BC</p> -->
