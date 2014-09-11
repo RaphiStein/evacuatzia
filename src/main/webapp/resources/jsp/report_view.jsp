@@ -30,7 +30,7 @@
         </div>
         <div class="row">
           <div class="theLabel col-lg-4"><p> Content </p></div>
-          <div class="theData col-lg-8"><p> Bla Bla Bla </p></div>
+          <div class="theData col-lg-8"><p>${report.content}</p></div>
         </div>
         <div class="row">
           <c:set var="reportDate" value="${report.reportTime}" />

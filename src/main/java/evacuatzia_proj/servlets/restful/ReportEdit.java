@@ -18,7 +18,7 @@ public class ReportEdit extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setAttribute("message", "Editing reports is temporarily not available");
-		request.getRequestDispatcher("/evacuatzia/resources/jsp/result.jsp").forward(request, response);
+		request.getRequestDispatcher("/resources/jsp/result.jsp").forward(request, response);
 	}
 
 	/**

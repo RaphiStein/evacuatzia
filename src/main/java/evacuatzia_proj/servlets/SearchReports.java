@@ -38,13 +38,14 @@ public class SearchReports extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		System.out.println("Servlet \"SearchReports\" doPost working");
 		
-		String partialTitle = request.getParameter("locationInput");
+		String partialTitle = request.getParameter("titleSearch");
+		System.out.println("Searching for Reports with names like " + "\"" + partialTitle + "\"");
 		List<Report> reports = ReportManager.getReportsByPartialTitle(partialTitle);
 		System.out.println("Printing Reports of size " + reports.size());
 		for (int i = 0; i < reports.size(); i++){
 			System.out.println(reports.get(i));
 		}
-		request.setAttribute("reports", reports);
+		request.setAttribute("reports", reports	);
 		request.getRequestDispatcher("/resources/jsp/search_reports.jsp").forward(request, response);
 	}
 

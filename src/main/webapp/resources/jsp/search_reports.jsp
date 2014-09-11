@@ -20,9 +20,9 @@
 			<div class="col-lg-6 col-lg-offset-3">
 				<form action="" method="POST" class="form-horizontal">
 					<div class="form-group">
-						<label class="col-sm-3 control-label" for="locationInput">Name:</label>
+						<label class="col-sm-3 control-label" for="titleSearch">Name:</label>
 						<div class="col-sm-6">
-							<input id="locationInput" type="text" class="form-control">
+							<input name="titleSearch" type="text" class="form-control">
 						</div>
 						<button type="submit" class="btn btn-default">Search</button>
 					</div>
@@ -40,7 +40,7 @@
 					<div id="list" class="col-lg-6 col-lg-offset-3">
 						<div id	="" class="list-group">
 							<c:forEach var="report" items="${reports}">
-								<a href="#" id="user1" class="list-group-item"> <img
+								<a href="/evacuatzia/report/${report.eventID}" class="list-group-item"> <img
 									class="" style="float: left; padding-right: 20px;"
 									src="/evacuatzia/resources/img/report.png" />
 									<h4 class="list-group-item-heading">
