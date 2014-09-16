@@ -6,9 +6,17 @@
 	    <description>Location to store uploaded file</description> 
 	    <param-name>file-upload</param-name> 
 	    <param-value>
-	         evacuatzia_upload/
-	     </param-value> 
+	         /tmp/evacuatzia_upload/
+	     </param-value>
 	</context-param>
+	   <context-param> 
+        <description>Location to store uploaded file</description> 
+        <param-name>tmp-file-upload</param-name> 
+        <param-value>
+             /tmp/evacuatzia_temp_upload/
+         </param-value> 
+    </context-param>
+	        
 	<display-name>Archetype Created Web Application</display-name>
 
 	<servlet>

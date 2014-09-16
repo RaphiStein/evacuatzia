@@ -39,15 +39,17 @@ public class InitFileUpload extends HttpServlet {
 	private static final long serialVersionUID = -3186677171233274168L;
 	private boolean isMultipart;
 	private String filePath;
+	private String tmpFilePath;
 	private int maxFileSize = 500 * 1024 * 1024; // 500 mb should be enough
 	private int maxMemSize = 4 * 1024;
 	private File file;
 
 	public void init() {
 		// Get the file location where it would be stored.
-		filePath = System.getProperty("user.dir") + File.separator
-				+ getServletContext().getInitParameter("file-upload");
+		filePath = getServletContext().getInitParameter("file-upload");
 		createDirIfDoesntExist(filePath);
+		tmpFilePath = getServletContext().getInitParameter("tmp-file-upload");
+		createDirIfDoesntExist(tmpFilePath);
 	}
 
 	private void createDirIfDoesntExist(String path) {
@@ -100,8 +102,7 @@ public class InitFileUpload extends HttpServlet {
 		// maximum size that will be stored in memory
 		factory.setSizeThreshold(maxMemSize);
 		// Location to save data that is larger than maxMemSize.
-		createDirIfDoesntExist("evacuatzia_temp_upload");
-		factory.setRepository(new File("evacuatzia_temp_upload"));
+		factory.setRepository(new File(tmpFilePath));
 
 		// Create a new file upload handler
 		ServletFileUpload upload = new ServletFileUpload(factory);
